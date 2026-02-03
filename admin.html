@@ -14,15 +14,12 @@
         input { background: rgba(255,255,255,0.05) !important; border: 1px solid rgba(255,255,255,0.1) !important; color: white !important; width: 100%; padding: 16px; border-radius: 14px; outline: none; transition: 0.2s; }
         input:focus { border-color: var(--stream-green) !important; background: rgba(255,255,255,0.08) !important; }
         .btn-primary { background: var(--stream-green); color: var(--stream-dark); font-weight: 800; padding: 18px; border-radius: 14px; width: 100%; text-transform: uppercase; letter-spacing: 1px; transition: 0.3s; cursor: pointer; border: none; }
-        .btn-primary:hover { opacity: 0.9; transform: translateY(-1px); }
         .btn-primary:active { transform: scale(0.98); }
-        .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; }
         .hidden { display: none !important; }
     </style>
 </head>
 <body>
 
-<!-- LOGIN CARD -->
 <div id="login-card" class="glass w-full max-w-sm p-8 shadow-2xl">
     <div class="text-center mb-8">
         <div class="w-16 h-16 bg-white/5 rounded-2xl flex items-center justify-center text-2xl mx-auto mb-4 border border-white/10 text-[#b8d5b0]">
@@ -32,50 +29,40 @@
         <p class="text-gray-500 text-[10px] font-bold uppercase tracking-widest mt-1">Authorized Access Only</p>
     </div>
     <div class="space-y-4">
-        <div>
-            <input type="text" id="user" placeholder="Username" value="admin">
-        </div>
-        <div>
-            <input type="password" id="pass" placeholder="Password">
-        </div>
+        <input type="text" id="user" placeholder="Username" value="admin">
+        <input type="password" id="pass" placeholder="Password" value="admin2026">
         <button class="btn-primary" id="login-btn">Sign In</button>
-        <p id="error-msg" class="text-red-400 text-[10px] text-center font-bold uppercase hidden">Invalid Username or Password</p>
+        <p id="error-msg" class="text-red-400 text-[10px] text-center font-bold uppercase hidden">Invalid Credentials</p>
     </div>
 </div>
 
-<!-- DASHBOARD CARD -->
 <div id="dash-card" class="glass w-full max-w-lg p-8 hidden shadow-2xl">
     <div class="flex justify-between items-center mb-8 border-b border-white/10 pb-4">
         <div>
             <h1 class="text-xl font-black text-[#b8d5b0] uppercase">Dashboard</h1>
             <p class="text-[9px] text-gray-500 font-bold uppercase">Update Payment Details</p>
         </div>
-        <button onclick="location.reload()" class="text-gray-500 hover:text-white transition-colors">
-            <i class="fas fa-power-off"></i>
-        </button>
+        <button onclick="location.reload()" class="text-gray-500 hover:text-white"><i class="fas fa-power-off"></i></button>
     </div>
 
     <div class="space-y-5">
         <div>
             <label class="text-[10px] text-gray-400 ml-1 font-bold uppercase">Bank Name</label>
-            <input id="in-bank" placeholder="e.g. Opay Digital Bank">
+            <input id="in-bank" placeholder="e.g. Opay" value="KUDA Mfb">
         </div>
         <div>
             <label class="text-[10px] text-gray-400 ml-1 font-bold uppercase">Account Number</label>
-            <input id="in-number" placeholder="10 Digits">
+            <input id="in-number" placeholder="10 Digits" value="3003425249">
         </div>
         <div>
             <label class="text-[10px] text-gray-400 ml-1 font-bold uppercase">Account Holder</label>
-            <input id="in-holder" placeholder="Full Name">
+            <input id="in-holder" placeholder="Full Name" value="MORRISH MEDIA ENTERPRISES">
         </div>
         <div>
             <label class="text-[10px] text-gray-400 ml-1 font-bold uppercase">Telegram Link</label>
-            <input id="in-link" placeholder="https://t.me/yourusername">
+            <input id="in-link" placeholder="https://t.me/..." value="https://t.me/morrishmedia">
         </div>
-
-        <button id="update-btn" class="btn-primary">
-            Update Website Live <i class="fas fa-wifi ml-2"></i>
-        </button>
+        <button id="update-btn" class="btn-primary">Update Website Live <i class="fas fa-wifi ml-2"></i></button>
         <p id="status" class="text-center text-[10px] font-bold uppercase mt-2"></p>
     </div>
 </div>
@@ -86,85 +73,62 @@
     import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
 
     const firebaseConfig = {
-      apiKey: "AIzaSyDK7vQ35wWE_-gAxoSq35FUAnhAve2l8Ic",
-      authDomain: "stream-africa-410f4.firebaseapp.com",
-      projectId: "stream-africa-410f4",
-      storageBucket: "stream-africa-410f4.firebasestorage.app",
-      messagingSenderId: "351251546396",
-      appId: "1:351251546396:web:14a787e02ae613ac367ad9"
+        apiKey: "AIzaSyDnElnPVmXki1il5bnHU2QzkeQCEuRKCco",
+        authDomain: "stream-africa1.firebaseapp.com",
+        projectId: "stream-africa1",
+        storageBucket: "stream-africa1.firebasestorage.app",
+        messagingSenderId: "418092449756",
+        appId: "1:418092449756:web:f25270e84786d127e95919"
     };
 
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
     const auth = getAuth(app);
-    const appId = "stream-africa-410f4";
+    const appId = "stream-africa1";
     const docPath = doc(db, 'artifacts', appId, 'public', 'data', 'paymentConfig');
 
-    // Login Logic
     document.getElementById('login-btn').addEventListener('click', () => {
-        const u = document.getElementById("user").value.trim();
-        const p = document.getElementById("pass").value.trim();
-        const error = document.getElementById("error-msg");
-
-        // CHECKING FOR ADMIN2026
-        if (u === "admin" && p === "admin2026") {
+        if (document.getElementById("user").value === "admin" && document.getElementById("pass").value === "admin2026") {
             document.getElementById("login-card").classList.add("hidden");
             document.getElementById("dash-card").classList.remove("hidden");
             loadCurrent();
         } else {
-            error.classList.remove("hidden");
-            setTimeout(() => error.classList.add("hidden"), 3000);
+            document.getElementById("error-msg").classList.remove("hidden");
         }
     });
 
-    // Load Existing Data
     async function loadCurrent() {
         try {
             await signInAnonymously(auth);
             const snap = await getDoc(docPath);
             if(snap.exists()){
                 const d = snap.data();
-                document.getElementById('in-bank').value = d.bank || "";
-                document.getElementById('in-number').value = d.number || "";
-                document.getElementById('in-holder').value = d.holder || "";
-                document.getElementById('in-link').value = d.link || "";
+                document.getElementById('in-bank').value = d.bank || "KUDA Mfb";
+                document.getElementById('in-number').value = d.number || "3003425249";
+                document.getElementById('in-holder').value = d.holder || "MORRISH MEDIA ENTERPRISES";
+                document.getElementById('in-link').value = d.link || "https://t.me/morrishmedia";
             }
-        } catch(e) { 
-            console.error("Auth/Fetch Error:", e);
-            document.getElementById('status').innerText = "Auth Error: Enable Anonymous in Firebase";
-        }
+        } catch(e) { console.error(e); }
     }
 
-    // Update Data
     document.getElementById('update-btn').addEventListener('click', async () => {
         const btn = document.getElementById('update-btn');
         const st = document.getElementById('status');
-        
-        btn.disabled = true; 
-        btn.innerText = "PUSHING...";
-        st.innerText = "";
-        
+        btn.disabled = true; btn.innerText = "UPDATING...";
         try {
             if (!auth.currentUser) await signInAnonymously(auth);
-            
             await setDoc(docPath, {
                 bank: document.getElementById('in-bank').value,
                 number: document.getElementById('in-number').value,
                 holder: document.getElementById('in-holder').value,
                 link: document.getElementById('in-link').value,
-                updatedAt: new Date().toISOString()
+                time: new Date().getTime()
             });
-
-            st.innerText = "WEBSITE UPDATED SUCCESSFULLY";
+            st.innerText = "LIVE UPDATE SUCCESSFUL!";
             st.style.color = "#b8d5b0";
-            setTimeout(() => st.innerText = "", 4000);
-        } catch(e) {
-            st.innerText = "ERROR: " + e.message;
-            st.style.color = "#ff6b6b";
-            console.error(e);
-        }
-        btn.disabled = false; 
-        btn.innerHTML = 'Update Website Live <i class="fas fa-wifi ml-2"></i>';
+            setTimeout(() => st.innerText = "", 3000);
+        } catch(e) { st.innerText = "ERROR: " + e.message; st.style.color = "#ff6b6b"; }
+        btn.disabled = false; btn.innerHTML = 'Update Website Live <i class="fas fa-wifi ml-2"></i>';
     });
 </script>
 </body>
