@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>STREAM AFRICA | Engagement & Rewards</title>
+    <title>STREAM AFRICA | Professional Engagement</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
     :root {
         --primary-forest: #0a1f1c;
         --matcha-accent: #b8d5b0;
         --white: #ffffff;
-        --bg-soft: #f4f7f6;
+        --bg-soft: #f8faf9;
         --text-deep: #1a2e2a;
         --live-green: #27ae60;
     }
@@ -19,11 +19,14 @@
         margin: 0;
         padding: 0;
         background-color: var(--bg-soft);
-        font-family: 'Inter', -apple-system, sans-serif;
+        font-family: 'Inter', Arial, sans-serif;
         color: var(--text-deep);
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
     }
 
-    /* REDUCED HEIGHT BUT LARGER LOGO SPACE */
+    /* FIXED TOP BAR */
     .topbar {
         position: sticky; 
         top: 0;
@@ -31,15 +34,14 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
-        padding: 10px 6%;
+        padding: 10px 5%;
         background: var(--white); 
         border-bottom: 3px solid var(--matcha-accent);
-        box-shadow: 0 2px 15px rgba(0,0,0,0.05);
+        box-shadow: 0 4px 12px rgba(0,0,0,0.05);
     }
 
-    /* LOGO: SIZED LARGE AND NATURAL */
     .logo-container {
-        height: 85px; /* Increased from 65px to be bold */
+        height: 100px;
         display: flex;
         align-items: center;
     }
@@ -48,206 +50,215 @@
         height: 100%;
         width: auto;
         object-fit: contain;
-        display: block;
     }
 
     .join-btn {
         background: var(--primary-forest);
         color: var(--matcha-accent);
-        padding: 12px 28px;
+        padding: 12px 24px;
         border-radius: 8px;
         text-decoration: none;
-        font-weight: 800;
-        font-size: 14px;
+        font-weight: bold;
+        font-size: 15px;
         text-transform: uppercase;
         transition: 0.3s;
     }
 
-    /* HERO VIDEO: LONG NORMAL FORMAT */
-    .hero-box {
-        width: 92%;
-        max-width: 1100px;
-        margin: 30px auto;
-        background: #000;
+    /* VIDEO SECTION */
+    .video-box {
+        width: 90%;
+        max-width: 1000px;
+        margin: 40px auto 20px auto;
+        background: var(--white);
+        border: 2px solid var(--matcha-accent);
         border-radius: 20px;
-        overflow: hidden;
-        border: 4px solid var(--matcha-accent);
-        box-shadow: 0 15px 40px rgba(0,0,0,0.12);
+        padding: 20px;
+        text-align: center;
+        box-shadow: 0 20px 40px rgba(0,0,0,0.06);
     }
 
-    .video-container {
+    .video-box video {
         width: 100%;
-        /* Removed padding-top aspect ratio to allow natural height */
-    }
-
-    .video-container video {
-        width: 100%;
-        height: auto; /* Changed to auto for 'long normal' display */
+        max-height: 550px; 
+        border-radius: 12px;
+        background: #000;
         display: block;
     }
 
-    /* GRID LAYOUT */
+    .reward-btn {
+        display: inline-block;
+        margin-top: 20px;
+        background: var(--primary-forest);
+        color: var(--white);
+        padding: 15px 40px;
+        border-radius: 10px;
+        text-decoration: none;
+        font-weight: 900;
+        font-size: 18px;
+        border: 2px solid var(--matcha-accent);
+        transition: 0.3s;
+    }
+
+    .reward-btn:hover {
+        background: var(--matcha-accent);
+        color: var(--primary-forest);
+    }
+
+    /* GRID SECTION */
+    .how-it-works-section {
+        width: 90%;
+        max-width: 1100px;
+        margin: 50px auto;
+    }
+
+    .works-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+        gap: 30px;
+    }
+
+    .work-box {
+        background: var(--white); 
+        border: 1px solid rgba(10, 31, 28, 0.08);
+        border-radius: 20px;
+        padding: 25px;
+        text-align: center;
+        transition: transform 0.3s ease;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .work-box:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+    }
+
+    .work-box img {
+        width: 100%;
+        border-radius: 12px;
+        margin-bottom: 20px;
+    }
+
+    .work-box h3 {
+        font-weight: 800;
+        color: var(--primary-forest);
+        font-size: 19px;
+        margin: 10px 0;
+    }
+
+    .work-box p {
+        text-align: left;
+        line-height: 1.6;
+        font-size: 14.5px;
+        color: #444;
+        flex-grow: 1;
+    }
+
+    .join-btn-small {
+        display: block;
+        margin-top: 20px;
+        background: var(--primary-forest);
+        color: var(--matcha-accent);
+        padding: 12px;
+        border-radius: 8px;
+        text-decoration: none;
+        font-weight: bold;
+        font-size: 14px;
+        text-transform: uppercase;
+        transition: 0.2s;
+    }
+
+    .join-btn-small:hover {
+        background: var(--matcha-accent);
+        color: var(--primary-forest);
+    }
+
+    /* STATUS STRIP */
+    .status-strip {
+        background: var(--primary-forest);
+        padding: 60px 0;
+        margin-top: 60px;
+        color: var(--white);
+        text-align: center;
+    }
+
+    .status-flex {
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 40px;
+        max-width: 1100px;
+        margin: 0 auto;
+    }
+
+    .status-item h4 { font-size: 36px; margin: 10px 0; color: var(--matcha-accent); font-weight: 900; }
+
+    .bip-live {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        background: rgba(255,255,255,0.1);
+        padding: 6px 15px;
+        border-radius: 30px;
+        margin-top: 10px;
+        font-weight: bold;
+        font-size: 12px;
+    }
+
+    .dot {
+        height: 8px; width: 8px; background: var(--live-green); border-radius: 50%;
+        animation: pulse 1.5s infinite;
+    }
+
+    @keyframes pulse { 0% { opacity: 0.4; } 50% { opacity: 1; } 100% { opacity: 0.4; } }
+
+    /* KNOWLEDGE CENTER */
     .section-title {
         text-align: center;
         font-size: 28px;
         font-weight: 900;
         color: var(--primary-forest);
-        margin: 60px 0 40px;
-        text-transform: uppercase;
-    }
-
-    .income-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-        gap: 30px;
-        width: 92%;
-        max-width: 1200px;
-        margin: 0 auto;
-    }
-
-    .work-card {
-        background: var(--white);
-        border: 1px solid rgba(0,0,0,0.05);
-        border-radius: 24px;
-        overflow: hidden;
-        transition: 0.3s ease;
-    }
-
-    .work-card:hover {
-        transform: translateY(-8px);
-        box-shadow: 0 20px 30px rgba(0,0,0,0.05);
-    }
-
-    .work-img {
-        width: 100%;
-        height: 240px;
-        object-fit: cover;
-    }
-
-    .work-info {
-        padding: 30px;
-    }
-
-    .work-info h3 {
-        margin: 0 0 12px;
-        font-size: 20px;
-        color: var(--primary-forest);
-        display: flex;
-        align-items: center;
-        gap: 12px;
-        font-weight: 800;
-    }
-
-    .work-info p {
-        font-size: 15px;
-        color: #555;
-        line-height: 1.7;
-        margin: 0;
-    }
-
-    /* STATUS SECTION */
-    .status-area {
-        background: var(--primary-forest);
-        color: var(--white);
-        padding: 80px 0;
-        margin: 80px 0;
-        text-align: center;
-    }
-
-    .status-grid {
-        display: flex;
-        justify-content: center;
-        flex-wrap: wrap;
-        gap: 60px;
-        max-width: 1100px;
-        margin: 0 auto;
-    }
-
-    .status-item h4 {
-        font-size: 45px;
-        margin: 10px 0;
-        color: var(--matcha-accent);
-        font-weight: 900;
-    }
-
-    .status-label {
-        font-size: 14px;
-        text-transform: uppercase;
+        margin: 60px 0 30px;
         letter-spacing: 2px;
-        opacity: 0.8;
     }
 
-    /* BIP LIVE INDICATOR ON USERS */
-    .bip-container {
-        display: inline-flex;
-        align-items: center;
-        gap: 10px;
-        background: rgba(255,255,255,0.12);
-        padding: 8px 18px;
-        border-radius: 30px;
-        margin-top: 20px;
-        font-weight: 800;
-        font-size: 13px;
-    }
-
-    .pulse {
-        height: 10px;
-        width: 10px;
-        background: var(--live-green);
-        border-radius: 50%;
-        box-shadow: 0 0 10px var(--live-green);
-        animation: blink 1.2s infinite ease-in-out;
-    }
-
-    @keyframes blink {
-        0% { transform: scale(0.8); opacity: 0.5; }
-        50% { transform: scale(1.3); opacity: 1; }
-        100% { transform: scale(0.8); opacity: 0.5; }
-    }
-
-    /* KNOWLEDGE CENTER - 5 ITEMS */
-    .faq-container {
-        max-width: 850px;
-        margin: 0 auto 100px;
+    .knowledge-center {
+        max-width: 800px;
+        margin: 0 auto 80px;
         padding: 0 20px;
     }
 
     details {
         background: var(--white);
         margin-bottom: 15px;
-        border-radius: 15px;
-        border: 1px solid rgba(0,0,0,0.06);
-        overflow: hidden;
+        border-radius: 12px;
+        border: 1px solid rgba(0,0,0,0.05);
+        box-shadow: 0 2px 5px rgba(0,0,0,0.02);
     }
 
     summary {
-        padding: 25px;
+        padding: 20px;
         cursor: pointer;
-        font-weight: 800;
+        font-weight: 700;
         display: flex;
         justify-content: space-between;
         align-items: center;
-        list-style: none;
         color: var(--primary-forest);
     }
 
     /* FOOTER */
     .footer {
         background: var(--white);
-        padding: 80px 6% 40px;
+        padding: 60px 6% 30px;
         border-top: 4px solid var(--matcha-accent);
     }
 
-    .footer-logo {
-        height: 90px; /* Big natural logo in footer too */
-        margin-bottom: 25px;
-        display: block;
-    }
+    .footer-logo { height: 90px; margin-bottom: 20px; }
 
     @media (max-width: 768px) {
-        .logo-container { height: 60px; }
-        .footer-logo { height: 70px; }
-        .status-grid { flex-direction: column; gap: 40px; }
+        .logo-container { height: 70px; }
+        .video-box video { height: auto; }
+        .status-flex { gap: 20px; }
     }
 </style>
 </head>
@@ -255,143 +266,168 @@
 
 <header class="topbar">
     <div class="logo-container">
-        <!-- Natural Logo - Prominent Size -->
-        <img src="logo.png" alt="Stream Africa Logo" class="logo-img">
+        <!-- Logo Image replaces text -->
+        <img src="hero8.jpg" alt="Stream Africa" class="logo-img">
     </div>
-    <a href="reward.html" class="join-btn">Get Started</a>
+    <a href="reward.html" class="join-btn">Join Now</a>
 </header>
 
 <main>
-    <section class="hero-box">
-        <div class="video-container">
-            <!-- Normal Long Video Display -->
-            <video src="video.mp4" controls poster="hero1.jpg" playsinline></video>
-        </div>
-    </section>
+    <div class="video-box">
+        <video src="video.mp4" controls poster="hero1.jpg"></video>
+        <a href="reward.html" class="reward-btn">JOIN US NOW 🔥</a>
+    </div>
 
-    <h2 class="section-title">Income Channels</h2>
-
-    <div class="income-grid">
-        <div class="work-card">
-            <img src="hero2.jpg" class="work-img">
-            <div class="work-info">
-                <h3><i class="fas fa-headphones"></i> Audio Collab</h3>
-                <p>Support the African music industry. Listen to tracks and verified audio content to earn daily rewards.</p>
+    <div class="how-it-works-section">
+        <h2 style="text-align:center; color: var(--primary-forest); margin-bottom: 40px; letter-spacing: 3px; font-weight: 900;">HOW IT WORKS</h2>
+        
+        <div class="works-grid">
+            
+            <div class="work-box">
+                <img src="hero1.jpg" alt="Livestream">
+                <h3>🔴🎥 LIVESTREAM COLLAB</h3>
+                <p>
+                    Why should only the host get paid? On STREAM, everyone earns—hosts, co-streamers, and viewers alike.<br><br>
+                    1. Join a verified session.<br>
+                    2. Engage with the content.<br>
+                    3. Earn rewards in real-time.
+                </p>
+                <a href="reward.html" class="join-btn-small">Join Now</a>
             </div>
-        </div>
 
-        <div class="work-card">
-            <img src="hero3.jpg" class="work-img">
-            <div class="work-info">
-                <h3><i class="fas fa-play-circle"></i> Video Collab</h3>
-                <p>Monetize your screen time. Engage with movie trailers, short clips, and campaign videos for instant growth.</p>
+            <div class="work-box">
+                <img src="hero2.jpg" alt="Audio">
+                <h3>🎧 AUDIO COLLAB</h3>
+                <p>
+                    Collaborate directly with artists and labels. Listening to music isn't just a hobby—it’s a career move.<br><br>
+                    • Stream official songs and new releases.<br>
+                    • Engage with music campaigns.<br>
+                    • Earn $1.50 (₦1,550) per qualified collaboration.
+                </p>
+                <a href="reward.html" class="join-btn-small">Join Now</a>
             </div>
-        </div>
 
-        <div class="work-card">
-            <img src="hero4.jpg" class="work-img">
-            <div class="work-info">
-                <h3><i class="fas fa-camera"></i> Snap Collab</h3>
-                <p>Turn visual interaction into assets. Complete photography-based verification tasks for high-value rewards.</p>
+            <div class="work-box">
+                <img src="hero3.jpg" alt="Video">
+                <h3>🎬 VIDEO COLLAB</h3>
+                <p>
+                    Connect with movie studios and brands. Help trailers and promos go viral through engagement.<br><br>
+                    • Access movie trailers and brand reels.<br>
+                    • Promote studio releases to wider audiences.<br>
+                    • Earn $2.70 (₦2,750) for every collaboration.
+                </p>
+                <a href="reward.html" class="join-btn-small">Join Now</a>
             </div>
-        </div>
 
-        <div class="work-card">
-            <img src="hero5.jpg" class="work-img">
-            <div class="work-info">
-                <h3><i class="fas fa-route"></i> Growth Roadmap</h3>
-                <p>Stay consistent with our daily earning structure. Consistency is the primary factor for bonus wealth.</p>
+            <div class="work-box">
+                <img src="hero4.jpg" alt="Snap">
+                <h3>🖼️ SNAP COLLAB</h3>
+                <p>
+                    Collaborate with designers and record labels by engaging with official artworks and campaign posters.<br><br>
+                    • Interact with premium illustrations.<br>
+                    • Boost brand visibility through support.<br>
+                    • Earn $1.10 (₦1,100) per creative collab.
+                </p>
+                <a href="reward.html" class="join-btn-small">Join Now</a>
             </div>
-        </div>
 
-        <div class="work-card">
-            <img src="hero6.jpg" class="work-img">
-            <div class="work-info">
-                <h3><i class="fas fa-download"></i> Download Hub</h3>
-                <p>Help scale the ecosystem. Receive rewards for every verified asset download within the network hub.</p>
+            <div class="work-box">
+                <img src="hero5.jpg" alt="Download">
+                <h3>📥 FILE DOWNLOAD</h3>
+                <p>
+                    Help brands expand their reach by downloading music, creative resources, and exclusive digital content.<br><br>
+                    • Access exclusive music and promos.<br>
+                    • Support distribution for global creators.<br>
+                    • Earn $1.00 (₦1,000) per download.
+                </p>
+                <a href="reward.html" class="join-btn-small">Join Now</a>
             </div>
-        </div>
 
-        <div class="work-card">
-            <img src="hero7.jpg" class="work-img">
-            <div class="work-info">
-                <h3><i class="fas fa-users"></i> Global Network</h3>
-                <p>Connect with a digital community of thousands building a new financial future for the continent.</p>
+            <div class="work-box">
+                <img src="hero6.jpg" alt="Global">
+                <h3>🌍 STREAM AFRICA IS LIVE</h3>
+                <p>
+                    No borders. No limits. STREAM AFRICA is a global movement open to the world.<br><br>
+                    Join thousands of creators turning digital engagement into real income. One platform. One vision. Unlimited reach.
+                </p>
+                <a href="reward.html" class="join-btn-small">Join Now</a>
             </div>
-        </div>
 
-        <div class="work-card">
-            <img src="hero1.jpg" class="work-img">
-            <div class="work-info">
-                <h3><i class="fas fa-gem"></i> Stream Plus</h3>
-                <p>The premium choice. Unlock high-yield tasks and priority verification for maximum daily output.</p>
+            <div class="work-box" style="grid-column: 1 / -1;">
+                <div style="display: flex; flex-wrap: wrap; gap: 30px; align-items: center; text-align: left;">
+                    <img src="hero7.jpg" alt="Verified" style="max-width: 350px; margin-bottom:0;">
+                    <div style="flex: 1; min-width: 300px;">
+                        <h3>✅ VERIFIED & LEGITIMATE</h3>
+                        <p>
+                            STREAM AFRICA is officially registered with the Corporate Affairs Commission (CAC) of Nigeria. We operate with full transparency.<br><br>
+                            • <b>Legally Recognized:</b> Fully compliant with laws.<br>
+                            • <b>Accountable:</b> Built on integrity.<br>
+                            • <b>Secure:</b> A credible platform you can depend on.
+                        </p>
+                        <a href="reward.html" class="join-btn-small" style="display: inline-block; padding: 12px 40px;">Join Now</a>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 
-    <section class="status-area">
-        <div class="status-grid">
+    <section class="status-strip">
+        <div class="status-flex">
             <div class="status-item">
-                <span class="status-label">Active Collaborators</span>
+                <span style="opacity:0.7; font-size:12px; text-transform:uppercase;">Community</span>
                 <h4>300,000+</h4>
-                <div class="bip-container">
-                    <div class="pulse"></div>
-                    BIP ACTIVE NOW
-                </div>
+                <div class="bip-live"><div class="dot"></div> BIP ACTIVE NOW</div>
             </div>
             <div class="status-item">
-                <span class="status-label">System Security</span>
+                <span style="opacity:0.7; font-size:12px; text-transform:uppercase;">Security Level</span>
                 <h4>ENCRYPTED</h4>
-                <p style="font-size: 13px; opacity: 0.7; margin-top: 10px;">End-to-end data protection active</p>
             </div>
             <div class="status-item">
-                <span class="status-label">Global Access</span>
+                <span style="opacity:0.7; font-size:12px; text-transform:uppercase;">Network Health</span>
                 <h4>OPTIMAL</h4>
-                <p style="font-size: 13px; opacity: 0.7; margin-top: 10px;">Network uptime at 99.9%</p>
             </div>
         </div>
     </section>
 
     <h2 class="section-title">Knowledge Center</h2>
-    <div class="faq-container">
+    <div class="knowledge-center">
         <details>
-            <summary>1. How do I start earning? <i class="fas fa-chevron-down"></i></summary>
-            <div style="padding: 0 25px 25px; opacity: 0.8; font-size: 15px;">Select any of the seven channels, follow the specific task instructions, and rewards are credited to your dashboard upon completion.</div>
+            <summary>1. How do I start? <i class="fas fa-plus"></i></summary>
+            <div style="padding: 0 20px 20px; color: #555; font-size: 14px;">Select any channel and follow the daily tasks to credit your account instantly.</div>
         </details>
         <details>
-            <summary>2. Is my account safe? <i class="fas fa-chevron-down"></i></summary>
-            <div style="padding: 0 25px 25px; opacity: 0.8; font-size: 15px;">Absolutely. We use professional-grade encryption protocols to ensure your data and assets are always protected.</div>
+            <summary>2. Is it secure? <i class="fas fa-plus"></i></summary>
+            <div style="padding: 0 20px 20px; color: #555; font-size: 14px;">Yes, all collaborator data and transactions are protected by end-to-end encryption.</div>
         </details>
         <details>
-            <summary>3. When can I withdraw my rewards? <i class="fas fa-chevron-down"></i></summary>
-            <div style="padding: 0 25px 25px; opacity: 0.8; font-size: 15px;">Withdrawals are available daily once you reach the minimum regional milestone designated for your account.</div>
+            <summary>3. When can I withdraw? <i class="fas fa-plus"></i></summary>
+            <div style="padding: 0 20px 20px; color: #555; font-size: 14px;">Withdrawals are processed as soon as you reach your regional minimum milestone.</div>
         </details>
         <details>
-            <summary>4. Can I use multiple channels? <i class="fas fa-chevron-down"></i></summary>
-            <div style="padding: 0 25px 25px; opacity: 0.8; font-size: 15px;">Yes! In fact, most top earners use multiple channels simultaneously to maximize their daily income potential.</div>
+            <summary>4. Multi-Channel earning? <i class="fas fa-plus"></i></summary>
+            <div style="padding: 0 20px 20px; color: #555; font-size: 14px;">Absolutely. You can participate in all 7 channels simultaneously to maximize revenue.</div>
         </details>
         <details>
-            <summary>5. How to get technical support? <i class="fas fa-chevron-down"></i></summary>
-            <div style="padding: 0 25px 25px; opacity: 0.8; font-size: 15px;">Our support team is available 24/7 through our official Telegram community or via the email address in the footer.</div>
+            <summary>5. Technical Support? <i class="fas fa-plus"></i></summary>
+            <div style="padding: 0 20px 20px; color: #555; font-size: 14px;">Our team is available 24/7 via the official Telegram channel and support email.</div>
         </details>
     </div>
 </main>
 
 <footer class="footer">
-    <div style="max-width: 1150px; margin: 0 auto; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 50px;">
-        <div style="max-width: 450px;">
-            <!-- Large Natural Footer Logo -->
-            <img src="logo.png" alt="Stream Footer" class="footer-logo">
-            <p style="font-size: 15px; color: #666; line-height: 1.8;">Leading the digital evolution in Africa through transparent infrastructure and shared opportunities for all creators.</p>
+    <div style="max-width: 1100px; margin: 0 auto; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 40px;">
+        <div style="max-width: 300px;">
+            <img src="logo.png" class="footer-logo">
+            <p style="font-size: 15px; color: #666; line-height: 1.5;">Leading digital infrastructure and opportunities across Africa and the globe.</p>
         </div>
         <div>
-            <h5 style="margin-bottom: 25px; font-size: 18px; color: var(--primary-forest);">Contact Info</h5>
-            <p style="font-size: 15px; color: #666; margin-bottom: 12px;"><i class="fas fa-envelope" style="color: var(--live-green); margin-right: 10px;"></i> support@stream.africa</p>
-            <p style="font-size: 15px; color: #666;"><i class="fas fa-map-marker-alt" style="color: var(--live-green); margin-right: 10px;"></i> Victoria Island, Lagos</p>
+            <h5 style="margin-bottom: 20px; font-size: 18px; color: var(--primary-forest);">Contact</h5>
+            <p style="font-size: 14px; color: #666;">support@stream.africa</p>
+            <p style="font-size: 14px; color: #666;">Lagos, Nigeria</p>
         </div>
     </div>
-    <div style="text-align: center; margin-top: 70px; padding-top: 30px; border-top: 1px solid #eee; font-size: 12px; color: #999;">
-        &copy; 2026 STREAM AFRICA | EMPOWERING THE CONTINENT
+    <div style="text-align: center; margin-top: 60px; font-size: 11px; color: #bbb; border-top: 1px solid #eee; padding-top: 20px;">
+        &copy; 2026 STREAM AFRICA | ALL RIGHTS RESERVED | CAC REGISTERED
     </div>
 </footer>
 
