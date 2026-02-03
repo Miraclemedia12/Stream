@@ -3,67 +3,102 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Activate Account | STREAM AFRICA</title>
+    <title>Account Activation | STREAM AFRICA</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;700;800&display=swap');
+        
         :root { --stream-green: #b8d5b0; --stream-dark: #0a1f1c; }
-        body { background-color: var(--stream-dark); color: #ffffff; font-family: 'Inter', sans-serif; min-height: 100vh; }
-        .checkout-container { max-width: 450px; margin: 0 auto; padding: 20px; }
-        .premium-card { background: rgba(255, 255, 255, 0.05); border: 2px solid var(--stream-green); border-radius: 32px; padding: 30px 24px; }
-        .price-box { background: var(--stream-dark); border: 1px solid rgba(184, 213, 176, 0.3); border-radius: 20px; padding: 20px; margin: 25px 0; text-align: center; }
-        .bank-details-wrapper { background: rgba(255, 255, 255, 0.03); border: 2px dashed var(--stream-green); border-radius: 24px; padding: 24px; margin: 25px 0 15px 0; cursor: pointer; }
-        .account-number-text { font-size: 32px; font-weight: 900; color: #ffffff; margin: 8px 0; letter-spacing: 1px; }
-        .btn-main { background: var(--stream-green); color: var(--stream-dark); width: 100%; padding: 20px; border-radius: 20px; font-weight: 900; text-transform: uppercase; display: flex; align-items: center; justify-content: center; gap: 10px; }
-        #overlay { position: fixed; inset: 0; background: rgba(10, 31, 28, 0.98); display: none; align-items: center; justify-content: center; flex-direction: column; z-index: 9999; }
-        .loader-ring { width: 50px; height: 50px; border: 5px solid rgba(184, 213, 176, 0.1); border-top: 5px solid var(--stream-green); border-radius: 50%; animation: spin 0.8s linear infinite; }
-        @keyframes spin { 100% { transform: rotate(360deg); } }
+        body { 
+            background-color: var(--stream-dark); 
+            color: #ffffff; 
+            font-family: 'Plus Jakarta Sans', sans-serif; 
+            min-height: 100vh;
+        }
+        .glass-card { 
+            background: rgba(255, 255, 255, 0.03); 
+            border: 1px solid rgba(184, 213, 176, 0.15); 
+            border-radius: 28px; 
+            padding: 30px; 
+            max-width: 400px; 
+            width: 100%;
+        }
+        .bank-details { 
+            background: rgba(255, 255, 255, 0.02); 
+            border: 1px solid rgba(184, 213, 176, 0.3);
+            border-radius: 20px; 
+            padding: 20px; 
+            margin: 20px 0; 
+            cursor: pointer;
+        }
+        .btn-pay { 
+            background: var(--stream-green); 
+            color: var(--stream-dark); 
+            width: 100%; 
+            padding: 18px; 
+            border-radius: 16px; 
+            font-weight: 800; 
+            text-transform: uppercase; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            gap: 10px;
+            transition: 0.2s;
+        }
+        .btn-pay:active { transform: scale(0.97); }
     </style>
 </head>
-<body>
+<body class="flex items-center justify-center p-6">
 
-<div class="checkout-container">
-    <div class="flex flex-col justify-center items-center py-8">
-        <h1 class="text-2xl font-black italic tracking-tighter">STREAM AFRICA</h1>
+    <div class="glass-card">
+        <!-- Logo & Timer -->
+        <div class="text-center mb-8">
+            <h1 class="text-xl font-black italic text-[#b8d5b0] tracking-tighter mb-4">STREAM AFRICA</h1>
+            <div class="inline-flex items-center gap-2 bg-red-500/10 text-red-400 px-4 py-1 rounded-full text-[10px] font-bold">
+                <i class="fas fa-clock animate-pulse"></i> SECURE SESSION: <span id="timer">10:00</span>
+            </div>
+        </div>
+
+        <!-- Main Write-up -->
+        <div class="text-center mb-6">
+            <h2 class="text-lg font-bold">Instant Activation</h2>
+            <p class="text-[11px] text-gray-500 mt-1">Transfer ₦12,000 to the secure account below to unlock your premium access.</p>
+        </div>
+
+        <!-- Bank Info -->
+        <div class="bank-details" onclick="copyNum()">
+            <div class="flex justify-between items-center mb-4">
+                <span class="text-[9px] font-bold text-gray-500 uppercase tracking-widest">Official Bank Account</span>
+                <i class="fas fa-shield-check text-[#b8d5b0]"></i>
+            </div>
+            
+            <div class="space-y-3">
+                <div>
+                    <p class="text-[10px] text-[#b8d5b0] font-bold uppercase">Bank Name</p>
+                    <p id="bank" class="text-white font-bold">KUDA Mfb</p>
+                </div>
+                <div>
+                    <p class="text-[10px] text-[#b8d5b0] font-bold uppercase">Account Number</p>
+                    <p id="num" class="text-3xl font-black tracking-tight">3003425249</p>
+                    <p id="copy-text" class="text-[8px] text-gray-500 mt-1 font-bold uppercase">Click to copy number</p>
+                </div>
+                <div>
+                    <p class="text-[10px] text-[#b8d5b0] font-bold uppercase">Account Name</p>
+                    <p id="name" class="text-[13px] font-bold text-white uppercase">MORRISH MEDIA ENTERPRISES</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Button -->
+        <button onclick="paid()" class="btn-pay">
+            I Have Paid <i class="fas fa-check-circle"></i>
+        </button>
+
+        <p class="text-[9px] text-center text-gray-600 mt-6 font-bold uppercase tracking-widest">
+            <i class="fas fa-lock text-[8px] mr-1"></i> Secured by Stream Africa
+        </p>
     </div>
-
-    <div class="premium-card">
-        <div class="text-center">
-            <div class="bg-red-500/20 border border-red-500/40 text-red-400 px-4 py-1.5 rounded-full inline-flex items-center gap-2 text-xs font-bold">
-                <i class="fas fa-clock"></i> <span id="timer">10:00</span> EXPIRES
-            </div>
-            <h2 class="text-2xl font-black mt-6 mb-2 uppercase text-white">Activate Account</h2>
-            <p class="text-gray-400 text-[12px]">Transfer the amount below to complete activation.</p>
-        </div>
-
-        <div class="price-box">
-            <p class="text-[10px] text-[#b8d5b0] font-black uppercase">Transfer Amount</p>
-            <p class="text-3xl font-black">₦12,000</p>
-        </div>
-
-        <div class="bank-details-wrapper" onclick="copyNum()">
-            <p class="text-[9px] font-black uppercase text-green-300 mb-4"><i class="fas fa-shield-check"></i> Verified Destination</p>
-            <div class="mb-4">
-                <p class="text-[10px] text-gray-500 font-bold uppercase">Bank Name</p>
-                <p id="bank-name" class="font-bold text-lg">Loading...</p>
-            </div>
-            <div class="mb-4">
-                <p class="text-[10px] text-gray-500 font-bold uppercase">Account Number</p>
-                <p id="db-number" class="account-number-text">---</p>
-                <span id="copy-text" class="text-[8px] bg-green-900 text-green-200 px-2 py-1 rounded font-black">CLICK TO COPY</span>
-            </div>
-            <div>
-                <p class="text-[10px] text-gray-500 font-bold uppercase">Account Name</p>
-                <p id="account-name" class="font-bold uppercase">---</p>
-            </div>
-        </div>
-
-        <button onclick="confirmPayment()" class="btn-main">I Have Made Payment <i class="fas fa-chevron-right"></i></button>
-    </div>
-</div>
-
-<div id="overlay"><div class="loader-ring"></div><p class="mt-4 font-black">Verifying Transaction...</p></div>
 
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
@@ -71,46 +106,60 @@
     import { getFirestore, doc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
     const firebaseConfig = {
-      apiKey: "AIzaSyDK7vQ35wWE_-gAxoSq35FUAnhAve2l8Ic",
-      authDomain: "stream-africa-410f4.firebaseapp.com",
-      projectId: "stream-africa-410f4",
-      storageBucket: "stream-africa-410f4.firebasestorage.app",
-      messagingSenderId: "351251546396",
-      appId: "1:351251546396:web:14a787e02ae613ac367ad9"
+        apiKey: "AIzaSyDnElnPVmXki1il5bnHU2QzkeQCEuRKCco",
+        authDomain: "stream-africa1.firebaseapp.com",
+        projectId: "stream-africa1",
+        storageBucket: "stream-africa1.firebasestorage.app",
+        messagingSenderId: "418092449756",
+        appId: "1:418092449756:web:f25270e84786d127e95919"
     };
 
     const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
     const db = getFirestore(app);
-    const appId = "stream-africa-410f4";
-    let link = "https://t.me/morrishmedia";
+    const auth = getAuth(app);
+    let tgLink = "https://t.me/morrishmedia";
 
-    async function start() {
+    async function init() {
         await signInAnonymously(auth);
-        onSnapshot(doc(db, 'artifacts', appId, 'public', 'data', 'paymentConfig'), (snap) => {
+        onSnapshot(doc(db, 'artifacts', 'stream-africa1', 'public', 'data', 'paymentConfig'), (snap) => {
             if (snap.exists()) {
                 const d = snap.data();
-                document.getElementById('bank-name').innerText = d.bank || '...';
-                document.getElementById('db-number').innerText = d.number || '---';
-                document.getElementById('account-name').innerText = d.holder || '---';
-                link = d.link || link;
+                document.getElementById('bank').innerText = d.bank || 'KUDA Mfb';
+                document.getElementById('num').innerText = d.number || '3003425249';
+                document.getElementById('name').innerText = d.holder || 'MORRISH MEDIA ENTERPRISES';
+                tgLink = d.link || tgLink;
             }
         });
     }
 
     window.copyNum = () => {
-        const n = document.getElementById('db-number').innerText;
-        navigator.clipboard.writeText(n);
-        document.getElementById('copy-text').innerText = "COPIED!";
-        setTimeout(() => document.getElementById('copy-text').innerText = "CLICK TO COPY", 2000);
+        const n = document.getElementById('num').innerText;
+        const el = document.createElement('textarea');
+        el.value = n; document.body.appendChild(el); el.select();
+        document.execCommand('copy'); document.body.removeChild(el);
+        document.getElementById('copy-text').innerText = "COPIED SUCCESSFULLY!";
+        document.getElementById('copy-text').style.color = "#b8d5b0";
+        setTimeout(() => {
+            document.getElementById('copy-text').innerText = "CLICK TO COPY NUMBER";
+            document.getElementById('copy-text').style.color = "";
+        }, 2000);
     };
 
-    window.confirmPayment = () => {
-        document.getElementById('overlay').style.display = 'flex';
-        setTimeout(() => { window.location.href = `${link}?text=Paid_12k_Activation`; }, 2000);
+    window.paid = () => {
+        const msg = encodeURIComponent("I have paid ₦12,000 for account activation. Kindly verify.");
+        window.location.href = `${tgLink}?text=${msg}`;
     };
 
-    start();
+    let time = 600;
+    setInterval(() => {
+        if(time <= 0) return;
+        time--;
+        let m = Math.floor(time/60);
+        let s = time % 60;
+        document.getElementById('timer').innerText = `${m}:${s < 10 ? '0'+s : s}`;
+    }, 1000);
+
+    init();
 </script>
 </body>
 </html>
