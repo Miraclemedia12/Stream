@@ -7,11 +7,10 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
     :root {
-        --primary-forest: #0a1f1c;
-        --matcha-accent: #b8d5b0;
+        --primary-forest: #0a1f1c; /* Background from image */
+        --matcha-accent: #b8d5b0; /* Light green from image */
         --white: #ffffff;
-        --bg-soft: #f8faf9;
-        --text-deep: #1a2e2a;
+        --card-bg: rgba(255, 255, 255, 0.05);
         --live-green: #27ae60;
     }
 
@@ -22,9 +21,9 @@
     body {
         margin: 0;
         padding: 0;
-        background-color: var(--bg-soft);
+        background-color: var(--primary-forest);
         font-family: 'Inter', Arial, sans-serif;
-        color: var(--text-deep);
+        color: var(--white); /* All text is white */
         display: flex;
         flex-direction: column;
         min-height: 100vh;
@@ -39,9 +38,9 @@
         justify-content: space-between;
         align-items: center;
         padding: 10px 5%;
-        background: var(--white); 
+        background: var(--primary-forest); 
         border-bottom: 3px solid var(--matcha-accent);
-        box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        box-shadow: 0 4px 12px rgba(0,0,0,0.3);
     }
 
     .logo-container {
@@ -54,11 +53,12 @@
         height: 100%;
         width: auto;
         object-fit: contain;
+        filter: brightness(0) invert(1); /* Ensure logo shows white */
     }
 
     .join-btn {
-        background: var(--primary-forest);
-        color: var(--matcha-accent);
+        background: var(--matcha-accent);
+        color: var(--primary-forest);
         padding: 12px 24px;
         border-radius: 8px;
         text-decoration: none;
@@ -73,12 +73,12 @@
         width: 90%;
         max-width: 1000px;
         margin: 40px auto 20px auto;
-        background: var(--white);
+        background: var(--card-bg);
         border: 2px solid var(--matcha-accent);
         border-radius: 20px;
         padding: 20px;
         text-align: center;
-        box-shadow: 0 20px 40px rgba(0,0,0,0.06);
+        box-shadow: 0 20px 40px rgba(0,0,0,0.2);
     }
 
     .video-box video {
@@ -92,8 +92,8 @@
     .reward-btn {
         display: inline-block;
         margin-top: 20px;
-        background: var(--primary-forest);
-        color: var(--white);
+        background: var(--matcha-accent);
+        color: var(--primary-forest);
         padding: 15px 40px;
         border-radius: 10px;
         text-decoration: none;
@@ -103,11 +103,6 @@
         transition: 0.3s;
     }
 
-    .reward-btn:hover {
-        background: var(--matcha-accent);
-        color: var(--primary-forest);
-    }
-
     /* SHINING TITLE EFFECT */
     .shining-title {
         text-align: center;
@@ -115,11 +110,9 @@
         letter-spacing: 4px;
         font-weight: 900;
         font-size: 2.2rem;
-        background: linear-gradient(to right, #0a1f1c 20%, #b8d5b0 40%, #b8d5b0 60%, #0a1f1c 80%);
+        background: linear-gradient(to right, var(--white) 20%, var(--matcha-accent) 40%, var(--matcha-accent) 60%, var(--white) 80%);
         background-size: 200% auto;
-        color: #000;
         background-clip: text;
-        text-fill-color: transparent;
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         animation: shine 3s linear infinite;
@@ -143,8 +136,8 @@
     }
 
     .work-box {
-        background: var(--white); 
-        border: 1px solid rgba(10, 31, 28, 0.08);
+        background: var(--card-bg); 
+        border: 1px solid rgba(184, 213, 176, 0.2);
         border-radius: 20px;
         padding: 25px;
         text-align: center;
@@ -155,7 +148,8 @@
 
     .work-box:hover {
         transform: translateY(-5px);
-        box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+        box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        border-color: var(--matcha-accent);
     }
 
     .work-box img {
@@ -166,7 +160,7 @@
 
     .work-box h3 {
         font-weight: 800;
-        color: var(--primary-forest);
+        color: var(--matcha-accent);
         font-size: 19px;
         margin: 10px 0;
         display: flex;
@@ -179,15 +173,15 @@
         text-align: left;
         line-height: 1.6;
         font-size: 14.5px;
-        color: #444;
+        color: var(--white);
         flex-grow: 1;
     }
 
     .join-btn-small {
         display: block;
         margin-top: 20px;
-        background: var(--primary-forest);
-        color: var(--matcha-accent);
+        background: var(--matcha-accent);
+        color: var(--primary-forest);
         padding: 12px;
         border-radius: 8px;
         text-decoration: none;
@@ -199,7 +193,7 @@
 
     /* STATUS STRIP */
     .status-strip {
-        background: var(--primary-forest);
+        background: rgba(0,0,0,0.3);
         padding: 60px 0;
         margin-top: 60px;
         color: var(--white);
@@ -241,7 +235,7 @@
         text-align: center;
         font-size: 28px;
         font-weight: 900;
-        color: var(--primary-forest);
+        color: var(--matcha-accent);
         margin: 60px 0 30px;
         letter-spacing: 2px;
     }
@@ -253,10 +247,10 @@
     }
 
     details {
-        background: var(--white);
+        background: var(--card-bg);
         margin-bottom: 15px;
         border-radius: 12px;
-        border: 1px solid rgba(0,0,0,0.05);
+        border: 1px solid rgba(184, 213, 176, 0.1);
     }
 
     summary {
@@ -266,23 +260,23 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
-        color: var(--primary-forest);
+        color: var(--white);
     }
 
     /* FOOTER */
     .footer {
-        background: var(--white);
+        background: rgba(0,0,0,0.2);
         padding: 60px 6% 30px;
         border-top: 4px solid var(--matcha-accent);
     }
 
-    .footer-logo { height: 90px; margin-bottom: 20px; }
+    .footer-logo { height: 90px; margin-bottom: 20px; filter: brightness(0) invert(1); }
 
-    .footer-links-col h5 { margin-bottom: 20px; font-size: 18px; color: var(--primary-forest); }
+    .footer-links-col h5 { margin-bottom: 20px; font-size: 18px; color: var(--matcha-accent); }
     .footer-links-col ul { list-style: none; padding: 0; margin: 0; }
     .footer-links-col li { margin-bottom: 12px; }
-    .footer-links-col a { text-decoration: none; color: #666; font-size: 15px; transition: 0.3s; }
-    .footer-links-col a:hover { color: var(--primary-forest); padding-left: 5px; }
+    .footer-links-col a { text-decoration: none; color: rgba(255,255,255,0.7); font-size: 15px; transition: 0.3s; }
+    .footer-links-col a:hover { color: var(--matcha-accent); padding-left: 5px; }
 
     @media (max-width: 768px) {
         .logo-container { height: 70px; }
@@ -301,13 +295,11 @@
 </header>
 
 <main>
-    <!-- Anchor for About Us (Top Video) -->
     <div id="video-top" class="video-box">
         <video src="video.mp4" controls poster="hero1.jpg"></video>
         <a href="reward.html" class="reward-btn">JOIN US NOW <i class="fas fa-fire"></i></a>
     </div>
 
-    <!-- Anchor for Features (How It Works) -->
     <div id="how-it-works" class="how-it-works-section">
         <h2 class="shining-title">HOW IT WORKS</h2>
         
@@ -419,29 +411,28 @@
         </div>
     </section>
 
-    <!-- Anchor for FAQ (Knowledge Center) -->
     <div id="knowledge-center">
         <h2 class="section-title">Knowledge Center</h2>
         <div class="knowledge-center">
             <details>
                 <summary>1. How do I start? <i class="fas fa-plus"></i></summary>
-                <div style="padding: 20px; color: #555; font-size: 14px;">Select any channel and follow the daily tasks to credit your account instantly.</div>
+                <div style="padding: 20px; color: rgba(255,255,255,0.7); font-size: 14px;">Select any channel and follow the daily tasks to credit your account instantly.</div>
             </details>
             <details>
                 <summary>2. Is it secure? <i class="fas fa-plus"></i></summary>
-                <div style="padding: 20px; color: #555; font-size: 14px;">Yes, all collaborator data and transactions are protected by end-to-end encryption.</div>
+                <div style="padding: 20px; color: rgba(255,255,255,0.7); font-size: 14px;">Yes, all collaborator data and transactions are protected by end-to-end encryption.</div>
             </details>
             <details>
                 <summary>3. When can I withdraw? <i class="fas fa-plus"></i></summary>
-                <div style="padding: 20px; color: #555; font-size: 14px;">Withdrawals are processed as soon as you reach your regional minimum milestone.</div>
+                <div style="padding: 20px; color: rgba(255,255,255,0.7); font-size: 14px;">Withdrawals are processed as soon as you reach your regional minimum milestone.</div>
             </details>
             <details>
                 <summary>4. Multi-Channel earning? <i class="fas fa-plus"></i></summary>
-                <div style="padding: 20px; color: #555; font-size: 14px;">Absolutely. You can participate in all 7 channels simultaneously to maximize revenue.</div>
+                <div style="padding: 20px; color: rgba(255,255,255,0.7); font-size: 14px;">Absolutely. You can participate in all 7 channels simultaneously to maximize revenue.</div>
             </details>
             <details>
                 <summary>5. Technical Support? <i class="fas fa-plus"></i></summary>
-                <div style="padding: 20px; color: #555; font-size: 14px;">Our team is available 24/7 via the official Telegram channel and support email.</div>
+                <div style="padding: 20px; color: rgba(255,255,255,0.7); font-size: 14px;">Our team is available 24/7 via the official Telegram channel and support email.</div>
             </details>
         </div>
     </div>
@@ -450,8 +441,8 @@
 <footer class="footer">
     <div style="max-width: 1100px; margin: 0 auto; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 40px;">
         <div style="max-width: 300px;">
-            <img src="logo.png" class="footer-logo">
-            <p style="font-size: 15px; color: #666; line-height: 1.5;">Stream is an innovation ecosystem connecting people, creating opportunities, and rewarding engagement.</p>
+            <h1 style="font-weight: 900; letter-spacing: 2px; color: var(--matcha-accent);">STREAM</h1>
+            <p style="font-size: 15px; color: rgba(255,255,255,0.7); line-height: 1.5;">Stream is an innovation ecosystem connecting people, creating opportunities, and rewarding engagement.</p>
         </div>
 
         <div class="footer-links-col">
@@ -465,11 +456,11 @@
 
         <div class="footer-links-col">
             <h5>Contact</h5>
-            <p style="font-size: 14px; color: #666;">support@stream.africa</p>
-            <p style="font-size: 14px; color: #666;">Lagos, Nigeria</p>
+            <p style="font-size: 14px; color: rgba(255,255,255,0.7);">support@stream.africa</p>
+            <p style="font-size: 14px; color: rgba(255,255,255,0.7);">Lagos, Nigeria</p>
         </div>
     </div>
-    <div style="text-align: center; margin-top: 60px; font-size: 11px; color: #bbb; border-top: 1px solid #eee; padding-top: 20px;">
+    <div style="text-align: center; margin-top: 60px; font-size: 11px; color: rgba(255,255,255,0.3); border-top: 1px solid rgba(255,255,255,0.1); padding-top: 20px;">
         &copy; 2026 STREAM AFRICA | ALL RIGHTS RESERVED | CAC REGISTERED
     </div>
 </footer>
