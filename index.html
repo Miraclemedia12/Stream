@@ -15,6 +15,10 @@
         --live-green: #27ae60;
     }
 
+    html {
+        scroll-behavior: smooth;
+    }
+
     body {
         margin: 0;
         padding: 0;
@@ -104,6 +108,27 @@
         color: var(--primary-forest);
     }
 
+    /* SHINING TITLE EFFECT */
+    .shining-title {
+        text-align: center;
+        margin-bottom: 40px;
+        letter-spacing: 4px;
+        font-weight: 900;
+        font-size: 2.2rem;
+        background: linear-gradient(to right, #0a1f1c 20%, #b8d5b0 40%, #b8d5b0 60%, #0a1f1c 80%);
+        background-size: 200% auto;
+        color: #000;
+        background-clip: text;
+        text-fill-color: transparent;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        animation: shine 3s linear infinite;
+    }
+
+    @keyframes shine {
+        to { background-position: 200% center; }
+    }
+
     /* GRID SECTION */
     .how-it-works-section {
         width: 90%;
@@ -144,6 +169,10 @@
         color: var(--primary-forest);
         font-size: 19px;
         margin: 10px 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
     }
 
     .work-box p {
@@ -166,11 +195,6 @@
         font-size: 14px;
         text-transform: uppercase;
         transition: 0.2s;
-    }
-
-    .join-btn-small:hover {
-        background: var(--matcha-accent);
-        color: var(--primary-forest);
     }
 
     /* STATUS STRIP */
@@ -233,7 +257,6 @@
         margin-bottom: 15px;
         border-radius: 12px;
         border: 1px solid rgba(0,0,0,0.05);
-        box-shadow: 0 2px 5px rgba(0,0,0,0.02);
     }
 
     summary {
@@ -255,10 +278,16 @@
 
     .footer-logo { height: 90px; margin-bottom: 20px; }
 
+    .footer-links-col h5 { margin-bottom: 20px; font-size: 18px; color: var(--primary-forest); }
+    .footer-links-col ul { list-style: none; padding: 0; margin: 0; }
+    .footer-links-col li { margin-bottom: 12px; }
+    .footer-links-col a { text-decoration: none; color: #666; font-size: 15px; transition: 0.3s; }
+    .footer-links-col a:hover { color: var(--primary-forest); padding-left: 5px; }
+
     @media (max-width: 768px) {
         .logo-container { height: 70px; }
         .video-box video { height: auto; }
-        .status-flex { gap: 20px; }
+        .shining-title { font-size: 1.5rem; }
     }
 </style>
 </head>
@@ -266,26 +295,27 @@
 
 <header class="topbar">
     <div class="logo-container">
-        <!-- Logo Image replaces text -->
         <img src="logo.png" alt="Stream Africa" class="logo-img">
     </div>
     <a href="reward.html" class="join-btn">Join Now</a>
 </header>
 
 <main>
-    <div class="video-box">
+    <!-- Anchor for About Us (Top Video) -->
+    <div id="video-top" class="video-box">
         <video src="video.mp4" controls poster="hero1.jpg"></video>
-        <a href="reward.html" class="reward-btn">JOIN US NOW 🔥</a>
+        <a href="reward.html" class="reward-btn">JOIN US NOW <i class="fas fa-fire"></i></a>
     </div>
 
-    <div class="how-it-works-section">
-        <h2 style="text-align:center; color: var(--primary-forest); margin-bottom: 40px; letter-spacing: 3px; font-weight: 900;">HOW IT WORKS</h2>
+    <!-- Anchor for Features (How It Works) -->
+    <div id="how-it-works" class="how-it-works-section">
+        <h2 class="shining-title">HOW IT WORKS</h2>
         
         <div class="works-grid">
             
             <div class="work-box">
                 <img src="hero1.jpg" alt="Livestream">
-                <h3>🔴🎥 LIVESTREAM COLLAB</h3>
+                <h3><i class="fas fa-tower-broadcast"></i> LIVESTREAM COLLAB</h3>
                 <p>
                     Why should only the host get paid? On STREAM, everyone earns—hosts, co-streamers, and viewers alike.<br><br>
                     1. Join a verified session.<br>
@@ -297,7 +327,7 @@
 
             <div class="work-box">
                 <img src="hero2.jpg" alt="Audio">
-                <h3>🎧 AUDIO COLLAB</h3>
+                <h3><i class="fas fa-headphones"></i> AUDIO COLLAB</h3>
                 <p>
                     Collaborate directly with artists and labels. Listening to music isn't just a hobby—it’s a career move.<br><br>
                     • Stream official songs and new releases.<br>
@@ -309,7 +339,7 @@
 
             <div class="work-box">
                 <img src="hero3.jpg" alt="Video">
-                <h3>🎬 VIDEO COLLAB</h3>
+                <h3><i class="fas fa-clapperboard"></i> VIDEO COLLAB</h3>
                 <p>
                     Connect with movie studios and brands. Help trailers and promos go viral through engagement.<br><br>
                     • Access movie trailers and brand reels.<br>
@@ -321,7 +351,7 @@
 
             <div class="work-box">
                 <img src="hero4.jpg" alt="Snap">
-                <h3>🖼️ SNAP COLLAB</h3>
+                <h3><i class="fas fa-image"></i> SNAP COLLAB</h3>
                 <p>
                     Collaborate with designers and record labels by engaging with official artworks and campaign posters.<br><br>
                     • Interact with premium illustrations.<br>
@@ -333,7 +363,7 @@
 
             <div class="work-box">
                 <img src="hero5.jpg" alt="Download">
-                <h3>📥 FILE DOWNLOAD</h3>
+                <h3><i class="fas fa-file-arrow-down"></i> FILE DOWNLOAD</h3>
                 <p>
                     Help brands expand their reach by downloading music, creative resources, and exclusive digital content.<br><br>
                     • Access exclusive music and promos.<br>
@@ -345,7 +375,7 @@
 
             <div class="work-box">
                 <img src="hero6.jpg" alt="Global">
-                <h3>🌍 STREAM AFRICA IS LIVE</h3>
+                <h3><i class="fas fa-globe-africa"></i> STREAM AFRICA IS LIVE</h3>
                 <p>
                     No borders. No limits. STREAM AFRICA is a global movement open to the world.<br><br>
                     Join thousands of creators turning digital engagement into real income. One platform. One vision. Unlimited reach.
@@ -355,9 +385,9 @@
 
             <div class="work-box" style="grid-column: 1 / -1;">
                 <div style="display: flex; flex-wrap: wrap; gap: 30px; align-items: center; text-align: left;">
-                    <img src="hero7.jpg" alt="Verified" style="max-width: 350px; margin-bottom:0;">
+                    <img src="hero7.jpg" alt="Verified" style="max-width: 350px; border-radius: 12px;">
                     <div style="flex: 1; min-width: 300px;">
-                        <h3>✅ VERIFIED & LEGITIMATE</h3>
+                        <h3><i class="fas fa-circle-check"></i> VERIFIED & LEGITIMATE</h3>
                         <p>
                             STREAM AFRICA is officially registered with the Corporate Affairs Commission (CAC) of Nigeria. We operate with full transparency.<br><br>
                             • <b>Legally Recognized:</b> Fully compliant with laws.<br>
@@ -389,28 +419,31 @@
         </div>
     </section>
 
-    <h2 class="section-title">Knowledge Center</h2>
-    <div class="knowledge-center">
-        <details>
-            <summary>1. How do I start? <i class="fas fa-plus"></i></summary>
-            <div style="padding: 0 20px 20px; color: #555; font-size: 14px;">Select any channel and follow the daily tasks to credit your account instantly.</div>
-        </details>
-        <details>
-            <summary>2. Is it secure? <i class="fas fa-plus"></i></summary>
-            <div style="padding: 0 20px 20px; color: #555; font-size: 14px;">Yes, all collaborator data and transactions are protected by end-to-end encryption.</div>
-        </details>
-        <details>
-            <summary>3. When can I withdraw? <i class="fas fa-plus"></i></summary>
-            <div style="padding: 0 20px 20px; color: #555; font-size: 14px;">Withdrawals are processed as soon as you reach your regional minimum milestone.</div>
-        </details>
-        <details>
-            <summary>4. Multi-Channel earning? <i class="fas fa-plus"></i></summary>
-            <div style="padding: 0 20px 20px; color: #555; font-size: 14px;">Absolutely. You can participate in all 7 channels simultaneously to maximize revenue.</div>
-        </details>
-        <details>
-            <summary>5. Technical Support? <i class="fas fa-plus"></i></summary>
-            <div style="padding: 0 20px 20px; color: #555; font-size: 14px;">Our team is available 24/7 via the official Telegram channel and support email.</div>
-        </details>
+    <!-- Anchor for FAQ (Knowledge Center) -->
+    <div id="knowledge-center">
+        <h2 class="section-title">Knowledge Center</h2>
+        <div class="knowledge-center">
+            <details>
+                <summary>1. How do I start? <i class="fas fa-plus"></i></summary>
+                <div style="padding: 20px; color: #555; font-size: 14px;">Select any channel and follow the daily tasks to credit your account instantly.</div>
+            </details>
+            <details>
+                <summary>2. Is it secure? <i class="fas fa-plus"></i></summary>
+                <div style="padding: 20px; color: #555; font-size: 14px;">Yes, all collaborator data and transactions are protected by end-to-end encryption.</div>
+            </details>
+            <details>
+                <summary>3. When can I withdraw? <i class="fas fa-plus"></i></summary>
+                <div style="padding: 20px; color: #555; font-size: 14px;">Withdrawals are processed as soon as you reach your regional minimum milestone.</div>
+            </details>
+            <details>
+                <summary>4. Multi-Channel earning? <i class="fas fa-plus"></i></summary>
+                <div style="padding: 20px; color: #555; font-size: 14px;">Absolutely. You can participate in all 7 channels simultaneously to maximize revenue.</div>
+            </details>
+            <details>
+                <summary>5. Technical Support? <i class="fas fa-plus"></i></summary>
+                <div style="padding: 20px; color: #555; font-size: 14px;">Our team is available 24/7 via the official Telegram channel and support email.</div>
+            </details>
+        </div>
     </div>
 </main>
 
@@ -418,10 +451,20 @@
     <div style="max-width: 1100px; margin: 0 auto; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 40px;">
         <div style="max-width: 300px;">
             <img src="logo.png" class="footer-logo">
-            <p style="font-size: 15px; color: #666; line-height: 1.5;">Leading digital infrastructure and opportunities across Africa and the globe.</p>
+            <p style="font-size: 15px; color: #666; line-height: 1.5;">Stream is an innovation ecosystem connecting people, creating opportunities, and rewarding engagement.</p>
         </div>
-        <div>
-            <h5 style="margin-bottom: 20px; font-size: 18px; color: var(--primary-forest);">Contact</h5>
+
+        <div class="footer-links-col">
+            <h5>Navigation</h5>
+            <ul>
+                <li><a href="#video-top">About Us</a></li>
+                <li><a href="#how-it-works">Features</a></li>
+                <li><a href="#knowledge-center">FAQ</a></li>
+            </ul>
+        </div>
+
+        <div class="footer-links-col">
+            <h5>Contact</h5>
             <p style="font-size: 14px; color: #666;">support@stream.africa</p>
             <p style="font-size: 14px; color: #666;">Lagos, Nigeria</p>
         </div>
