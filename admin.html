@@ -6,59 +6,16 @@
     <title>Stream Africa | Admin Control</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700;800&display=swap');
-
-        :root {
-            --stream-green: #b8d5b0;
-            --stream-dark: #0a1f1c;
-        }
-
-        body {
-            background: var(--stream-dark);
-            color: #fff;
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .glass {
-            background: rgba(255,255,255,0.03);
-            border: 1px solid rgba(184,213,176,0.15);
-            backdrop-filter: blur(10px);
-            border-radius: 30px;
-        }
-
-        input {
-            background: rgba(255,255,255,0.05);
-            border: 1px solid rgba(255,255,255,0.1);
-            color: white;
-            width: 100%;
-            padding: 16px;
-            border-radius: 14px;
-            outline: none;
-        }
-
-        input:focus {
-            border-color: var(--stream-green);
-        }
-
-        .btn-primary {
-            background: var(--stream-green);
-            color: var(--stream-dark);
-            font-weight: 800;
-            padding: 18px;
-            border-radius: 14px;
-            width: 100%;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            transition: 0.3s;
-        }
-
+        :root { --stream-green: #b8d5b0; --stream-dark: #0a1f1c; }
+        body { background: var(--stream-dark); color: #fff; font-family: 'Plus Jakarta Sans', sans-serif; min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 20px; }
+        .glass { background: rgba(255,255,255,0.03); border: 1px solid rgba(184, 213, 176, 0.15); backdrop-filter: blur(10px); border-radius: 30px; }
+        input { background: rgba(255,255,255,0.05) !important; border: 1px solid rgba(255,255,255,0.1) !important; color: white !important; width: 100%; padding: 16px; border-radius: 14px; outline: none; }
+        input:focus { border-color: var(--stream-green) !important; }
+        .btn-primary { background: var(--stream-green); color: var(--stream-dark); font-weight: 800; padding: 18px; border-radius: 14px; width: 100%; text-transform: uppercase; letter-spacing: 1px; transition: 0.3s; }
         .btn-primary:active { transform: scale(0.98); }
+        .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; }
         .hidden { display: none; }
     </style>
 </head>
@@ -71,18 +28,13 @@
             <i class="fas fa-user-shield"></i>
         </div>
         <h1 class="text-2xl font-black">Admin Login</h1>
-        <p class="text-gray-500 text-[10px] font-bold uppercase tracking-widest mt-1">
-            Authorized Access Only
-        </p>
+        <p class="text-gray-500 text-[10px] font-bold uppercase tracking-widest mt-1">Authorized Access Only</p>
     </div>
-
     <div class="space-y-4">
         <input type="text" id="user" placeholder="Username">
         <input type="password" id="pass" placeholder="Password">
         <button class="btn-primary" onclick="handleLogin()">Sign In</button>
-        <p id="error-msg" class="text-red-400 text-[10px] text-center font-bold uppercase hidden">
-            Invalid Credentials
-        </p>
+        <p id="error-msg" class="text-red-400 text-[10px] text-center font-bold uppercase hidden">Invalid Credentials</p>
     </div>
 </div>
 
@@ -93,38 +45,104 @@
             <h1 class="text-xl font-black text-[#b8d5b0] uppercase">Dashboard</h1>
             <p class="text-[9px] text-gray-500 font-bold uppercase">Update Payment Details</p>
         </div>
-        <button onclick="location.reload()" class="text-gray-500 hover:text-white">
-            <i class="fas fa-power-off"></i>
-        </button>
+        <button onclick="location.reload()" class="text-gray-500 hover:text-white"><i class="fas fa-power-off"></i></button>
     </div>
 
     <div class="space-y-5">
-        <input placeholder="Bank Name">
-        <input placeholder="Account Number">
-        <input placeholder="Account Holder">
-        <input placeholder="Telegram Link">
+        <div>
+            <label class="text-[10px] text-gray-400 ml-1 font-bold uppercase">Bank Name</label>
+            <input id="in-bank" placeholder="Bank Name">
+        </div>
+        <div>
+            <label class="text-[10px] text-gray-400 ml-1 font-bold uppercase">Account Number</label>
+            <input id="in-number" placeholder="Account Number">
+        </div>
+        <div>
+            <label class="text-[10px] text-gray-400 ml-1 font-bold uppercase">Account Holder</label>
+            <input id="in-holder" placeholder="Account Holder">
+        </div>
+        <div>
+            <label class="text-[10px] text-gray-400 ml-1 font-bold uppercase">Telegram Link</label>
+            <input id="in-link" placeholder="Telegram Link">
+        </div>
 
-        <button class="btn-primary">
+        <button id="update-btn" class="btn-primary" onclick="pushUpdate()">
             Update Website Live <i class="fas fa-wifi ml-2"></i>
         </button>
+        <p id="status" class="text-center text-[10px] font-bold uppercase mt-2"></p>
     </div>
 </div>
 
-<script>
-    function handleLogin() {
-        const u = document.getElementById("user").value.trim();
-        const p = document.getElementById("pass").value.trim();
-        const error = document.getElementById("error-msg");
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+    import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+    import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
 
-        if (u === "admin" && p === "stream2026") {
+    // YOUR NEW PROJECT CONFIG
+    const firebaseConfig = {
+      apiKey: "AIzaSyDK7vQ35wWE_-gAxoSq35FUAnhAve2l8Ic",
+      authDomain: "stream-africa-410f4.firebaseapp.com",
+      projectId: "stream-africa-410f4",
+      storageBucket: "stream-africa-410f4.firebasestorage.app",
+      messagingSenderId: "351251546396",
+      appId: "1:351251546396:web:14a787e02ae613ac367ad9"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+    const auth = getAuth(app);
+    const appId = "stream-africa-410f4";
+    const docPath = doc(db, 'artifacts', appId, 'public', 'data', 'paymentConfig');
+
+    window.handleLogin = () => {
+        if (document.getElementById("user").value.trim() === "admin" && 
+            document.getElementById("pass").value.trim() === "stream2026") {
             document.getElementById("login-card").classList.add("hidden");
             document.getElementById("dash-card").classList.remove("hidden");
-            error.classList.add("hidden");
+            loadCurrent();
         } else {
-            error.classList.remove("hidden");
+            document.getElementById("error-msg").classList.remove("hidden");
         }
-    }
-</script>
+    };
 
+    async function loadCurrent() {
+        try {
+            await signInAnonymously(auth);
+            const snap = await getDoc(docPath);
+            if(snap.exists()){
+                const d = snap.data();
+                document.getElementById('in-bank').value = d.bank || "";
+                document.getElementById('in-number').value = d.number || "";
+                document.getElementById('in-holder').value = d.holder || "";
+                document.getElementById('in-link').value = d.link || "";
+            }
+        } catch(e) { console.error(e); }
+    }
+
+    window.pushUpdate = async () => {
+        const btn = document.getElementById('update-btn');
+        const st = document.getElementById('status');
+        btn.disabled = true; btn.innerText = "PUSHING...";
+        
+        try {
+            await signInAnonymously(auth);
+            await setDoc(docPath, {
+                bank: document.getElementById('in-bank').value,
+                number: document.getElementById('in-number').value,
+                holder: document.getElementById('in-holder').value,
+                link: document.getElementById('in-link').value,
+                updatedAt: new Date().toISOString()
+            });
+            st.innerText = "WEBSITE UPDATED SUCCESSFULLY";
+            st.style.color = "#b8d5b0";
+            setTimeout(() => st.innerText = "", 3000);
+        } catch(e) {
+            st.innerText = "ERROR: " + e.message;
+            st.style.color = "#ff6b6b";
+        }
+        btn.disabled = false; btn.innerHTML = 'Update Website Live <i class="fas fa-wifi ml-2"></i>';
+    };
+</script>
 </body>
 </html>
+
