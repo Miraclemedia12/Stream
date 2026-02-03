@@ -23,7 +23,7 @@
         color: var(--text-deep);
     }
 
-    /* SLIM PROFESSIONAL HEADER */
+    /* REDUCED HEIGHT BUT LARGER LOGO SPACE */
     .topbar {
         position: sticky; 
         top: 0;
@@ -33,13 +33,13 @@
         align-items: center;
         padding: 10px 6%;
         background: var(--white); 
-        border-bottom: 2px solid var(--matcha-accent);
+        border-bottom: 3px solid var(--matcha-accent);
         box-shadow: 0 2px 15px rgba(0,0,0,0.05);
     }
 
-    /* LOGO BOX - Sized to be visible but professional */
+    /* LOGO: SIZED LARGE AND NATURAL */
     .logo-container {
-        height: 65px; 
+        height: 85px; /* Increased from 65px to be bold */
         display: flex;
         align-items: center;
     }
@@ -54,16 +54,16 @@
     .join-btn {
         background: var(--primary-forest);
         color: var(--matcha-accent);
-        padding: 10px 24px;
+        padding: 12px 28px;
         border-radius: 8px;
         text-decoration: none;
-        font-weight: 700;
-        font-size: 13px;
+        font-weight: 800;
+        font-size: 14px;
         text-transform: uppercase;
         transition: 0.3s;
     }
 
-    /* HERO VIDEO */
+    /* HERO VIDEO: LONG NORMAL FORMAT */
     .hero-box {
         width: 92%;
         max-width: 1100px;
@@ -72,36 +72,34 @@
         border-radius: 20px;
         overflow: hidden;
         border: 4px solid var(--matcha-accent);
-        box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        box-shadow: 0 15px 40px rgba(0,0,0,0.12);
     }
 
     .video-container {
-        position: relative;
         width: 100%;
-        padding-top: 56.25%; 
+        /* Removed padding-top aspect ratio to allow natural height */
     }
 
     .video-container video {
-        position: absolute;
-        top: 0; left: 0;
-        width: 100%; height: 100%;
-        object-fit: contain;
+        width: 100%;
+        height: auto; /* Changed to auto for 'long normal' display */
+        display: block;
     }
 
     /* GRID LAYOUT */
     .section-title {
         text-align: center;
-        font-size: 26px;
+        font-size: 28px;
         font-weight: 900;
         color: var(--primary-forest);
-        margin: 50px 0 30px;
+        margin: 60px 0 40px;
         text-transform: uppercase;
     }
 
     .income-grid {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-        gap: 25px;
+        gap: 30px;
         width: 92%;
         max-width: 1200px;
         margin: 0 auto;
@@ -110,38 +108,40 @@
     .work-card {
         background: var(--white);
         border: 1px solid rgba(0,0,0,0.05);
-        border-radius: 20px;
+        border-radius: 24px;
         overflow: hidden;
-        transition: transform 0.3s ease;
+        transition: 0.3s ease;
     }
 
     .work-card:hover {
-        transform: translateY(-5px);
+        transform: translateY(-8px);
+        box-shadow: 0 20px 30px rgba(0,0,0,0.05);
     }
 
     .work-img {
         width: 100%;
-        height: 220px;
+        height: 240px;
         object-fit: cover;
     }
 
     .work-info {
-        padding: 25px;
+        padding: 30px;
     }
 
     .work-info h3 {
-        margin: 0 0 10px;
-        font-size: 19px;
+        margin: 0 0 12px;
+        font-size: 20px;
         color: var(--primary-forest);
         display: flex;
         align-items: center;
-        gap: 10px;
+        gap: 12px;
+        font-weight: 800;
     }
 
     .work-info p {
-        font-size: 14px;
+        font-size: 15px;
         color: #555;
-        line-height: 1.6;
+        line-height: 1.7;
         margin: 0;
     }
 
@@ -149,8 +149,8 @@
     .status-area {
         background: var(--primary-forest);
         color: var(--white);
-        padding: 60px 0;
-        margin: 70px 0;
+        padding: 80px 0;
+        margin: 80px 0;
         text-align: center;
     }
 
@@ -158,35 +158,36 @@
         display: flex;
         justify-content: center;
         flex-wrap: wrap;
-        gap: 50px;
-        max-width: 1000px;
+        gap: 60px;
+        max-width: 1100px;
         margin: 0 auto;
     }
 
     .status-item h4 {
-        font-size: 38px;
+        font-size: 45px;
         margin: 10px 0;
         color: var(--matcha-accent);
+        font-weight: 900;
     }
 
     .status-label {
-        font-size: 12px;
+        font-size: 14px;
         text-transform: uppercase;
-        letter-spacing: 1px;
-        opacity: 0.7;
+        letter-spacing: 2px;
+        opacity: 0.8;
     }
 
-    /* BIP LIVE INDICATOR */
+    /* BIP LIVE INDICATOR ON USERS */
     .bip-container {
         display: inline-flex;
         align-items: center;
-        gap: 8px;
-        background: rgba(255,255,255,0.08);
-        padding: 6px 15px;
-        border-radius: 20px;
-        margin-top: 15px;
-        font-weight: 700;
-        font-size: 12px;
+        gap: 10px;
+        background: rgba(255,255,255,0.12);
+        padding: 8px 18px;
+        border-radius: 30px;
+        margin-top: 20px;
+        font-weight: 800;
+        font-size: 13px;
     }
 
     .pulse {
@@ -194,54 +195,59 @@
         width: 10px;
         background: var(--live-green);
         border-radius: 50%;
+        box-shadow: 0 0 10px var(--live-green);
         animation: blink 1.2s infinite ease-in-out;
     }
 
     @keyframes blink {
         0% { transform: scale(0.8); opacity: 0.5; }
-        50% { transform: scale(1.2); opacity: 1; }
+        50% { transform: scale(1.3); opacity: 1; }
         100% { transform: scale(0.8); opacity: 0.5; }
     }
 
     /* KNOWLEDGE CENTER - 5 ITEMS */
     .faq-container {
-        max-width: 800px;
-        margin: 0 auto 80px;
+        max-width: 850px;
+        margin: 0 auto 100px;
         padding: 0 20px;
     }
 
     details {
         background: var(--white);
-        margin-bottom: 12px;
-        border-radius: 12px;
-        border: 1px solid rgba(0,0,0,0.05);
+        margin-bottom: 15px;
+        border-radius: 15px;
+        border: 1px solid rgba(0,0,0,0.06);
+        overflow: hidden;
     }
 
     summary {
-        padding: 20px;
+        padding: 25px;
         cursor: pointer;
-        font-weight: 700;
+        font-weight: 800;
         display: flex;
         justify-content: space-between;
         align-items: center;
         list-style: none;
+        color: var(--primary-forest);
     }
 
     /* FOOTER */
     .footer {
         background: var(--white);
-        padding: 60px 6% 30px;
-        border-top: 1px solid #eee;
+        padding: 80px 6% 40px;
+        border-top: 4px solid var(--matcha-accent);
     }
 
     .footer-logo {
-        height: 70px;
-        margin-bottom: 20px;
+        height: 90px; /* Big natural logo in footer too */
+        margin-bottom: 25px;
+        display: block;
     }
 
     @media (max-width: 768px) {
-        .logo-container { height: 55px; }
-        .status-grid { flex-direction: column; gap: 30px; }
+        .logo-container { height: 60px; }
+        .footer-logo { height: 70px; }
+        .status-grid { flex-direction: column; gap: 40px; }
     }
 </style>
 </head>
@@ -249,14 +255,16 @@
 
 <header class="topbar">
     <div class="logo-container">
-        <img src="logo.png" alt="Logo" class="logo-img">
+        <!-- Natural Logo - Prominent Size -->
+        <img src="logo.png" alt="Stream Africa Logo" class="logo-img">
     </div>
-    <a href="reward.html" class="join-btn">Join Now</a>
+    <a href="reward.html" class="join-btn">Get Started</a>
 </header>
 
 <main>
     <section class="hero-box">
         <div class="video-container">
+            <!-- Normal Long Video Display -->
             <video src="video.mp4" controls poster="hero1.jpg" playsinline></video>
         </div>
     </section>
@@ -264,60 +272,59 @@
     <h2 class="section-title">Income Channels</h2>
 
     <div class="income-grid">
-        <!-- Box 1 -->
         <div class="work-card">
             <img src="hero2.jpg" class="work-img">
             <div class="work-info">
                 <h3><i class="fas fa-headphones"></i> Audio Collab</h3>
-                <p>Monetize your streams. Support regional artists and earn rewards for active listening sessions.</p>
+                <p>Support the African music industry. Listen to tracks and verified audio content to earn daily rewards.</p>
             </div>
         </div>
-        <!-- Box 2 -->
+
         <div class="work-card">
             <img src="hero3.jpg" class="work-img">
             <div class="work-info">
                 <h3><i class="fas fa-play-circle"></i> Video Collab</h3>
-                <p>Engage with high-quality visual content and campaign trailers to accumulate digital assets.</p>
+                <p>Monetize your screen time. Engage with movie trailers, short clips, and campaign videos for instant growth.</p>
             </div>
         </div>
-        <!-- Box 3 -->
+
         <div class="work-card">
             <img src="hero4.jpg" class="work-img">
             <div class="work-info">
                 <h3><i class="fas fa-camera"></i> Snap Collab</h3>
-                <p>Turn visual creativity into profit. Verify brand imagery and complete photography tasks.</p>
+                <p>Turn visual interaction into assets. Complete photography-based verification tasks for high-value rewards.</p>
             </div>
         </div>
-        <!-- Box 4 -->
+
         <div class="work-card">
             <img src="hero5.jpg" class="work-img">
             <div class="work-info">
-                <h3><i class="fas fa-map"></i> Task Roadmap</h3>
-                <p>Follow the daily structured guide to maintain consistency and maximize monthly earnings.</p>
+                <h3><i class="fas fa-route"></i> Growth Roadmap</h3>
+                <p>Stay consistent with our daily earning structure. Consistency is the primary factor for bonus wealth.</p>
             </div>
         </div>
-        <!-- Box 5 -->
+
         <div class="work-card">
             <img src="hero6.jpg" class="work-img">
             <div class="work-info">
                 <h3><i class="fas fa-download"></i> Download Hub</h3>
-                <p>Access essential ecosystem tools. Rewards are issued for every verified network download.</p>
+                <p>Help scale the ecosystem. Receive rewards for every verified asset download within the network hub.</p>
             </div>
         </div>
-        <!-- Box 6 -->
+
         <div class="work-card">
             <img src="hero7.jpg" class="work-img">
             <div class="work-info">
                 <h3><i class="fas fa-users"></i> Global Network</h3>
-                <p>Join a borderless community across the continent building shared digital wealth.</p>
+                <p>Connect with a digital community of thousands building a new financial future for the continent.</p>
             </div>
         </div>
-        <!-- Box 7 -->
+
         <div class="work-card">
             <img src="hero1.jpg" class="work-img">
             <div class="work-info">
                 <h3><i class="fas fa-gem"></i> Stream Plus</h3>
-                <p>Premium tier access for dedicated collaborators with higher reward multipliers.</p>
+                <p>The premium choice. Unlock high-yield tasks and priority verification for maximum daily output.</p>
             </div>
         </div>
     </div>
@@ -325,7 +332,7 @@
     <section class="status-area">
         <div class="status-grid">
             <div class="status-item">
-                <span class="status-label">Community Size</span>
+                <span class="status-label">Active Collaborators</span>
                 <h4>300,000+</h4>
                 <div class="bip-container">
                     <div class="pulse"></div>
@@ -333,14 +340,14 @@
                 </div>
             </div>
             <div class="status-item">
-                <span class="status-label">Trust Score</span>
-                <h4>SECURE</h4>
-                <p style="font-size: 11px; opacity: 0.6; margin-top: 5px;">Bank-grade encryption active</p>
+                <span class="status-label">System Security</span>
+                <h4>ENCRYPTED</h4>
+                <p style="font-size: 13px; opacity: 0.7; margin-top: 10px;">End-to-end data protection active</p>
             </div>
             <div class="status-item">
-                <span class="status-label">Asset Growth</span>
+                <span class="status-label">Global Access</span>
                 <h4>OPTIMAL</h4>
-                <p style="font-size: 11px; opacity: 0.6; margin-top: 5px;">Low latency nodes enabled</p>
+                <p style="font-size: 13px; opacity: 0.7; margin-top: 10px;">Network uptime at 99.9%</p>
             </div>
         </div>
     </section>
@@ -348,42 +355,43 @@
     <h2 class="section-title">Knowledge Center</h2>
     <div class="faq-container">
         <details>
-            <summary>1. How do I start earning? <i class="fas fa-plus"></i></summary>
-            <div style="padding: 0 20px 20px; opacity: 0.7; font-size: 14px;">Select any active channel, follow the specific task requirements, and rewards will be credited to your wallet.</div>
+            <summary>1. How do I start earning? <i class="fas fa-chevron-down"></i></summary>
+            <div style="padding: 0 25px 25px; opacity: 0.8; font-size: 15px;">Select any of the seven channels, follow the specific task instructions, and rewards are credited to your dashboard upon completion.</div>
         </details>
         <details>
-            <summary>2. Is my account protected? <i class="fas fa-plus"></i></summary>
-            <div style="padding: 0 20px 20px; opacity: 0.7; font-size: 14px;">Yes. We use end-to-end encryption and secure trust protocols to safeguard all collaborator data.</div>
+            <summary>2. Is my account safe? <i class="fas fa-chevron-down"></i></summary>
+            <div style="padding: 0 25px 25px; opacity: 0.8; font-size: 15px;">Absolutely. We use professional-grade encryption protocols to ensure your data and assets are always protected.</div>
         </details>
         <details>
-            <summary>3. Payout Schedule <i class="fas fa-plus"></i></summary>
-            <div style="padding: 0 20px 20px; opacity: 0.7; font-size: 14px;">Withdrawals are processed systematically once you reach the minimum regional milestone.</div>
+            <summary>3. When can I withdraw my rewards? <i class="fas fa-chevron-down"></i></summary>
+            <div style="padding: 0 25px 25px; opacity: 0.8; font-size: 15px;">Withdrawals are available daily once you reach the minimum regional milestone designated for your account.</div>
         </details>
         <details>
-            <summary>4. Multi-Channel Earning <i class="fas fa-plus"></i></summary>
-            <div style="padding: 0 20px 20px; opacity: 0.7; font-size: 14px;">Collaborators can participate in all 7 channels simultaneously to optimize their daily income potential.</div>
+            <summary>4. Can I use multiple channels? <i class="fas fa-chevron-down"></i></summary>
+            <div style="padding: 0 25px 25px; opacity: 0.8; font-size: 15px;">Yes! In fact, most top earners use multiple channels simultaneously to maximize their daily income potential.</div>
         </details>
         <details>
-            <summary>5. Technical Support <i class="fas fa-plus"></i></summary>
-            <div style="padding: 0 20px 20px; opacity: 0.7; font-size: 14px;">Reach out via our official community telegram or email support for 24/7 technical assistance.</div>
+            <summary>5. How to get technical support? <i class="fas fa-chevron-down"></i></summary>
+            <div style="padding: 0 25px 25px; opacity: 0.8; font-size: 15px;">Our support team is available 24/7 through our official Telegram community or via the email address in the footer.</div>
         </details>
     </div>
 </main>
 
 <footer class="footer">
-    <div style="max-width: 1100px; margin: 0 auto; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 40px;">
-        <div style="max-width: 400px;">
-            <img src="logo.png" class="footer-logo">
-            <p style="font-size: 14px; color: #666; line-height: 1.6;">Empowering the continent through digital infrastructure and community-driven wealth creation.</p>
+    <div style="max-width: 1150px; margin: 0 auto; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 50px;">
+        <div style="max-width: 450px;">
+            <!-- Large Natural Footer Logo -->
+            <img src="logo.png" alt="Stream Footer" class="footer-logo">
+            <p style="font-size: 15px; color: #666; line-height: 1.8;">Leading the digital evolution in Africa through transparent infrastructure and shared opportunities for all creators.</p>
         </div>
         <div>
-            <h5 style="margin-bottom: 20px; text-transform: uppercase;">Contact</h5>
-            <p style="font-size: 14px; color: #666;"><i class="fas fa-envelope"></i> support@stream.africa</p>
-            <p style="font-size: 14px; color: #666;"><i class="fas fa-map-marker-alt"></i> Victoria Island, Lagos</p>
+            <h5 style="margin-bottom: 25px; font-size: 18px; color: var(--primary-forest);">Contact Info</h5>
+            <p style="font-size: 15px; color: #666; margin-bottom: 12px;"><i class="fas fa-envelope" style="color: var(--live-green); margin-right: 10px;"></i> support@stream.africa</p>
+            <p style="font-size: 15px; color: #666;"><i class="fas fa-map-marker-alt" style="color: var(--live-green); margin-right: 10px;"></i> Victoria Island, Lagos</p>
         </div>
     </div>
-    <div style="text-align: center; margin-top: 50px; padding-top: 25px; border-top: 1px solid #eee; font-size: 11px; color: #aaa;">
-        &copy; 2026 STREAM AFRICA | ALL RIGHTS RESERVED
+    <div style="text-align: center; margin-top: 70px; padding-top: 30px; border-top: 1px solid #eee; font-size: 12px; color: #999;">
+        &copy; 2026 STREAM AFRICA | EMPOWERING THE CONTINENT
     </div>
 </footer>
 
