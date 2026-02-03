@@ -12,9 +12,9 @@
         body {
             margin: 0;
             padding: 0;
-            background: #f8faf9;
+            background: #0a1f1c; /* Dark Forest Background */
             font-family: 'Inter', sans-serif;
-            color: #1a2e2a;
+            color: #ffffff; /* White text */
             min-height: 100vh;
             display: flex;
             flex-direction: column;
@@ -23,13 +23,13 @@
 
         .topbar {
             width: 100%;
-            background: white;
+            background: #0a1f1c;
             padding: 15px 5%;
             display: flex;
             flex-direction: column;
             align-items: center;
             border-bottom: 2px solid #b8d5b0;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
         }
 
         .logo-container {
@@ -41,6 +41,7 @@
             height: 100%;
             width: auto;
             object-fit: contain;
+            filter: brightness(0) invert(1); /* Makes logo white to match theme */
         }
 
         .navbar {
@@ -51,7 +52,7 @@
         }
 
         .navbar a {
-            color: #0a1f1c;
+            color: #ffffff;
             text-decoration: none;
             font-weight: bold;
             font-size: 14px;
@@ -60,23 +61,23 @@
             transition: all 0.3s;
         }
 
-        .navbar a.active { border-bottom: 3px solid #b8d5b0; }
+        .navbar a.active { border-bottom: 3px solid #b8d5b0; color: #b8d5b0; }
 
         .register-container {
             width: 95%;
             max-width: 450px;
             margin: 40px auto;
-            background: white;
+            background: rgba(255, 255, 255, 0.05); /* Subtle dark card */
             border: 2px solid #b8d5b0;
             border-radius: 20px;
             padding: 35px 25px;
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.05);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
         }
 
         .main-title {
             font-size: 24px;
             font-weight: 900;
-            color: #0a1f1c;
+            color: #ffffff;
             text-align: center;
             margin-bottom: 30px;
             text-transform: uppercase;
@@ -90,7 +91,7 @@
             margin-bottom: 8px;
             font-size: 12px;
             font-weight: 800;
-            color: #0a1f1c;
+            color: #b8d5b0; /* Matcha accent for labels */
             text-transform: uppercase;
             letter-spacing: 1px;
         }
@@ -98,10 +99,10 @@
         .form-group input {
             width: 100%;
             padding: 14px;
-            border: 1px solid #e0e0e0;
+            border: 1px solid rgba(184, 213, 176, 0.2);
             border-radius: 12px;
-            background-color: #fdfdfd;
-            color: #1a2e2a;
+            background-color: rgba(255, 255, 255, 0.03);
+            color: #ffffff;
             font-size: 15px;
             box-sizing: border-box;
             transition: 0.3s;
@@ -110,14 +111,14 @@
         .form-group input:focus {
             outline: none;
             border-color: #b8d5b0;
-            background-color: white;
+            background-color: rgba(255, 255, 255, 0.08);
         }
         
         .register-button {
             width: 100%;
             padding: 18px;
-            background: #0a1f1c;
-            color: #b8d5b0;
+            background: #b8d5b0;
+            color: #0a1f1c;
             border: none;
             border-radius: 12px;
             font-size: 16px;
@@ -133,6 +134,7 @@
             transform: translateY(-2px);
         }
 
+        /* TOP-LEFT ACTIVITY FEED (MEDIUM SIZE) */
         .activity-feed-container {
             position: fixed; 
             top: 20px; 
@@ -140,25 +142,25 @@
             z-index: 2000; 
             width: 320px; 
             padding: 12px;
-            background: white; 
+            background: #0a1f1c; 
             border: 2px solid #b8d5b0; 
             border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
             display: flex;
             align-items: center;
             transition: left 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
         }
 
         .show-activity { left: 20px; }
-        .activity-icon { margin-right: 12px; flex-shrink: 0; color: #0a1f1c; font-size: 18px; }
-        #activity-text { flex-grow: 1; font-size: 12px; line-height: 1.4; color: #333; text-align: left;}
-        .stream-brand { color: #0a1f1c; font-weight: 900; text-transform: uppercase; }
-        .activity-user { color: #0a1f1c; font-weight: 700; }
-        .activity-amount { color: #27ae60; font-weight: 900; }
+        .activity-icon { margin-right: 12px; flex-shrink: 0; color: #b8d5b0; font-size: 18px; }
+        #activity-text { flex-grow: 1; font-size: 12px; line-height: 1.4; color: #ffffff; text-align: left;}
+        .stream-brand { color: #b8d5b0; font-weight: 900; text-transform: uppercase; }
+        .activity-user { color: #ffffff; font-weight: 700; }
+        .activity-amount { color: #ffffff; font-weight: 900; } /* Bold white amount */
         .activity-amount.withdrawal { color: #e74c3c; }
-        .activity-time { color: #999; font-size: 10px; display: block; margin-top: 2px; }
+        .activity-time { color: rgba(255,255,255,0.4); font-size: 10px; display: block; margin-top: 2px; }
 
-        .footer { width: 100%; text-align: center; padding: 30px 0; color: #bbb; font-size: 12px; border-top: 1px solid #eee; margin-top: auto; }
+        .footer { width: 100%; text-align: center; padding: 30px 0; color: #555; font-size: 12px; border-top: 1px solid rgba(184, 213, 176, 0.1); margin-top: auto; }
     </style>
 </head>
 <body>
