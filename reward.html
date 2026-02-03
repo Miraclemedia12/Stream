@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rewards | STREAM AFRICA</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: #f8faf9;
+            font-family: 'Inter', sans-serif;
+            color: #1a2e2a;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        .topbar {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 5%;
+            background: white;
+            border-bottom: 2px solid #b8d5b0;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        }
+
+        .logo-container {
+            height: 60px;
+            display: flex;
+            align-items: center;
+        }
+
+        .logo-img {
+            height: 100%;
+            width: auto;
+            object-fit: contain;
+        }
+
+        .nav-link {
+            color: #0a1f1c;
+            text-decoration: none;
+            font-weight: bold;
+            margin-left: 20px;
+            font-size: 14px;
+            text-transform: uppercase;
+        }
+
+        main {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 40px 15px;
+        }
+
+        .reward-box {
+            width: 100%;
+            max-width: 450px;
+            background: white;
+            border: 2px solid #b8d5b0;
+            border-radius: 20px;
+            padding: 30px;
+            text-align: center;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.05);
+        }
+
+        .plan-header {
+            font-size: 22px;
+            font-weight: 800;
+            color: #0a1f1c;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .price-container {
+            display: flex;
+            justify-content: center;
+            align-items: baseline;
+            gap: 15px;
+            margin-bottom: 5px;
+        }
+
+        .old-price { font-size: 20px; color: #999; text-decoration: line-through; }
+        .new-price { font-size: 48px; font-weight: 900; color: #0a1f1c; }
+
+        .timer-badge {
+            font-size: 13px;
+            background: #e74c3c;
+            color: white;
+            padding: 6px 15px;
+            border-radius: 50px;
+            font-weight: bold;
+            display: inline-block;
+            margin-bottom: 25px;
+        }
+
+        .section-title {
+            color: #0a1f1c;
+            font-weight: 900;
+            text-align: left;
+            margin: 25px 0 12px 0;
+            border-left: 4px solid #b8d5b0;
+            padding-left: 10px;
+            font-size: 13px;
+            text-transform: uppercase;
+        }
+
+        .earn-item {
+            background: #fdfdfd;
+            padding: 14px;
+            margin: 6px 0;
+            border: 1px solid #f0f0f0;
+            border-radius: 12px;
+            font-size: 14px;
+            text-align: left;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .earn-item i {
+            color: #0a1f1c;
+            margin-right: 10px;
+            width: 20px;
+            text-align: center;
+        }
+
+        .highlight-green { color: #27ae60; font-weight: 900; }
+
+        .plan-button {
+            width: 100%;
+            background: #0a1f1c;
+            color: #b8d5b0;
+            border: none;
+            border-radius: 12px;
+            padding: 18px;
+            font-weight: 900;
+            font-size: 17px;
+            cursor: pointer;
+            margin-top: 25px;
+            transition: 0.3s;
+            text-transform: uppercase;
+        }
+
+        /* TOP-LEFT ACTIVITY FEED (MEDIUM SIZE) */
+        .activity-feed-container {
+            position: fixed; 
+            top: 20px; 
+            left: -400px; /* Hidden state */
+            z-index: 2000; 
+            width: 320px; /* Medium width */
+            padding: 12px;
+            background: white; 
+            border: 2px solid #b8d5b0; 
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+            transition: left 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
+        }
+
+        .show-activity { left: 20px; }
+        .activity-icon { margin-right: 12px; flex-shrink: 0; color: #0a1f1c; font-size: 18px; }
+        #activity-text { flex-grow: 1; font-size: 12px; line-height: 1.4; color: #333; text-align: left; }
+        .stream-brand { color: #0a1f1c; font-weight: 800; }
+        .activity-user { color: #0a1f1c; font-weight: 700; }
+        .activity-amount { color: #27ae60; font-weight: 900; }
+        .activity-amount.withdrawal { color: #e74c3c; }
+        .activity-time { color: #999; font-size: 10px; display: block; margin-top: 2px; }
+
+        .footer { padding: 30px; text-align: center; color: #bbb; font-size: 12px; border-top: 1px solid #eee; margin-top: auto; }
+    </style>
+</head>
+<body>
+
+<div class="topbar">
+    <div class="logo-container">
+        <img src="logo.png" alt="Stream Africa Logo" class="logo-img">
+    </div>
+    <div>
+        <a href="index.html" class="nav-link">Home</a>
+        <a href="register.html" class="nav-link">Register</a>
+    </div>
+</div>
+
+<main>
+    <div class="reward-box">
+        <div class="plan-header">Membership Onboarding</div>
+        <div class="price-container">
+            <div class="old-price">₦16,000</div>
+            <div class="new-price">₦12,000</div>
+        </div>
+        <div class="timer-badge">OFFER EXPIRES: <span id="countdown">30:00</span></div>
+
+        <div class="section-title">Earnings & Rewards</div>
+        <div class="earn-item"><span><i class="fas fa-wallet"></i> Stream Cashback</span> <span class="highlight-green">₦12,000</span></div>
+        <div class="earn-item"><span><i class="fas fa-tower-broadcast"></i> Livestream</span> <span class="highlight-green">₦5,700</span></div>
+        <div class="earn-item"><span><i class="fas fa-clapperboard"></i> Video</span> <span class="highlight-green">₦2,750</span></div>
+        <div class="earn-item"><span><i class="fas fa-music"></i> Audio</span> <span class="highlight-green">₦1,550</span></div>
+        <div class="earn-item"><span><i class="fas fa-camera"></i> Snap</span> <span class="highlight-green">₦1,150</span></div>
+        <div class="earn-item"><span><i class="fas fa-file-arrow-down"></i> File Download</span> <span class="highlight-green">₦1,050</span></div>
+
+        <div class="section-title">Power Features</div>
+        <div class="earn-item"><span><i class="fab fa-tiktok"></i> TikTok Network</span> <span class="highlight-green">₦200k Monthly</span></div>
+        <div class="earn-item"><span><i class="fas fa-gift"></i> WishHub</span> <span class="highlight-green">Weekly Gifts</span></div>
+        <div class="earn-item"><span><i class="fas fa-store"></i> Stream Bazaar</span> <span class="highlight-green">Market Access</span></div>
+        <div class="earn-item"><span><i class="fas fa-graduation-cap"></i> Stream SkillUp</span> <span class="highlight-green">Digital Skills</span></div>
+
+        <button class="plan-button" onclick="window.location.href='register.html'">Get Started Now</button>
+    </div>
+</main>
+
+<div class="footer">© 2026 STREAM AFRICA — ALL RIGHTS RESERVED</div>
+
+<div id="activity-feed" class="activity-feed-container">
+    <div class="activity-icon">
+        <i id="act-icon" class="fas fa-circle-check"></i>
+    </div>
+    <div id="activity-text">Connecting to Stream Africa...</div>
+</div>
+
+<script>
+    function startTimer(duration, display) {
+        let timer = duration, minutes, seconds;
+        setInterval(function () {
+            minutes = parseInt(timer / 60, 10);
+            seconds = parseInt(timer % 60, 10);
+            minutes = minutes < 10 ? "0" + minutes : minutes;
+            seconds = seconds < 10 ? "0" + seconds : seconds;
+            display.textContent = minutes + ":" + seconds;
+            if (--timer < 0) { timer = duration; }
+        }, 1000);
+    }
+
+    // 8 UNIQUE ACTIVITIES
+    const ACTIVITIES = [
+        { name: "Adesua M.", type: "withdrawn", amount: "35,000", location: "Lagos", time: "just now" },
+        { name: "Obinna K.", type: "joined", amount: "12,000", location: "PH", time: "2m ago" },
+        { name: "Fatima S.", type: "joined", amount: "12,000", location: "Kano", time: "5m ago" },
+        { name: "Chidi N.", type: "withdrawn", amount: "15,500", location: "Enugu", time: "10m ago" },
+        { name: "Tunde W.", type: "joined", amount: "12,000", location: "Ibadan", time: "1m ago" },
+        { name: "Zainab A.", type: "withdrawn", amount: "52,000", location: "Abuja", time: "just now" },
+        { name: "Efe J.", type: "joined", amount: "12,000", location: "Warri", time: "4m ago" },
+        { name: "Amaka R.", type: "withdrawn", amount: "110,000", location: "Onitsha", time: "just now" }
+    ];
+    let activityIndex = 0;
+
+    function cycleActivityFeed() {
+        const activityElement = document.getElementById('activity-text');
+        const feedContainer = document.getElementById('activity-feed');
+        const actIcon = document.getElementById('act-icon');
+        const act = ACTIVITIES[activityIndex];
+        
+        if (act.type === 'joined') {
+            actIcon.className = "fas fa-user-plus";
+            activityElement.innerHTML = `<span class="activity-user">${act.name}</span> (${act.location}) joined <span class="stream-brand">STREAM AFRICA</span> and earned <span class="activity-amount">₦${act.amount}</span>!<span class="activity-time">${act.time}</span>`;
+        } else {
+            actIcon.className = "fas fa-money-bill-transfer";
+            activityElement.innerHTML = `<span class="activity-user">${act.name}</span> (${act.location}) withdrew <span class="activity-amount withdrawal">₦${act.amount}</span> from <span class="stream-brand">STREAM AFRICA</span>!<span class="activity-time">${act.time}</span>`;
+        }
+
+        feedContainer.classList.add('show-activity');
+        setTimeout(() => {
+            feedContainer.classList.remove('show-activity');
+            activityIndex = (activityIndex + 1) % ACTIVITIES.length;
+        }, 5000); 
+    }
+
+    window.onload = function () {
+        startTimer(30 * 60, document.querySelector('#countdown'));
+        setTimeout(cycleActivityFeed, 2000);
+        setInterval(cycleActivityFeed, 10000);
+    };
+</script>
+</body>
+</html>
+
+
