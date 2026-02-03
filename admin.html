@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stream Africa | Admin Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700;800&display=swap');
+        body { background: #0a1f1c; color: #fff; font-family: 'Plus Jakarta Sans', sans-serif; }
+        .glass { background: rgba(255,255,255,0.03); border: 1px solid rgba(184, 213, 176, 0.15); backdrop-filter: blur(10px); }
+        input { background: rgba(255,255,255,0.05) !important; border: 1px solid rgba(255,255,255,0.1) !important; color: white !important; }
+        .hidden { display: none; }
+        .stream-green { color: #b8d5b0; }
+        .bg-stream-green { background-color: #b8d5b0; }
+        .border-stream-green { border-color: #b8d5b0; }
+    </style>
+</head>
+<body class="flex items-center justify-center min-h-screen p-6">
+
+    <!-- LOGIN SECTION -->
+    <div id="login-card" class="glass w-full max-w-sm rounded-[30px] p-8">
+        <div class="flex items-center gap-3 mb-6">
+            <div class="w-10 h-10 bg-stream-green rounded-full flex items-center justify-center text-black"><i class="fas fa-shield-alt"></i></div>
+            <h1 class="text-2xl font-black stream-green">Stream Admin</h1>
+        </div>
+        <div class="space-y-4">
+            <input type="text" id="user" placeholder="Username" class="w-full p-4 rounded-xl outline-none">
+            <input type="password" id="pass" placeholder="Password" class="w-full p-4 rounded-xl outline-none">
+            <button id="login-btn" onclick="handleLogin()" class="w-full bg-stream-green text-black font-black p-4 rounded-xl shadow-lg active:scale-95 transition">LOG IN</button>
+            <p id="auth-error" class="text-red-400 text-[10px] text-center font-bold uppercase hidden">Invalid Credentials</p>
+        </div>
+    </div>
+
+    <!-- DASHBOARD SECTION -->
+    <div id="dash-card" class="glass w-full max-w-lg rounded-[30px] p-8 hidden">
+        <div class="flex justify-between items-center mb-8">
+            <h1 class="text-xl font-black stream-green uppercase">Global Settings</h1>
+            <div class="bg-stream-green/10 stream-green text-[10px] font-bold px-3 py-1 rounded-full border border-stream-green/20 uppercase">Live Control</div>
+        </div>
+        <div class="space-y-5">
+            <div>
+                <label class="text-[10px] font-bold text-gray-500 uppercase tracking-widest ml-1">Bank Name</label>
+                <input type="text" id="bank-in" class="w-full p-4 mt-1 rounded-xl outline-none" placeholder="e.g. Kuda Bank">
+            </div>
+            <div>
+                <label class="text-[10px] font-bold text-gray-500 uppercase tracking-widest ml-1">Account Number</label>
+                <input type="text" id="num-in" class="w-full p-4 mt-1 rounded-xl outline-none" placeholder="e.g. 3003425249">
+            </div>
+            <div>
+                <label class="text-[10px] font-bold text-gray-500 uppercase tracking-widest ml-1">Account Holder Name</label>
+                <input type="text" id="name-in" class="w-full p-4 mt-1 rounded-xl outline-none" placeholder="e.g. MORRISH M ENTERPRISES">
+            </div>
+            <div>
+                <label class="text-[10px] font-bold text-gray-500 uppercase tracking-widest ml-1">Telegram Redirect URL</label>
+                <input type="text" id="link-in" class="w-full p-4 mt-1 rounded-xl outline-none" placeholder="https://t.me/...">
+            </div>
+            <div class="pt-4">
+                <button onclick="handleUpdate()" id="up-btn" class="w-full bg-stream-green text-black font-black p-5 rounded-2xl transition hover:brightness-110 uppercase tracking-tighter">Save & Update Website</button>
+            </div>
+            <p id="status-msg" class="text-center text-[10px] font-bold uppercase tracking-widest"></p>
+        </div>
+    </div>
+
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+    import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+    import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyDnElnPVmXki1il5bnHU2QzkeQCEuRKCco",
+        authDomain: "stream-africa1.firebaseapp.com",
+        projectId: "stream-africa1",
+        storageBucket: "stream-africa1.firebasestorage.app",
+        messagingSenderId: "418092449756",
+        appId: "1:418092449756:web:f25270e84786d127e95919"
+    };
+    
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+    const appId = "stream-africa1";
+    // RULE 1: Strict path structure
+    const docPath = doc(db, 'artifacts', appId, 'public', 'data', 'paymentConfig');
+
+    window.handleLogin = () => {
+        const u = document.getElementById('user').value;
+        const p = document.getElementById('pass').value;
+        const err = document.getElementById('auth-error');
+        
+        // Use your preferred credentials here
+        if(u === "admin" && p === "stream2026") {
+            document.getElementById('login-card').classList.add('hidden');
+            document.getElementById('dash-card').classList.remove('hidden');
+            initDash();
+        } else { 
+            err.classList.remove('hidden');
+        }
+    };
+
+    async function initDash() {
+        await signInAnonymously(auth);
+        const snap = await getDoc(docPath);
+        if(snap.exists()) {
+            const d = snap.data();
+            document.getElementById('bank-in').value = d.bankName || "";
+            document.getElementById('num-in').value = d.accountNumber || "";
+            document.getElementById('name-in').value = d.accountName || "";
+            document.getElementById('link-in').value = d.telegramLink || "";
+        }
+    }
+
+    window.handleUpdate = async () => {
+        const btn = document.getElementById('up-btn');
+        const status = document.getElementById('status-msg');
+        btn.innerText = "UPDATING..."; btn.disabled = true;
+        
+        try {
+            if(!auth.currentUser) await signInAnonymously(auth);
+            
+            await setDoc(docPath, {
+                bankName: document.getElementById('bank-in').value,
+                accountNumber: document.getElementById('num-in').value,
+                accountName: document.getElementById('name-in').value,
+                telegramLink: document.getElementById('link-in').value,
+                updatedAt: new Date().toISOString()
+            });
+            
+            status.innerText = "Website Updated Successfully!";
+            status.style.color = "#b8d5b0";
+            setTimeout(() => { status.innerText = ""; }, 3000);
+        } catch (e) { 
+            status.innerText = "Error: " + e.message;
+            status.style.color = "#ff6b6b";
+        }
+        btn.innerText = "SAVE & UPDATE WEBSITE"; btn.disabled = false;
+    };
+</script>
+</body>
+</html>
+
+
