@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>REGISTER | STREAM AFRICA</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: #f8faf9;
+            font-family: 'Inter', sans-serif;
+            color: #1a2e2a;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .topbar {
+            width: 100%;
+            background: white;
+            padding: 15px 5%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            border-bottom: 2px solid #b8d5b0;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        }
+
+        .logo-container {
+            height: 60px;
+            margin-bottom: 15px;
+        }
+
+        .logo-img {
+            height: 100%;
+            width: auto;
+            object-fit: contain;
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: center;
+            gap: 25px;
+            width: 100%;
+        }
+
+        .navbar a {
+            color: #0a1f1c;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 14px;
+            text-transform: uppercase;
+            padding-bottom: 5px;
+            transition: all 0.3s;
+        }
+
+        .navbar a.active { border-bottom: 3px solid #b8d5b0; }
+
+        .register-container {
+            width: 95%;
+            max-width: 450px;
+            margin: 40px auto;
+            background: white;
+            border: 2px solid #b8d5b0;
+            border-radius: 20px;
+            padding: 35px 25px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.05);
+        }
+
+        .main-title {
+            font-size: 24px;
+            font-weight: 900;
+            color: #0a1f1c;
+            text-align: center;
+            margin-bottom: 30px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .form-group { margin-bottom: 20px; }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 12px;
+            font-weight: 800;
+            color: #0a1f1c;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 14px;
+            border: 1px solid #e0e0e0;
+            border-radius: 12px;
+            background-color: #fdfdfd;
+            color: #1a2e2a;
+            font-size: 15px;
+            box-sizing: border-box;
+            transition: 0.3s;
+        }
+        
+        .form-group input:focus {
+            outline: none;
+            border-color: #b8d5b0;
+            background-color: white;
+        }
+        
+        .payment-button {
+            width: 100%;
+            padding: 18px;
+            background: #0a1f1c;
+            color: #b8d5b0;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 900;
+            cursor: pointer;
+            transition: 0.3s;
+            margin-top: 15px;
+            text-transform: uppercase;
+        }
+
+        .activity-feed-container {
+            position: fixed; 
+            top: 20px; 
+            left: -400px; 
+            z-index: 2000; 
+            width: 320px; 
+            padding: 12px;
+            background: white; 
+            border: 2px solid #b8d5b0; 
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+            transition: left 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
+        }
+
+        .show-activity { left: 20px; }
+        .activity-icon { margin-right: 12px; flex-shrink: 0; color: #0a1f1c; font-size: 18px; }
+        #activity-text { flex-grow: 1; font-size: 12px; line-height: 1.4; color: #333; text-align: left;}
+        .stream-brand { color: #0a1f1c; font-weight: 900; text-transform: uppercase; }
+        .activity-user { color: #0a1f1c; font-weight: 700; }
+        .activity-amount { color: #27ae60; font-weight: 900; }
+        .activity-amount.withdrawal { color: #e74c3c; }
+        .activity-time { color: #999; font-size: 10px; display: block; margin-top: 2px; }
+
+        .footer { width: 100%; text-align: center; padding: 30px 0; color: #bbb; font-size: 12px; border-top: 1px solid #eee; margin-top: auto; }
+    </style>
+</head>
+<body>
+
+<header class="topbar">
+    <div class="logo-container">
+        <img src="logo.png" alt="Stream Africa Logo" class="logo-img">
+    </div>
+    <div class="navbar">
+        <a href="index.html">HOME</a>
+        <a href="reward.html">REWARD</a>
+        <a href="register.html" class="active">REGISTER</a>
+    </div>
+</header>
+
+<div class="register-container">
+    <div class="main-title">Create Account</div>
+
+    <form id="registration-form">
+        <div class="form-group">
+            <label>Full Name</label>
+            <input type="text" id="full-name" placeholder="Enter your full name" required>
+        </div>
+        <div class="form-group">
+            <label>Username</label>
+            <input type="text" id="username" placeholder="Choose unique username" required>
+        </div>
+        <div class="form-group">
+            <label>Email Address</label>
+            <input type="email" id="email" placeholder="active@email.com" required>
+        </div>
+        <div class="form-group">
+            <label>Phone Number</label>
+            <input type="tel" id="phone-number" placeholder="Whatsapp number" required>
+        </div>
+        <div class="form-group">
+            <label>Password</label>
+            <input type="password" id="password" placeholder="Min 8 characters" required>
+        </div>
+        <button type="submit" class="payment-button">Register & Proceed To Payment</button>
+    </form>
+</div>
+
+<div class="footer">
+    &copy; 2026 STREAM AFRICA. All rights reserved. 
+</div>
+
+<div id="activity-feed" class="activity-feed-container">
+    <div class="activity-icon">
+        <i id="act-icon" class="fas fa-circle-check"></i>
+    </div>
+    <div id="activity-text">Authenticating...</div>
+</div>
+
+<script>
+    const ACTIVITIES = [
+        { name: "Blessing U.", type: "joined", amount: "12,000", location: "Benin", time: "just now" },
+        { name: "Kelechi O.", type: "withdrawn", amount: "67,500", location: "Asaba", time: "1m ago" },
+        { name: "Suleiman Y.", type: "joined", amount: "12,000", location: "Jos", time: "3m ago" },
+        { name: "Ifeanyi P.", type: "withdrawn", amount: "150,000", location: "Lekki", time: "just now" },
+        { name: "Damilola F.", type: "joined", amount: "12,000", location: "Akure", time: "6m ago" },
+        { name: "Umar G.", type: "withdrawn", amount: "28,200", location: "Sokoto", time: "4m ago" },
+        { name: "Chinwe H.", type: "joined", amount: "12,000", location: "Calabar", time: "2m ago" },
+        { name: "Rita X.", type: "withdrawn", amount: "41,300", location: "Uyo", time: "7m ago" }
+    ];
+
+    let activityIndex = 0;
+
+    function cycleActivityFeed() {
+        const activityElement = document.getElementById('activity-text');
+        const feedContainer = document.getElementById('activity-feed');
+        const actIcon = document.getElementById('act-icon');
+        const act = ACTIVITIES[activityIndex];
+        
+        if (act.type === 'joined') {
+            actIcon.className = "fas fa-user-plus";
+            activityElement.innerHTML = `<span class="activity-user">${act.name}</span> (${act.location}) joined <span class="stream-brand">STREAM</span> and earned <span class="activity-amount">₦${act.amount}</span>!<span class="activity-time">${act.time}</span>`;
+        } else {
+            actIcon.className = "fas fa-money-bill-transfer";
+            activityElement.innerHTML = `<span class="activity-user">${act.name}</span> (${act.location}) withdrew <span class="activity-amount withdrawal">₦${act.amount}</span> from <span class="stream-brand">STREAM</span>!<span class="activity-time">${act.time}</span>`;
+        }
+
+        feedContainer.classList.add('show-activity');
+        setTimeout(() => {
+            feedContainer.classList.remove('show-activity');
+            activityIndex = (activityIndex + 1) % ACTIVITIES.length;
+        }, 5000); 
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        setTimeout(cycleActivityFeed, 2000);
+        setInterval(cycleActivityFeed, 10000);
+    });
+</script>
+</body>
+</html>
+
