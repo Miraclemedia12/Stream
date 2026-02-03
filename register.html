@@ -7,6 +7,8 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&display=swap');
+
         body {
             margin: 0;
             padding: 0;
@@ -111,7 +113,7 @@
             background-color: white;
         }
         
-        .payment-button {
+        .register-button {
             width: 100%;
             padding: 18px;
             background: #0a1f1c;
@@ -124,6 +126,11 @@
             transition: 0.3s;
             margin-top: 15px;
             text-transform: uppercase;
+        }
+
+        .register-button:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
         }
 
         .activity-feed-container {
@@ -240,6 +247,30 @@
             activityIndex = (activityIndex + 1) % ACTIVITIES.length;
         }, 5000); 
     }
+
+    // Handle Form Submission and Redirection
+    document.getElementById('registration-form').addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        // Capture data
+        const fullName = document.getElementById('full-name').value;
+        const userName = document.getElementById('username').value;
+        
+        // Generate and save registration date if not exists
+        if (!localStorage.getItem('stream_reg_date')) {
+            const now = new Date();
+            const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+            const formattedDate = `${now.getDate()} ${months[now.getMonth()]} ${now.getFullYear()}`;
+            localStorage.setItem('stream_reg_date', formattedDate);
+        }
+
+        // Optional: Save user info for dashboard personalization
+        localStorage.setItem('stream_user_name', fullName);
+        localStorage.setItem('stream_username', userName);
+
+        // Redirect to dashboard
+        window.location.href = 'dashboard.html';
+    });
 
     document.addEventListener('DOMContentLoaded', () => {
         setTimeout(cycleActivityFeed, 2000);
