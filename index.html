@@ -14,6 +14,7 @@
         --text-dark: #0a1110;
         --matcha-glow: rgba(216, 232, 209, 0.9);
         --matcha-shine: rgba(216, 232, 209, 0.4);
+        --active-green: #2ecc71;
     }
 
     body {
@@ -25,7 +26,7 @@
         scroll-behavior: smooth;
     }
 
-    /* TOPBAR */
+    /* TOPBAR - BIG LOGO */
     .topbar {
         position: sticky; 
         top: 0;
@@ -33,14 +34,14 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
-        padding: 12px 6%;
+        padding: 15px 6%;
         background: var(--bright-white); 
-        border-bottom: 3px solid var(--matcha-green);
-        box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        border-bottom: 4px solid var(--matcha-green);
+        box-shadow: 0 4px 20px rgba(0,0,0,0.08);
     }
 
     .logo-container {
-        height: 60px;
+        height: 95px; /* Big logo size */
         display: flex;
         align-items: center;
     }
@@ -54,93 +55,97 @@
     .join-btn {
         background: var(--deep-forest);
         color: var(--matcha-green);
-        padding: 10px 24px;
+        padding: 14px 32px;
         border-radius: 50px;
         text-decoration: none;
-        font-weight: 800;
-        font-size: 13px;
+        font-weight: 900;
+        font-size: 14px;
         text-transform: uppercase;
         transition: 0.3s;
-        box-shadow: 0 4px 15px var(--matcha-shine);
+        box-shadow: 0 6px 20px var(--matcha-shine);
     }
 
     /* HERO VIDEO SECTION */
     .hero-box {
-        width: 92%;
-        max-width: 1100px;
-        margin: 20px auto;
+        width: 94%;
+        max-width: 1200px;
+        margin: 30px auto;
         background: #000;
-        border-radius: 24px;
+        border-radius: 30px;
         overflow: hidden;
-        border: 4px solid var(--matcha-green);
-        box-shadow: 0 10px 30px var(--matcha-shine);
+        border: 5px solid var(--matcha-green);
+        box-shadow: 0 15px 40px var(--matcha-shine);
+        position: relative;
     }
 
     .video-container {
         position: relative;
         width: 100%;
         padding-top: 56.25%; /* 16:9 Aspect Ratio */
+        background: #000;
     }
 
     .video-container video {
         position: absolute;
         top: 0; left: 0;
-        width: 100%; height: 100%;
-        object-fit: cover;
+        width: 100%; 
+        height: 100%;
+        object-fit: contain; 
+        display: block;
     }
 
     /* 7 INCOME CHANNELS */
     .section-title {
         text-align: center;
-        font-size: 24px;
+        font-size: 28px;
         font-weight: 900;
         color: var(--deep-forest);
-        margin: 50px 0 25px;
+        margin: 60px 0 35px;
         text-transform: uppercase;
-        letter-spacing: 1.5px;
+        letter-spacing: 2px;
     }
 
     .income-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-        gap: 25px;
+        grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+        gap: 30px;
         width: 92%;
-        max-width: 1200px;
+        max-width: 1250px;
         margin: 0 auto;
     }
 
     .work-card {
         background: var(--bright-white);
-        border: 2.5px solid var(--matcha-green);
-        border-radius: 28px;
+        border: 3px solid var(--matcha-green);
+        border-radius: 32px;
         overflow: hidden;
-        transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         display: flex;
         flex-direction: column;
     }
 
     .work-card:hover {
-        transform: translateY(-8px);
-        box-shadow: 0 15px 35px var(--matcha-glow);
+        transform: translateY(-12px);
+        box-shadow: 0 20px 45px var(--matcha-glow);
         border-color: var(--deep-forest);
     }
 
     .work-img {
         width: 100%;
-        height: 200px;
+        height: 240px;
         object-fit: cover;
         display: block;
-        background-color: #eee;
+        background-color: #f0f0f0;
     }
 
     .work-info {
-        padding: 25px;
+        padding: 30px;
         flex-grow: 1;
     }
 
     .work-info h3 {
-        margin: 0 0 12px;
-        font-size: 18px;
+        margin: 0 0 15px;
+        font-size: 20px;
         color: var(--deep-forest);
         display: flex;
         align-items: center;
@@ -149,27 +154,23 @@
         text-transform: uppercase;
     }
 
-    .work-info h3 i {
-        font-size: 20px;
-    }
-
     .work-info p {
         margin: 0;
-        line-height: 1.6;
-        font-size: 14px;
-        color: #555;
+        line-height: 1.7;
+        font-size: 15px;
+        color: #444;
     }
 
     /* STATUS COUNTER SECTION */
     .active-status-container {
         background: var(--matcha-green);
-        padding: 50px 0;
-        margin: 70px auto;
-        border-radius: 40px;
+        padding: 60px 0;
+        margin: 80px auto;
+        border-radius: 50px;
         width: 94%;
         max-width: 1200px;
-        box-shadow: inset 0 0 50px rgba(255,255,255,0.4), 0 20px 40px var(--matcha-shine);
-        border: 1px solid var(--bright-white);
+        box-shadow: inset 0 0 60px rgba(255,255,255,0.5), 0 25px 50px var(--matcha-shine);
+        border: 2px solid var(--bright-white);
     }
 
     .status-grid {
@@ -178,47 +179,82 @@
         flex-wrap: wrap;
         max-width: 1000px;
         margin: 0 auto;
-        gap: 30px;
+        gap: 40px;
     }
 
-    .status-item { text-align: center; flex: 1; min-width: 200px; }
+    .status-item { 
+        text-align: center; 
+        flex: 1; 
+        min-width: 250px;
+        position: relative;
+    }
 
     .status-icon-box {
-        width: 80px;
-        height: 80px;
+        width: 100px;
+        height: 100px;
         background: var(--bright-white);
-        border-radius: 20px;
+        border-radius: 25px;
         display: flex;
         justify-content: center;
         align-items: center;
-        margin: 0 auto 15px;
-        font-size: 32px;
+        margin: 0 auto 20px;
+        font-size: 40px;
         color: var(--deep-forest);
-        box-shadow: 0 8px 20px rgba(0,0,0,0.06);
+        box-shadow: 0 12px 25px rgba(0,0,0,0.08);
     }
 
-    .status-number { font-size: 36px; font-weight: 900; color: var(--deep-forest); margin: 0; }
+    .status-number { font-size: 42px; font-weight: 900; color: var(--deep-forest); margin: 0; }
 
-    .status-label { font-weight: 700; color: var(--deep-forest); opacity: 0.7; text-transform: uppercase; font-size: 12px; letter-spacing: 1px;}
+    .status-label { font-weight: 800; color: var(--deep-forest); opacity: 0.8; text-transform: uppercase; font-size: 13px; letter-spacing: 1.2px;}
 
-    /* KNOWLEDGE CENTER (5 LIST) */
+    /* BIP ACTIVE LIVE INDICATOR - MOVED TO USERS */
+    .bip-live-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        background: var(--deep-forest);
+        color: var(--matcha-green);
+        padding: 4px 12px;
+        border-radius: 20px;
+        font-size: 11px;
+        font-weight: 900;
+        margin-top: 10px;
+    }
+
+    .pulse-dot {
+        height: 8px;
+        width: 8px;
+        background-color: var(--active-green);
+        border-radius: 50%;
+        display: inline-block;
+        box-shadow: 0 0 8px var(--active-green);
+        animation: pulse-animation 1.5s infinite;
+    }
+
+    @keyframes pulse-animation {
+        0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(46, 204, 113, 0.7); }
+        70% { transform: scale(1); box-shadow: 0 0 0 8px rgba(46, 204, 113, 0); }
+        100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(46, 204, 113, 0); }
+    }
+
+    /* KNOWLEDGE CENTER */
     .knowledge-container {
-        max-width: 800px;
-        margin: 0 auto 80px;
+        max-width: 850px;
+        margin: 0 auto 100px;
         padding: 0 4%;
     }
 
     .faq-item {
         background: var(--bright-white);
         border: 2px solid var(--matcha-green);
-        border-radius: 18px;
-        margin-bottom: 12px;
+        border-radius: 20px;
+        margin-bottom: 15px;
         overflow: hidden;
     }
 
     summary {
-        padding: 20px;
-        font-weight: 700;
+        padding: 25px;
+        font-weight: 800;
         cursor: pointer;
         list-style: none;
         display: flex;
@@ -227,33 +263,26 @@
         color: var(--deep-forest);
     }
 
-    .faq-content {
-        padding: 0 20px 20px;
-        opacity: 0.8;
-        font-size: 14px;
-        line-height: 1.6;
-    }
-
     /* FOOTER */
     .footer {
         background: var(--deep-forest);
         color: var(--matcha-green);
-        padding: 60px 8% 30px;
-        border-radius: 40px 40px 0 0;
+        padding: 80px 8% 40px;
+        border-radius: 60px 60px 0 0;
     }
 
     .footer-content {
-        max-width: 1100px;
+        max-width: 1150px;
         margin: 0 auto;
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-        gap: 40px;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 60px;
     }
 
     @media (max-width: 768px) {
-        .logo-container { height: 45px; }
+        .logo-container { height: 75px; }
         .income-grid { grid-template-columns: 1fr; }
-        .work-img { height: 180px; }
+        .work-img { height: 200px; }
     }
 </style>
 </head>
@@ -261,7 +290,6 @@
 
 <nav class="topbar">
     <div class="logo-container">
-        <!-- Using your logo.png -->
         <img src="logo.png" alt="Stream Africa Logo" class="logo-img">
     </div>
     <a href="reward.html" class="join-btn">Join Now</a>
@@ -269,15 +297,13 @@
 
 <section class="hero-box">
     <div class="video-container">
-        <!-- Using video.mp4 with hero1.jpg as the poster -->
         <video src="video.mp4" controls poster="hero1.jpg" playsinline></video>
     </div>
 </section>
 
-<h2 class="section-title">HOW IT'S WORK</h2>
+<h2 class="section-title">HOW IT WORKS</h2>
 
 <div class="income-grid">
-    <!-- Box 1: Audio -->
     <div class="work-card">
         <img src="hero2.jpg" class="work-img" alt="Audio Collab">
         <div class="work-info">
@@ -286,7 +312,6 @@
         </div>
     </div>
 
-    <!-- Box 2: Video -->
     <div class="work-card">
         <img src="hero3.jpg" class="work-img" alt="Video Collab">
         <div class="work-info">
@@ -295,7 +320,6 @@
         </div>
     </div>
 
-    <!-- Box 3: Snap -->
     <div class="work-card">
         <img src="hero4.jpg" class="work-img" alt="Snap Collab">
         <div class="work-info">
@@ -304,16 +328,14 @@
         </div>
     </div>
 
-    <!-- Box 4: Monthly Tasks -->
     <div class="work-card">
         <img src="hero5.jpg" class="work-img" alt="Task Roadmap">
         <div class="work-info">
-            <h3><i class="fas fa-tasks"></i> February Roadmap</h3>
+            <h3><i class="fas fa-calendar-check"></i> February Roadmap</h3>
             <p>Stay on track with our structured daily task list. Consistency is the key to maximizing your monthly earnings.</p>
         </div>
     </div>
 
-    <!-- Box 5: Download Hub -->
     <div class="work-card">
         <img src="hero6.jpg" class="work-img" alt="Downloads">
         <div class="work-info">
@@ -322,7 +344,6 @@
         </div>
     </div>
 
-    <!-- Box 6: Global Network -->
     <div class="work-card">
         <img src="hero7.jpg" class="work-img" alt="Global Network">
         <div class="work-info">
@@ -331,11 +352,10 @@
         </div>
     </div>
 
-    <!-- Box 7: Stream Plus -->
     <div class="work-card">
         <img src="hero1.jpg" class="work-img" alt="Stream Plus">
         <div class="work-info">
-            <h3><i class="fas fa-gem"></i> Stream Plus</h3>
+            <h3><i class="fas fa-crown"></i> Stream Plus</h3>
             <p>Upgrade your experience. Unlock premium bonus tasks and higher reward rates reserved for our top-tier collaborators.</p>
         </div>
     </div>
@@ -347,6 +367,11 @@
             <div class="status-icon-box"><i class="fas fa-users"></i></div>
             <div class="status-number">300,000+</div>
             <div class="status-label">Active Users</div>
+            <!-- BIP ACTIVE LIVE INDICATOR PLACED HERE -->
+            <div class="bip-live-badge">
+                <span class="pulse-dot"></span>
+                BIP ACTIVE NOW
+            </div>
         </div>
         <div class="status-item">
             <div class="status-icon-box"><i class="fas fa-shield-alt"></i></div>
@@ -355,7 +380,7 @@
         </div>
         <div class="status-item">
             <div class="status-icon-box"><i class="fas fa-chart-line"></i></div>
-            <div class="status-number">GROWTH</div>
+            <div class="status-number">GLOBAL</div>
             <div class="status-label">Asset Ecosystem</div>
         </div>
     </div>
@@ -364,41 +389,40 @@
 <h2 class="section-title">Knowledge Center</h2>
 <div class="knowledge-container">
     <details class="faq-item">
-        <summary>1. How do I start earning? <i class="fas fa-plus"></i></summary>
-        <div class="faq-content">Choose any of the 7 channels above, follow the task instructions, and rewards are instantly credited to your dashboard.</div>
+        <summary>1. How do I start earning? <i class="fas fa-chevron-down"></i></summary>
+        <div style="padding:0 25px 25px; opacity:0.8; font-size:15px; line-height:1.7;">Choose any of the 7 channels above, follow the task instructions, and rewards are instantly credited to your dashboard.</div>
     </details>
     <details class="faq-item">
-        <summary>2. Is my account secure? <i class="fas fa-plus"></i></summary>
-        <div class="faq-content">Yes. We use advanced encryption and a secure trust protocol to protect all user data and transactions.</div>
+        <summary>2. Is my account secure? <i class="fas fa-chevron-down"></i></summary>
+        <div style="padding:0 25px 25px; opacity:0.8; font-size:15px; line-height:1.7;">Yes. We use advanced encryption and a secure trust protocol to protect all user data and transactions.</div>
     </details>
     <details class="faq-item">
-        <summary>3. When can I withdraw? <i class="fas fa-plus"></i></summary>
-        <div class="faq-content">Withdrawals are processed daily once you hit the minimum milestone designated for your region.</div>
+        <summary>3. When can I withdraw? <i class="fas fa-chevron-down"></i></summary>
+        <div style="padding:0 25px 25px; opacity:0.8; font-size:15px; line-height:1.7;">Withdrawals are processed daily once you hit the minimum milestone designated for your region.</div>
     </details>
     <details class="faq-item">
-        <summary>4. Can I join multiple channels? <i class="fas fa-plus"></i></summary>
-        <div class="faq-content">Absolutely. You are encouraged to participate across all channels to maximize your daily income potential.</div>
+        <summary>4. Can I join multiple channels? <i class="fas fa-chevron-down"></i></summary>
+        <div style="padding:0 25px 25px; opacity:0.8; font-size:15px; line-height:1.7;">Absolutely. You are encouraged to participate across all channels to maximize your daily income potential.</div>
     </details>
     <details class="faq-item">
-        <summary>5. How to contact support? <i class="fas fa-plus"></i></summary>
-        <div class="faq-content">Join our official Telegram community or send an email to our support desk listed in the footer below.</div>
+        <summary>5. How to contact support? <i class="fas fa-chevron-down"></i></summary>
+        <div style="padding:0 25px 25px; opacity:0.8; font-size:15px; line-height:1.7;">Join our official Telegram community or send an email to our support desk listed in the footer below.</div>
     </details>
 </div>
 
 <footer class="footer">
     <div class="footer-content">
         <div>
-            <!-- Footer Logo using logo.png with inverted colors for dark bg -->
-            <img src="logo.png" style="height: 40px; filter: brightness(0) invert(1); margin-bottom: 20px;">
-            <p style="font-size: 14px; opacity: 0.8;">Empowering the continent through digital infrastructure and shared wealth creation.</p>
+            <img src="logo.png" style="height: 65px; filter: brightness(0) invert(1); margin-bottom: 25px;">
+            <p style="font-size: 15px; opacity: 0.8; line-height: 1.6;">Empowering the continent through digital infrastructure and shared wealth creation.</p>
         </div>
         <div>
-            <h4 style="color:white; text-transform:uppercase; margin-bottom: 20px;">Contact</h4>
-            <p style="font-size: 14px; opacity: 0.8;"><i class="fas fa-envelope" style="margin-right:10px;"></i> support@stream.africa</p>
-            <p style="font-size: 14px; opacity: 0.8;"><i class="fas fa-map-marker-alt" style="margin-right:10px;"></i> Victoria Island, Lagos.</p>
+            <h4 style="color:white; text-transform:uppercase; margin-bottom: 25px; letter-spacing: 1px;">Connect with us</h4>
+            <p style="font-size: 15px; opacity: 0.8; margin-bottom: 12px;"><i class="fas fa-envelope" style="margin-right:12px; color: var(--matcha-green);"></i> support@stream.africa</p>
+            <p style="font-size: 15px; opacity: 0.8;"><i class="fas fa-map-marker-alt" style="margin-right:12px; color: var(--matcha-green);"></i> Victoria Island, Lagos.</p>
         </div>
     </div>
-    <div style="text-align:center; margin-top:50px; opacity:0.3; font-size:10px; border-top:1px solid rgba(255,255,255,0.1); padding-top:20px;">
+    <div style="text-align:center; margin-top:60px; opacity:0.3; font-size:11px; border-top:1px solid rgba(255,255,255,0.1); padding-top:25px; letter-spacing: 1px;">
         &copy; 2026 STREAM AFRICA | THE DIGITAL STREAMING COMMUNITY
     </div>
 </footer>
