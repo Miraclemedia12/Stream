@@ -10,9 +10,9 @@
         body {
             margin: 0;
             padding: 0;
-            background: #f8faf9;
+            background: #0a1f1c; /* Dark Forest Background */
             font-family: 'Inter', sans-serif;
-            color: #1a2e2a;
+            color: #ffffff; /* All text white */
             display: flex;
             flex-direction: column;
             min-height: 100vh;
@@ -26,9 +26,9 @@
             justify-content: space-between;
             align-items: center;
             padding: 10px 5%;
-            background: white;
+            background: #0a1f1c;
             border-bottom: 2px solid #b8d5b0;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
         }
 
         .logo-container {
@@ -41,10 +41,11 @@
             height: 100%;
             width: auto;
             object-fit: contain;
+            filter: brightness(0) invert(1); /* Makes logo white to match theme */
         }
 
         .nav-link {
-            color: #0a1f1c;
+            color: #ffffff;
             text-decoration: none;
             font-weight: bold;
             margin-left: 20px;
@@ -63,18 +64,18 @@
         .reward-box {
             width: 100%;
             max-width: 450px;
-            background: white;
+            background: rgba(255, 255, 255, 0.05); /* Subtle dark card */
             border: 2px solid #b8d5b0;
             border-radius: 20px;
             padding: 30px;
             text-align: center;
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.05);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
         }
 
         .plan-header {
             font-size: 22px;
             font-weight: 800;
-            color: #0a1f1c;
+            color: #b8d5b0; /* Matcha accent */
             margin-bottom: 20px;
             text-transform: uppercase;
             letter-spacing: 1px;
@@ -88,8 +89,8 @@
             margin-bottom: 5px;
         }
 
-        .old-price { font-size: 20px; color: #999; text-decoration: line-through; }
-        .new-price { font-size: 48px; font-weight: 900; color: #0a1f1c; }
+        .old-price { font-size: 20px; color: #666; text-decoration: line-through; }
+        .new-price { font-size: 48px; font-weight: 900; color: #ffffff; } /* Big white amount */
 
         .timer-badge {
             font-size: 13px;
@@ -103,7 +104,7 @@
         }
 
         .section-title {
-            color: #0a1f1c;
+            color: #b8d5b0;
             font-weight: 900;
             text-align: left;
             margin: 25px 0 12px 0;
@@ -114,31 +115,33 @@
         }
 
         .earn-item {
-            background: #fdfdfd;
+            background: rgba(255, 255, 255, 0.03);
             padding: 14px;
             margin: 6px 0;
-            border: 1px solid #f0f0f0;
+            border: 1px solid rgba(184, 213, 176, 0.1);
             border-radius: 12px;
             font-size: 14px;
             text-align: left;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            color: #ffffff;
         }
 
         .earn-item i {
-            color: #0a1f1c;
+            color: #b8d5b0;
             margin-right: 10px;
             width: 20px;
             text-align: center;
         }
 
-        .highlight-green { color: #27ae60; font-weight: 900; }
+        /* The white amount column */
+        .highlight-green { color: #ffffff; font-weight: 900; } 
 
         .plan-button {
             width: 100%;
-            background: #0a1f1c;
-            color: #b8d5b0;
+            background: #b8d5b0;
+            color: #0a1f1c;
             border: none;
             border-radius: 12px;
             padding: 18px;
@@ -158,25 +161,25 @@
             z-index: 2000; 
             width: 320px; /* Medium width */
             padding: 12px;
-            background: white; 
+            background: #0a1f1c; 
             border: 2px solid #b8d5b0; 
             border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
             display: flex;
             align-items: center;
             transition: left 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
         }
 
         .show-activity { left: 20px; }
-        .activity-icon { margin-right: 12px; flex-shrink: 0; color: #0a1f1c; font-size: 18px; }
-        #activity-text { flex-grow: 1; font-size: 12px; line-height: 1.4; color: #333; text-align: left; }
-        .stream-brand { color: #0a1f1c; font-weight: 800; }
-        .activity-user { color: #0a1f1c; font-weight: 700; }
-        .activity-amount { color: #27ae60; font-weight: 900; }
+        .activity-icon { margin-right: 12px; flex-shrink: 0; color: #b8d5b0; font-size: 18px; }
+        #activity-text { flex-grow: 1; font-size: 12px; line-height: 1.4; color: #ffffff; text-align: left; }
+        .stream-brand { color: #b8d5b0; font-weight: 800; }
+        .activity-user { color: #ffffff; font-weight: 700; }
+        .activity-amount { color: #ffffff; font-weight: 900; } /* White amount in notification */
         .activity-amount.withdrawal { color: #e74c3c; }
-        .activity-time { color: #999; font-size: 10px; display: block; margin-top: 2px; }
+        .activity-time { color: rgba(255,255,255,0.4); font-size: 10px; display: block; margin-top: 2px; }
 
-        .footer { padding: 30px; text-align: center; color: #bbb; font-size: 12px; border-top: 1px solid #eee; margin-top: auto; }
+        .footer { padding: 30px; text-align: center; color: #555; font-size: 12px; border-top: 1px solid rgba(184, 213, 176, 0.1); margin-top: auto; }
     </style>
 </head>
 <body>
@@ -198,7 +201,7 @@
             <div class="old-price">₦16,000</div>
             <div class="new-price">₦12,000</div>
         </div>
-        <div class="timer-badge">OFFER EXPIRES: <span id="countdown">30:00</span></div>
+        <div class="timer-badge">OFFER EXPIRES: <span id="countdown">10:00</span></div>
 
         <div class="section-title">Earnings & Rewards</div>
         <div class="earn-item"><span><i class="fas fa-wallet"></i> Stream Cashback</span> <span class="highlight-green">₦12,000</span></div>
@@ -240,7 +243,6 @@
         }, 1000);
     }
 
-    // 8 UNIQUE ACTIVITIES
     const ACTIVITIES = [
         { name: "Adesua M.", type: "withdrawn", amount: "35,000", location: "Lagos", time: "just now" },
         { name: "Obinna K.", type: "joined", amount: "12,000", location: "PH", time: "2m ago" },
@@ -275,12 +277,12 @@
     }
 
     window.onload = function () {
-        startTimer(30 * 60, document.querySelector('#countdown'));
+        // Changed duration to 10 minutes (600 seconds)
+        startTimer(10 * 60, document.querySelector('#countdown'));
         setTimeout(cycleActivityFeed, 2000);
         setInterval(cycleActivityFeed, 10000);
     };
 </script>
 </body>
 </html>
-
 
