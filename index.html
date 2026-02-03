@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>STREAM AFRICA | Engagement & Rewards</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+    :root {
+        /* Colors extracted from your pictures */
+        --matcha-green: #d8e8d1;
+        --deep-forest: #1a2e2a;
+        --bright-white: #ffffff;
+        --soft-bg: #f4f7f6;
+        --text-main: #0a1110;
+    }
+
+    body {
+        margin: 0;
+        padding: 0;
+        background-color: var(--soft-bg);
+        font-family: 'Inter', 'Segoe UI', sans-serif;
+        color: var(--text-main);
+        scroll-behavior: smooth;
+    }
+
+    /* NAVIGATION */
+    .topbar {
+        position: sticky; 
+        top: 0;
+        z-index: 1000; 
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px 6%;
+        background: var(--bright-white); 
+        border-bottom: 3px solid var(--matcha-green);
+        box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    }
+
+    .logo-img {
+        height: 50px;
+        width: auto;
+        object-fit: contain;
+    }
+
+    .join-btn {
+        background: var(--deep-forest);
+        color: var(--matcha-green);
+        padding: 12px 24px;
+        border-radius: 4px;
+        text-decoration: none;
+        font-weight: 800;
+        font-size: 14px;
+        text-transform: uppercase;
+        transition: 0.3s;
+    }
+
+    .join-btn:hover {
+        background: #000;
+        transform: scale(1.05);
+    }
+
+    /* HERO VIDEO SECTION */
+    .hero-container {
+        width: 92%;
+        max-width: 1100px;
+        margin: 30px auto;
+        background: var(--bright-white);
+        border: 2px solid var(--matcha-green);
+        border-radius: 15px;
+        padding: 10px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+    }
+
+    .video-wrapper {
+        position: relative;
+        width: 100%;
+        height: 500px;
+        background: var(--deep-forest);
+        border-radius: 10px;
+        overflow: hidden;
+        cursor: pointer;
+    }
+
+    .hero-img-cover {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        position: absolute;
+        top: 0;
+        left: 0;
+    }
+
+    .play-overlay {
+        position: absolute;
+        inset: 0;
+        background: rgba(26, 46, 42, 0.4);
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        color: var(--bright-white);
+        text-align: center;
+    }
+
+    .play-icon {
+        font-size: 60px;
+        color: var(--matcha-green);
+        margin-bottom: 15px;
+    }
+
+    /* GRID CHANNELS */
+    .section-title {
+        text-align: center;
+        color: var(--deep-forest);
+        margin: 50px 0 30px;
+        font-size: 30px;
+        font-weight: 900;
+        text-transform: uppercase;
+    }
+
+    .channel-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 20px;
+        width: 92%;
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+
+    .channel-card {
+        background: var(--bright-white);
+        border: 1px solid var(--matcha-green);
+        border-radius: 12px;
+        overflow: hidden;
+        transition: 0.3s;
+    }
+
+    .channel-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+    }
+
+    .channel-img {
+        width: 100%;
+        height: 200px;
+        object-fit: cover;
+    }
+
+    .channel-info {
+        padding: 20px;
+    }
+
+    .channel-info h3 {
+        margin: 0 0 10px;
+        color: var(--deep-forest);
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .channel-info p {
+        color: #555;
+        font-size: 14px;
+        line-height: 1.5;
+    }
+
+    /* KNOWLEDGE CENTER */
+    .knowledge-center {
+        width: 92%;
+        max-width: 800px;
+        margin: 80px auto;
+    }
+
+    details {
+        background: var(--bright-white);
+        border: 2px solid var(--matcha-green);
+        border-radius: 8px;
+        margin-bottom: 10px;
+        overflow: hidden;
+    }
+
+    summary {
+        padding: 20px;
+        font-weight: 700;
+        cursor: pointer;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        list-style: none;
+        color: var(--deep-forest);
+    }
+
+    summary::after {
+        content: '\f067';
+        font-family: 'Font Awesome 6 Free';
+        font-weight: 900;
+        color: var(--deep-forest);
+    }
+
+    details[open] summary {
+        background: var(--matcha-green);
+    }
+
+    .faq-text {
+        padding: 20px;
+        font-size: 15px;
+        color: #444;
+        border-top: 1px solid var(--matcha-green);
+    }
+
+    /* FOOTER */
+    .footer {
+        background: var(--deep-forest);
+        color: var(--matcha-green);
+        padding: 60px 6% 30px;
+        margin-top: 80px;
+    }
+
+    .footer-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 40px;
+    }
+
+    .footer-col h4 {
+        color: var(--bright-white);
+        margin-bottom: 20px;
+        text-transform: uppercase;
+    }
+
+    .loc-item {
+        display: flex;
+        gap: 12px;
+        margin-bottom: 15px;
+        align-items: flex-start;
+    }
+
+    .loc-item i {
+        font-size: 18px;
+        margin-top: 3px;
+    }
+
+    .footer-bottom {
+        text-align: center;
+        margin-top: 50px;
+        padding-top: 20px;
+        border-top: 1px solid rgba(216, 232, 209, 0.1);
+        font-size: 12px;
+        opacity: 0.7;
+    }
+
+    @media (max-width: 768px) {
+        .video-wrapper { height: 300px; }
+    }
+</style>
+</head>
+<body>
+
+<header class="topbar">
+    <img src="logo.png" alt="Stream Africa Logo" class="logo-img">
+    <a href="reward.html" class="join-btn">Join Now</a>
+</header>
+
+<section class="hero-container">
+    <div class="video-wrapper" onclick="this.innerHTML='<video src=\'video.mp4\' controls autoplay style=\'width:100%;height:100%\'></video>'">
+        <img src="hero1.jpg" class="hero-img-cover" alt="Stream Africa Hero">
+        <div class="play-overlay">
+            <i class="fas fa-circle-play play-icon"></i>
+            <h1 style="font-weight: 900; letter-spacing: 2px;">THE FUTURE OF ENGAGEMENT</h1>
+        </div>
+    </div>
+</section>
+
+<h2 class="section-title">Income Channels</h2>
+
+<div class="channel-grid">
+    <div class="channel-card">
+        <img src="hero2.jpg" class="channel-img" alt="Audio Collab">
+        <div class="channel-info">
+            <h3><i class="fas fa-music"></i> Audio Collab</h3>
+            <p>Earn $1.50 per sound collaboration. Support the biggest artists in Africa and get paid for your ears.</p>
+        </div>
+    </div>
+    <div class="channel-card">
+        <img src="hero3.jpg" class="channel-img" alt="Video Collab">
+        <div class="channel-info">
+            <h3><i class="fas fa-video"></i> Video Collab</h3>
+            <p>Earn $2.70 per movie trailer or campaign engagement. Connect with global cinema studios.</p>
+        </div>
+    </div>
+    <div class="channel-card">
+        <img src="hero4.jpg" class="channel-img" alt="Snap Collab">
+        <div class="channel-info">
+            <h3><i class="fas fa-camera"></i> Snap Collab</h3>
+            <p>Earn $1.10 for visual brand interactions. Boost visibility for high-impact creative campaigns.</p>
+        </div>
+    </div>
+    <div class="channel-card">
+        <img src="hero5.jpg" class="channel-img" alt="Download Hub">
+        <div class="channel-info">
+            <h3><i class="fas fa-download"></i> Download Hub</h3>
+            <p>Earn $1.00 for verified content downloads. Help creators spread their digital assets wider.</p>
+        </div>
+    </div>
+    <div class="channel-card">
+        <img src="hero6.jpg" class="channel-img" alt="February List">
+        <div class="channel-info">
+            <h3><i class="fas fa-calendar-check"></i> Monthly Tasks</h3>
+            <p>Stay updated with the February To-Do list. Maximum engagement equals maximum monthly rewards.</p>
+        </div>
+    </div>
+    <div class="channel-card">
+        <img src="hero7.jpg" class="channel-img" alt="Join Now">
+        <div class="channel-info">
+            <h3><i class="fas fa-users"></i> Global Network</h3>
+            <p>Join the movement today. Borderless earnings designed for the modern African digital native.</p>
+        </div>
+    </div>
+</div>
+
+<section class="knowledge-center">
+    <h2 class="section-title">Knowledge Center</h2>
+    <details>
+        <summary>How do I start earning?</summary>
+        <div class="faq-text">Select your preferred channel (Audio, Video, or Snap), follow the interaction steps, and rewards will be credited to your dashboard immediately.</div>
+    </details>
+    <details>
+        <summary>Is my payment guaranteed?</summary>
+        <div class="faq-text">Yes. We use a transparent protocol that locks in brand funds before campaigns go live, ensuring every collaborator is paid.</div>
+    </details>
+    <details>
+        <summary>What are the withdrawal rules?</summary>
+        <div class="faq-text">Withdrawals are processed every 24 hours once you reach the minimum milestone in your local currency.</div>
+    </details>
+    <details>
+        <summary>Can I participate in all channels?</summary>
+        <div class="faq-text">Absolutely. You can participate in any active collaboration across all 6 channels to maximize your daily income.</div>
+    </details>
+    <details>
+        <summary>How do I contact support?</summary>
+        <div class="faq-text">Our team is available via the email in the footer or through our official Telegram community.</div>
+    </details>
+</section>
+
+<footer class="footer">
+    <div class="footer-grid">
+        <div class="footer-col">
+            <img src="logo.png" style="height: 40px; filter: brightness(0) invert(1); margin-bottom: 20px;">
+            <p style="font-size: 14px; line-height: 1.6;">The first rewards-based digital infrastructure in Africa. Turning engagement into wealth.</p>
+        </div>
+        <div class="footer-col">
+            <h4>Contact Info</h4>
+            <div class="loc-item">
+                <i class="fas fa-location-dot"></i>
+                <span>Victoria Island, Lagos State,<br>Nigeria, West Africa.</span>
+            </div>
+            <div class="loc-item">
+                <i class="fas fa-envelope"></i>
+                <span>support@stream.africa</span>
+            </div>
+        </div>
+        <div class="footer-col">
+            <h4>Support Hours</h4>
+            <div class="loc-item">
+                <i class="fas fa-clock"></i>
+                <span>Mon - Fri: 9:00 AM - 6:00 PM<br>Saturday: 10:00 AM - 2:00 PM</span>
+            </div>
+        </div>
+    </div>
+    <div class="footer-bottom">
+        &copy; 2026 STREAM AFRICA | All Pictures and Content are Copyright Protected.
+    </div>
+</footer>
+
+</body>
+</html>
+
+          
