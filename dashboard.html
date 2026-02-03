@@ -12,7 +12,7 @@
         :root {
             --stream-green: #b8d5b0;
             --stream-dark: #0a1f1c;
-            --stream-bg: #f8faf9;
+            --stream-bg: #0a1f1c; /* Changed to Dark Forest */
         }
 
         body {
@@ -20,7 +20,7 @@
             padding: 0;
             background-color: var(--stream-bg);
             font-family: 'Inter', sans-serif;
-            color: var(--stream-dark);
+            color: #ffffff; /* White text */
             min-height: 100vh;
             padding-bottom: 40px;
             overflow-x: hidden;
@@ -32,8 +32,8 @@
             display: flex;
             justify-content: space-between;
             align-items: flex-start;
-            background: white;
-            border-bottom: 1px solid #eee;
+            background: var(--stream-dark);
+            border-bottom: 2px solid var(--stream-green);
         }
 
         .welcome-text h1 {
@@ -41,40 +41,40 @@
             font-weight: 900;
             margin: 0;
             letter-spacing: -0.5px;
-            color: var(--stream-dark);
+            color: #ffffff;
         }
 
         /* CARD STYLES */
         .glass-card {
-            background: white;
+            background: rgba(255, 255, 255, 0.05);
             border: 2px solid var(--stream-green);
             border-radius: 24px;
             padding: 20px;
             margin: 20px 15px;
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.04);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
         }
 
         .glass-card-bright {
-            background: white;
-            border: 1px solid #eee;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(184, 213, 176, 0.2);
             border-radius: 24px;
             padding: 20px;
             margin: 0 15px 20px 15px;
         }
 
         .status-badge {
-            background: rgba(231, 76, 60, 0.1);
-            color: #e74c3c;
+            background: rgba(231, 76, 60, 0.2);
+            color: #ff6b6b;
             padding: 6px 15px;
             border-radius: 20px;
             font-size: 12px;
             font-weight: bold;
-            border: 1px solid rgba(231, 76, 60, 0.2);
+            border: 1px solid rgba(231, 76, 60, 0.4);
         }
 
         .action-link-btn {
-            background: var(--stream-dark);
-            color: var(--stream-green);
+            background: var(--stream-green);
+            color: var(--stream-dark);
             width: 100%;
             padding: 16px;
             border-radius: 16px;
@@ -93,25 +93,25 @@
 
         /* FEATURE ITEMS */
         .feature-item {
-            background: white;
+            background: rgba(255, 255, 255, 0.05);
             border-radius: 20px;
             padding: 20px;
             display: flex;
             flex-direction: column;
             gap: 8px;
-            border: 1px solid #eee;
+            border: 1px solid rgba(184, 213, 176, 0.1);
             transition: all 0.3s ease;
         }
 
         .feature-icon-box {
             width: 45px;
             height: 45px;
-            background: #f0f4f1;
+            background: rgba(184, 213, 176, 0.1);
             border-radius: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: var(--stream-dark);
+            color: var(--stream-green);
             font-size: 18px;
             margin-bottom: 5px;
         }
@@ -124,7 +124,7 @@
             width: 80%;
             max-width: 300px;
             height: 100%;
-            background: white;
+            background: var(--stream-dark);
             z-index: 5000;
             transition: left 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             padding: 30px 20px;
@@ -138,14 +138,19 @@
             align-items: center;
             gap: 15px;
             padding: 15px;
-            color: #444;
+            color: #ffffff;
             font-size: 16px;
             font-weight: 600;
             border-radius: 12px;
             margin-bottom: 5px;
         }
 
-        .menu-item i { width: 20px; color: var(--stream-dark); }
+        .menu-item i { width: 20px; color: var(--stream-green); }
+
+        .logo-img {
+            height: 50px;
+            filter: brightness(0) invert(1);
+        }
 
         /* Floating Menu Button */
         .menu-toggle {
@@ -154,16 +159,16 @@
             right: 20px;
             width: 65px;
             height: 65px;
-            background: var(--stream-dark);
+            background: var(--stream-green);
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 24px;
-            box-shadow: 0 10px 25px rgba(10, 31, 28, 0.3);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
             z-index: 4000;
             cursor: pointer;
-            color: var(--stream-green);
+            color: var(--stream-dark);
         }
 
         /* NOTIFICATION POPUP (TOP LEFT) */
@@ -171,24 +176,25 @@
             position: fixed;
             top: 20px;
             left: -350px;
-            background: white;
+            background: var(--stream-dark);
             border: 2px solid var(--stream-green);
             padding: 12px 15px;
             border-radius: 15px;
             width: 320px;
             z-index: 6000;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.08);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.5);
             display: flex;
             gap: 12px;
             align-items: center;
             transition: left 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
         .notif-popup.active { left: 20px; }
-        .notif-icon { font-size: 18px; color: var(--stream-dark); }
-        .notif-body { font-size: 12px; color: #333; line-height: 1.4; }
-        .notif-user { color: var(--stream-dark); font-weight: 800; }
-        .notif-amount { color: #27ae60; font-weight: 900; }
-        .notif-amount.withdrawal { color: #e74c3c; }
+        .notif-icon { font-size: 18px; color: var(--stream-green); }
+        .notif-body { font-size: 12px; color: #ffffff; line-height: 1.4; }
+        .notif-user { color: var(--stream-green); font-weight: 800; }
+        .notif-amount { color: #ffffff; font-weight: 900; } /* Bold White Amount */
+        .notif-amount.withdrawal { color: #ff6b6b; }
+        .notif-time { color: rgba(255,255,255,0.4); font-size: 10px; display: block; margin-top: 2px; }
 
         /* Modal */
         .modal-overlay {
@@ -197,17 +203,17 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.5);
+            background: rgba(0, 0, 0, 0.8);
             z-index: 7000;
             display: none;
             align-items: center;
             justify-content: center;
             padding: 20px;
-            backdrop-filter: blur(4px);
+            backdrop-filter: blur(8px);
         }
 
         .modal-card {
-            background: white;
+            background: var(--stream-dark);
             border-radius: 25px;
             width: 95%;
             max-width: 360px;
@@ -215,6 +221,7 @@
             position: relative;
             text-align: center;
             border: 2px solid var(--stream-green);
+            color: #ffffff;
         }
     </style>
 </head>
@@ -223,7 +230,7 @@
 <!-- Side Menu -->
 <div id="side-menu" class="side-menu">
     <div style="margin-bottom: 40px;">
-        <img src="logo.png" alt="Logo" style="height: 50px;">
+        <img src="logo.png" alt="Logo" class="logo-img">
     </div>
     <div class="menu-item"><i class="fas fa-home"></i> HOME</div>
     <div class="menu-item"><i class="fas fa-wallet"></i> REWARD</div>
@@ -232,7 +239,7 @@
     <div class="menu-item"><i class="fas fa-users"></i> NETWORK</div>
     <div class="menu-item"><i class="fas fa-gear"></i> SETTINGS</div>
     
-    <button onclick="toggleMenu()" style="margin-top: 40px; background: #f0f0f0; color: #666; width: 100%; padding: 15px; border-radius: 12px; font-weight: 800; text-transform: uppercase;">
+    <button onclick="toggleMenu()" style="margin-top: 40px; background: rgba(255,255,255,0.1); color: #fff; width: 100%; padding: 15px; border-radius: 12px; font-weight: 800; text-transform: uppercase;">
         CLOSE MENU
     </button>
 </div>
@@ -248,10 +255,10 @@
 <div class="dashboard-header">
     <div class="welcome-text">
         <h1>Dashboard</h1>
-        <p style="color:#888; font-size: 14px; margin-top: 5px;">Welcome to your <br> <span style="color:var(--stream-dark); font-weight: 800;">STREAM AFRICA</span> account</p>
+        <p style="color:rgba(255,255,255,0.6); font-size: 14px; margin-top: 5px;">Welcome to your <br> <span style="color:var(--stream-green); font-weight: 800;">STREAM AFRICA</span> account</p>
     </div>
-    <div style="background: #f0f4f1; width: 45px; height: 45px; border-radius: 50%; display: flex; align-items: center; justify-content: center; position: relative;">
-        <i class="fas fa-bell" style="color:var(--stream-dark)"></i>
+    <div style="background: rgba(184, 213, 176, 0.1); width: 45px; height: 45px; border-radius: 50%; display: flex; align-items: center; justify-content: center; position: relative; border: 1px solid rgba(184, 213, 176, 0.2);">
+        <i class="fas fa-bell" style="color:var(--stream-green)"></i>
         <div style="position: absolute; top: -2px; right: -2px; background: #e74c3c; width: 18px; height: 18px; border-radius: 50%; font-size: 10px; display: flex; align-items: center; justify-content: center; font-weight: bold; color: white;">1</div>
     </div>
 </div>
@@ -260,12 +267,12 @@
 <div class="glass-card">
     <div class="flex justify-between items-start mb-6">
         <div class="flex items-center gap-3">
-            <i class="fas fa-shield-halved text-3xl" style="color:var(--stream-dark)"></i>
-            <h2 style="font-size: 20px; font-weight: 800; color: var(--stream-dark)">Account<br>Status</h2>
+            <i class="fas fa-shield-halved text-3xl" style="color:var(--stream-green)"></i>
+            <h2 style="font-size: 20px; font-weight: 800; color: #ffffff">Account<br>Status</h2>
         </div>
         <div class="status-badge">Inactive</div>
     </div>
-    <p style="color:#666; font-size: 14px; line-height: 1.5; margin-bottom: 20px;">
+    <p style="color:rgba(255,255,255,0.7); font-size: 14px; line-height: 1.5; margin-bottom: 20px;">
         Your Stream account is currently inactive. Complete your onboarding to unlock your earnings and dashboard features.
     </p>
     <div class="action-link-btn" onclick="openModal()">
@@ -276,26 +283,26 @@
 <!-- Onboarding Details -->
 <div class="glass-card">
     <div class="flex items-center gap-3 mb-6">
-        <i class="fas fa-file-invoice-dollar text-xl" style="color:var(--stream-dark)"></i>
-        <h2 style="font-size: 20px; font-weight: 800; color: var(--stream-dark)">Onboarding Details</h2>
+        <i class="fas fa-file-invoice-dollar text-xl" style="color:var(--stream-green)"></i>
+        <h2 style="font-size: 20px; font-weight: 800; color: #ffffff">Onboarding Details</h2>
     </div>
     
     <div class="space-y-4">
-        <div class="flex justify-between border-b border-gray-100 pb-3">
-            <span style="color:#888">Plan:</span>
-            <span style="color:#e74c3c; font-weight: 800;">None</span>
+        <div class="flex justify-between border-b border-white/10 pb-3">
+            <span style="color:rgba(255,255,255,0.5)">Plan:</span>
+            <span style="color:#ff6b6b; font-weight: 800;">None</span>
         </div>
-        <div class="flex justify-between border-b border-gray-100 pb-3">
-            <span style="color:#888">Price:</span>
-            <span style="color:#e74c3c; font-weight: 800;">Pending</span>
+        <div class="flex justify-between border-b border-white/10 pb-3">
+            <span style="color:rgba(255,255,255,0.5)">Price:</span>
+            <span style="color:#ff6b6b; font-weight: 800;">Pending</span>
         </div>
-        <div class="flex justify-between border-b border-gray-100 pb-3">
-            <span style="color:#888">Status:</span>
-            <span style="color:#e74c3c; font-weight: 800;">Inactive</span>
+        <div class="flex justify-between border-b border-white/10 pb-3">
+            <span style="color:rgba(255,255,255,0.5)">Status:</span>
+            <span style="color:#ff6b6b; font-weight: 800;">Inactive</span>
         </div>
         <div class="flex justify-between pb-1">
-            <span style="color:#888">Joined:</span>
-            <span style="color:var(--stream-dark); font-weight: 600;" id="dash-reg-date">...</span>
+            <span style="color:rgba(255,255,255,0.5)">Joined:</span>
+            <span style="color:var(--stream-green); font-weight: 600;" id="dash-reg-date">...</span>
         </div>
     </div>
 
@@ -305,59 +312,59 @@
 </div>
 
 <!-- Features Section -->
-<div style="margin: 30px 20px 15px; font-size: 18px; font-weight: 900; display: flex; align-items: center; gap: 10px; text-transform: uppercase;">
+<div style="margin: 30px 20px 15px; font-size: 18px; font-weight: 900; display: flex; align-items: center; gap: 10px; text-transform: uppercase; color: #ffffff;">
     <i class="fas fa-grip-vertical" style="color:var(--stream-green)"></i> Stream Features
 </div>
 
 <div class="grid grid-cols-1 px-4 gap-4">
     <div class="feature-item" onclick="openModal()">
         <div class="feature-icon-box"><i class="fas fa-wallet"></i></div>
-        <h3 style="color:#999; font-weight: 700; font-size: 13px; text-transform: uppercase;">Stream Balance</h3>
-        <div style="font-size: 24px; font-weight: 900; color:#ddd;">₦0.00</div>
-        <div style="font-size: 11px; color: #bbb;">Real-time earnings tracker</div>
+        <h3 style="color:rgba(255,255,255,0.4); font-weight: 700; font-size: 13px; text-transform: uppercase;">Stream Balance</h3>
+        <div style="font-size: 24px; font-weight: 900; color:rgba(255,255,255,0.2);">₦0.00</div>
+        <div style="font-size: 11px; color: rgba(255,255,255,0.3);">Real-time earnings tracker</div>
     </div>
 
     <div class="feature-item" onclick="openModal()">
         <div class="feature-icon-box"><i class="fas fa-tower-broadcast"></i></div>
-        <h3 style="color:#999; font-weight: 700; font-size: 13px; text-transform: uppercase;">Livestream</h3>
-        <div style="font-size: 24px; font-weight: 900; color:#ddd;">Inactive</div>
-        <div style="font-size: 11px; color: #bbb;">Earn while streaming content</div>
+        <h3 style="color:rgba(255,255,255,0.4); font-weight: 700; font-size: 13px; text-transform: uppercase;">Livestream</h3>
+        <div style="font-size: 24px; font-weight: 900; color:rgba(255,255,255,0.2);">Inactive</div>
+        <div style="font-size: 11px; color: rgba(255,255,255,0.3);">Earn while streaming content</div>
     </div>
 
     <div class="feature-item" onclick="openModal()">
         <div class="feature-icon-box"><i class="fas fa-clapperboard"></i></div>
-        <h3 style="color:#999; font-weight: 700; font-size: 13px; text-transform: uppercase;">Video Ads</h3>
-        <div style="font-size: 24px; font-weight: 900; color:#ddd;">0 Views</div>
-        <div style="font-size: 11px; color: #bbb;">Monetize your watch time</div>
+        <h3 style="color:rgba(255,255,255,0.4); font-weight: 700; font-size: 13px; text-transform: uppercase;">Video Ads</h3>
+        <div style="font-size: 24px; font-weight: 900; color:rgba(255,255,255,0.2);">0 Views</div>
+        <div style="font-size: 11px; color: rgba(255,255,255,0.3);">Monetize your watch time</div>
     </div>
 
     <div class="feature-item" onclick="openModal()">
         <div class="feature-icon-box"><i class="fas fa-network-wired"></i></div>
-        <h3 style="color:#999; font-weight: 700; font-size: 13px; text-transform: uppercase;">My Network</h3>
-        <div style="font-size: 24px; font-weight: 900; color:#ddd;">0 Members</div>
-        <div style="font-size: 11px; color: #bbb;">Growth statistics</div>
+        <h3 style="color:rgba(255,255,255,0.4); font-weight: 700; font-size: 13px; text-transform: uppercase;">My Network</h3>
+        <div style="font-size: 24px; font-weight: 900; color:rgba(255,255,255,0.2);">0 Members</div>
+        <div style="font-size: 11px; color: rgba(255,255,255,0.3);">Growth statistics</div>
     </div>
 </div>
 
 <!-- Recent Activity -->
 <div class="glass-card-bright mt-10">
-    <div style="font-size: 18px; font-weight: 800; margin-bottom: 25px; color: var(--stream-dark);">Account History</div>
+    <div style="font-size: 18px; font-weight: 800; margin-bottom: 25px; color: #ffffff;">Account History</div>
     <div class="space-y-6">
         <div class="flex gap-4 items-center">
-            <div style="width:40px; height:40px; background:#f0f4f1; border-radius:50%; display:flex; align-items:center; justify-content:center; color:var(--stream-dark)"><i class="fas fa-user-plus"></i></div>
+            <div style="width:40px; height:40px; background:rgba(255,255,255,0.05); border-radius:50%; display:flex; align-items:center; justify-content:center; color:var(--stream-green)"><i class="fas fa-user-plus"></i></div>
             <div>
-                <div style="font-weight:700; font-size:15px;">Profile Created</div>
-                <div style="color:#888; font-size:12px;">Welcome to Stream Africa</div>
+                <div style="font-weight:700; font-size:15px; color:#ffffff;">Profile Created</div>
+                <div style="color:rgba(255,255,255,0.5); font-size:12px;">Welcome to Stream Africa</div>
             </div>
-            <div style="margin-left:auto; color:#bbb; font-size:11px;" id="history-time-1">Just now</div>
+            <div style="margin-left:auto; color:rgba(255,255,255,0.3); font-size:11px;" id="history-time-1">Just now</div>
         </div>
         <div class="flex gap-4 items-center">
-            <div style="width:40px; height:40px; background:#f0f4f1; border-radius:50%; display:flex; align-items:center; justify-content:center; color:var(--stream-dark)"><i class="fas fa-clock"></i></div>
+            <div style="width:40px; height:40px; background:rgba(255,255,255,0.05); border-radius:50%; display:flex; align-items:center; justify-content:center; color:var(--stream-green)"><i class="fas fa-clock"></i></div>
             <div>
-                <div style="font-weight:700; font-size:15px;">Verification Pending</div>
-                <div style="color:#888; font-size:12px;">Onboarding not completed</div>
+                <div style="font-weight:700; font-size:15px; color:#ffffff;">Verification Pending</div>
+                <div style="color:rgba(255,255,255,0.5); font-size:12px;">Onboarding not completed</div>
             </div>
-            <div style="margin-left:auto; color:#bbb; font-size:11px;" id="history-time-2">Just now</div>
+            <div style="margin-left:auto; color:rgba(255,255,255,0.3); font-size:11px;" id="history-time-2">Just now</div>
         </div>
     </div>
 </div>
@@ -365,13 +372,13 @@
 <!-- Activation Modal -->
 <div id="activation-modal" class="modal-overlay">
     <div class="modal-card">
-        <div onclick="closeModal()" style="position: absolute; top: 15px; right: 15px; color: #ccc; font-size: 20px; cursor: pointer;"><i class="fas fa-times"></i></div>
-        <div style="color:var(--stream-dark); font-size: 55px; margin-bottom: 20px;"><i class="fas fa-circle-exclamation"></i></div>
-        <h2 style="font-size: 22px; font-weight: 900; margin-bottom: 12px; color:var(--stream-dark);">Activate Account</h2>
-        <p style="color:#666; font-size: 15px; line-height: 1.6; margin-bottom: 30px;">
+        <div onclick="closeModal()" style="position: absolute; top: 15px; right: 15px; color: rgba(255,255,255,0.3); font-size: 20px; cursor: pointer;"><i class="fas fa-times"></i></div>
+        <div style="color:var(--stream-green); font-size: 55px; margin-bottom: 20px;"><i class="fas fa-circle-exclamation"></i></div>
+        <h2 style="font-size: 22px; font-weight: 900; margin-bottom: 12px; color:#ffffff;">Activate Account</h2>
+        <p style="color:rgba(255,255,255,0.7); font-size: 15px; line-height: 1.6; margin-bottom: 30px;">
             To access your ₦12,000 reward and start earning from streams, please complete your registration payment.
         </p>
-        <div class="action-link-btn" style="background: var(--stream-dark); color: var(--stream-green);" onclick="window.location.href='register.html'">
+        <div class="action-link-btn" onclick="window.location.href='register.html'">
             Proceed to Payment <i class="fas fa-credit-card"></i>
         </div>
     </div>
@@ -405,10 +412,10 @@
         iconDiv.innerHTML = `<i class="fas ${act.icon}"></i>`;
 
         let message = act.type === 'joined' 
-            ? `<span class="notif-user">${act.name}</span> (${act.loc}) joined <span style="font-weight:800">STREAM</span> and earned <span class="notif-amount">₦${act.amount}</span>`
-            : `<span class="notif-user">${act.name}</span> (${act.loc}) withdrew <span class="notif-amount withdrawal">₦${act.amount}</span> from <span style="font-weight:800">STREAM</span>`;
+            ? `<span class="notif-user">${act.name}</span> (${act.loc}) joined <span style="font-weight:800; color:var(--stream-green)">STREAM</span> and earned <span class="notif-amount">₦${act.amount}</span>`
+            : `<span class="notif-user">${act.name}</span> (${act.loc}) withdrew <span class="notif-amount withdrawal">₦${act.amount}</span> from <span style="font-weight:800; color:var(--stream-green)">STREAM</span>`;
 
-        textDiv.innerHTML = `${message}<div style="font-size:10px; color:#bbb; margin-top:2px;">${act.time}</div>`;
+        textDiv.innerHTML = `${message}<div style="font-size:10px; color:rgba(255,255,255,0.4); margin-top:2px;">${act.time}</div>`;
 
         popup.classList.add('active');
         
@@ -460,5 +467,4 @@
 </script>
 </body>
 </html>
-
 
