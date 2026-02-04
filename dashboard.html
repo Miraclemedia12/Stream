@@ -458,10 +458,12 @@
         document.getElementById('activation-modal').style.display = 'none';
     }
 
+    // FIXED: Corrected redirect to payment.html (or checkout.html)
     function goToRegistration() {
         const country = document.getElementById('country-select').value;
         localStorage.setItem('selected_country', country);
-        window.location.href = 'register.html';
+        // Assuming your payment file is named payment.html as per your request
+        window.location.href = 'payment.html'; 
     }
 
     function initUserTracking() {
