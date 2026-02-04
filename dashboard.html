@@ -12,7 +12,7 @@
         :root {
             --stream-green: #b8d5b0;
             --stream-dark: #0a1f1c;
-            --stream-bg: #0a1f1c; /* Changed to Dark Forest */
+            --stream-bg: #0a1f1c; 
         }
 
         body {
@@ -20,7 +20,7 @@
             padding: 0;
             background-color: var(--stream-bg);
             font-family: 'Inter', sans-serif;
-            color: #ffffff; /* White text */
+            color: #ffffff;
             min-height: 100vh;
             padding-bottom: 40px;
             overflow-x: hidden;
@@ -192,9 +192,8 @@
         .notif-icon { font-size: 18px; color: var(--stream-green); }
         .notif-body { font-size: 12px; color: #ffffff; line-height: 1.4; }
         .notif-user { color: var(--stream-green); font-weight: 800; }
-        .notif-amount { color: #ffffff; font-weight: 900; } /* Bold White Amount */
+        .notif-amount { color: #ffffff; font-weight: 900; }
         .notif-amount.withdrawal { color: #ff6b6b; }
-        .notif-time { color: rgba(255,255,255,0.4); font-size: 10px; display: block; margin-top: 2px; }
 
         /* Modal */
         .modal-overlay {
@@ -223,6 +222,23 @@
             border: 2px solid var(--stream-green);
             color: #ffffff;
         }
+
+        /* Country Select Styling */
+        .country-select {
+            width: 100%;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(184, 213, 176, 0.3);
+            color: white;
+            padding: 15px;
+            border-radius: 12px;
+            margin-top: 10px;
+            font-weight: 600;
+            outline: none;
+        }
+        .country-select option {
+            background: var(--stream-dark);
+            color: white;
+        }
     </style>
 </head>
 <body>
@@ -244,7 +260,7 @@
     </button>
 </div>
 
-<!-- Live Notifications (Top Left) -->
+<!-- Live Notifications -->
 <div id="notif-popup" class="notif-popup">
     <div class="notif-icon" id="notif-icon"><i class="fas fa-circle-check"></i></div>
     <div class="notif-body" id="notif-text">
@@ -356,7 +372,7 @@
                 <div style="font-weight:700; font-size:15px; color:#ffffff;">Profile Created</div>
                 <div style="color:rgba(255,255,255,0.5); font-size:12px;">Welcome to Stream Africa</div>
             </div>
-            <div style="margin-left:auto; color:rgba(255,255,255,0.3); font-size:11px;" id="history-time-1">Just now</div>
+            <div style="margin-left:auto; color:rgba(255,255,255,0.3); font-size:11px;">Just now</div>
         </div>
         <div class="flex gap-4 items-center">
             <div style="width:40px; height:40px; background:rgba(255,255,255,0.05); border-radius:50%; display:flex; align-items:center; justify-content:center; color:var(--stream-green)"><i class="fas fa-clock"></i></div>
@@ -364,21 +380,31 @@
                 <div style="font-weight:700; font-size:15px; color:#ffffff;">Verification Pending</div>
                 <div style="color:rgba(255,255,255,0.5); font-size:12px;">Onboarding not completed</div>
             </div>
-            <div style="margin-left:auto; color:rgba(255,255,255,0.3); font-size:11px;" id="history-time-2">Just now</div>
+            <div style="margin-left:auto; color:rgba(255,255,255,0.3); font-size:11px;">Just now</div>
         </div>
     </div>
 </div>
 
-<!-- Activation Modal -->
+<!-- Activation Modal with Country Selector -->
 <div id="activation-modal" class="modal-overlay">
     <div class="modal-card">
         <div onclick="closeModal()" style="position: absolute; top: 15px; right: 15px; color: rgba(255,255,255,0.3); font-size: 20px; cursor: pointer;"><i class="fas fa-times"></i></div>
         <div style="color:var(--stream-green); font-size: 55px; margin-bottom: 20px;"><i class="fas fa-circle-exclamation"></i></div>
-        <h2 style="font-size: 22px; font-weight: 900; margin-bottom: 12px; color:#ffffff;">Activate Account</h2>
-        <p style="color:rgba(255,255,255,0.7); font-size: 15px; line-height: 1.6; margin-bottom: 30px;">
-            To access your ₦12,000 reward and start earning from streams, please complete your registration payment.
+        <h2 style="font-size: 22px; font-weight: 900; margin-bottom: 12px; color:#ffffff;">Select Country</h2>
+        <p style="color:rgba(255,255,255,0.7); font-size: 15px; line-height: 1.6; margin-bottom: 15px;">
+            Choose your country to see payment options and claim your ₦12,000 reward.
         </p>
-        <div class="action-link-btn" onclick="window.location.href='register.html'">
+
+        <select id="country-select" class="country-select">
+            <option value="nigeria">🇳🇬 Nigeria</option>
+            <option value="cameroon">🇨🇲 Cameroon</option>
+            <option value="ghana">🇬🇭 Ghana</option>
+            <option value="kenya">🇰🇪 Kenya</option>
+            <option value="south_africa">🇿🇦 South Africa</option>
+            <option value="uganda">🇺🇬 Uganda</option>
+        </select>
+
+        <div class="action-link-btn" onclick="goToRegistration()">
             Proceed to Payment <i class="fas fa-credit-card"></i>
         </div>
     </div>
@@ -390,19 +416,15 @@
 </div>
 
 <script>
-    // Activity Data for Popups
     const ACTIVITIES = [
         { type: 'joined', name: "Ayo M.", loc: "Lagos", amount: "12,000", time: "Just now", icon: "fa-user-plus" },
         { type: 'withdrawn', name: "Olamide B.", loc: "Ibadan", amount: "42,000", time: "2m ago", icon: "fa-money-bill-transfer" },
-        { type: 'joined', name: "Emeka U.", loc: "Enugu", amount: "12,000", time: "5m ago", icon: "fa-user-check" },
-        { type: 'withdrawn', name: "Yusuf K.", loc: "Kano", amount: "15,000", time: "8m ago", icon: "fa-wallet" },
-        { type: 'joined', name: "Sarah J.", loc: "Abuja", amount: "12,000", time: "10m ago", icon: "fa-user-plus" },
-        { type: 'withdrawn', name: "Gloria S.", loc: "Calabar", amount: "67,000", time: "12m ago", icon: "fa-money-bill-trend-up" }
+        { type: 'joined', name: "Kwame O.", loc: "Accra", amount: "12,000", time: "5m ago", icon: "fa-user-check" },
+        { type: 'withdrawn', name: "Banda L.", loc: "Nairobi", amount: "15,000", time: "8m ago", icon: "fa-wallet" }
     ];
 
     let currentActIndex = 0;
 
-    // Notification Logic
     function cycleActivities() {
         const popup = document.getElementById('notif-popup');
         const iconDiv = document.getElementById('notif-icon');
@@ -410,13 +432,11 @@
         const act = ACTIVITIES[currentActIndex];
 
         iconDiv.innerHTML = `<i class="fas ${act.icon}"></i>`;
-
         let message = act.type === 'joined' 
             ? `<span class="notif-user">${act.name}</span> (${act.loc}) joined <span style="font-weight:800; color:var(--stream-green)">STREAM</span> and earned <span class="notif-amount">₦${act.amount}</span>`
             : `<span class="notif-user">${act.name}</span> (${act.loc}) withdrew <span class="notif-amount withdrawal">₦${act.amount}</span> from <span style="font-weight:800; color:var(--stream-green)">STREAM</span>`;
 
         textDiv.innerHTML = `${message}<div style="font-size:10px; color:rgba(255,255,255,0.4); margin-top:2px;">${act.time}</div>`;
-
         popup.classList.add('active');
         
         setTimeout(() => {
@@ -426,7 +446,6 @@
         }, 6000);
     }
 
-    // UI State Logic
     function toggleMenu() {
         document.getElementById('side-menu').classList.toggle('open');
     }
@@ -439,24 +458,21 @@
         document.getElementById('activation-modal').style.display = 'none';
     }
 
-    // Registration Date Tracking Logic
+    function goToRegistration() {
+        const country = document.getElementById('country-select').value;
+        localStorage.setItem('selected_country', country);
+        window.location.href = 'register.html';
+    }
+
     function initUserTracking() {
         const regDateDisplay = document.getElementById('dash-reg-date');
-        
-        // Check if date is already stored
         let savedDate = localStorage.getItem('stream_reg_date');
-        
         if (!savedDate) {
-            // First time opening the dashboard - create the date
             const now = new Date();
             const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
             savedDate = `${now.getDate()} ${months[now.getMonth()]} ${now.getFullYear()}`;
-            
-            // Save it forever in this browser
             localStorage.setItem('stream_reg_date', savedDate);
         }
-        
-        // Display the date
         regDateDisplay.innerText = savedDate;
     }
 
