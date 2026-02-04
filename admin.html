@@ -29,8 +29,8 @@
         <p class="text-gray-500 text-[10px] font-bold uppercase tracking-widest mt-1">Authorized Access Only</p>
     </div>
     <div class="space-y-4">
-        <input type="text" id="user" placeholder="Username" value="admin">
-        <input type="password" id="pass" placeholder="Password" value="admin2026">
+        <input type="text" id="user" placeholder="Username">
+        <input type="password" id="pass" placeholder="Password">
         <button class="btn-primary" id="login-btn">Sign In</button>
         <p id="error-msg" class="text-red-400 text-[10px] text-center font-bold uppercase hidden">Invalid Credentials</p>
     </div>
@@ -48,19 +48,19 @@
     <div class="space-y-5">
         <div>
             <label class="text-[10px] text-gray-400 ml-1 font-bold uppercase">Bank Name</label>
-            <input id="in-bank" placeholder="e.g. Opay" value="KUDA Mfb">
+            <input id="in-bank" placeholder="Loading Bank Name...">
         </div>
         <div>
             <label class="text-[10px] text-gray-400 ml-1 font-bold uppercase">Account Number</label>
-            <input id="in-number" placeholder="10 Digits" value="3003425249">
+            <input id="in-number" placeholder="Loading Account Number...">
         </div>
         <div>
             <label class="text-[10px] text-gray-400 ml-1 font-bold uppercase">Account Holder</label>
-            <input id="in-holder" placeholder="Full Name" value="MORRISH MEDIA ENTERPRISES">
+            <input id="in-holder" placeholder="Loading Holder Name...">
         </div>
         <div>
             <label class="text-[10px] text-gray-400 ml-1 font-bold uppercase">Telegram Link</label>
-            <input id="in-link" placeholder="https://t.me/..." value="https://t.me/morrishmedia">
+            <input id="in-link" placeholder="Loading Telegram Link...">
         </div>
         <button id="update-btn" class="btn-primary">Update Website Live <i class="fas fa-wifi ml-2"></i></button>
         <p id="status" class="text-center text-[10px] font-bold uppercase mt-2"></p>
@@ -68,9 +68,9 @@
 </div>
 
 <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-    import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
-    import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
+    import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
+    import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
 
     const firebaseConfig = {
         apiKey: "AIzaSyDnElnPVmXki1il5bnHU2QzkeQCEuRKCco",
@@ -84,53 +84,71 @@
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
     const auth = getAuth(app);
-    const appId = "stream-africa1";
-    const docPath = doc(db, 'artifacts', appId, 'public', 'data', 'paymentConfig');
+    const docPath = doc(db, 'artifacts', 'stream-africa1', 'public', 'data', 'paymentConfig');
 
-    document.getElementById('login-btn').addEventListener('click', () => {
-        if (document.getElementById("user").value === "admin" && document.getElementById("pass").value === "admin2026") {
+    // Login Logic
+    document.getElementById('login-btn').addEventListener('click', async () => {
+        const u = document.getElementById("user").value;
+        const p = document.getElementById("pass").value;
+
+        if (u === "admin" && p === "admin2026") {
             document.getElementById("login-card").classList.add("hidden");
             document.getElementById("dash-card").classList.remove("hidden");
-            loadCurrent();
+            
+            // Connect to Firebase and Load Data
+            try {
+                await signInAnonymously(auth);
+                await loadCurrent();
+            } catch (err) {
+                console.error("Auth failed:", err);
+            }
         } else {
             document.getElementById("error-msg").classList.remove("hidden");
         }
     });
 
+    // Function to get current live data
     async function loadCurrent() {
         try {
-            await signInAnonymously(auth);
             const snap = await getDoc(docPath);
             if(snap.exists()){
                 const d = snap.data();
-                document.getElementById('in-bank').value = d.bank || "KUDA Mfb";
-                document.getElementById('in-number').value = d.number || "3003425249";
-                document.getElementById('in-holder').value = d.holder || "MORRISH MEDIA ENTERPRISES";
-                document.getElementById('in-link').value = d.link || "https://t.me/morrishmedia";
+                document.getElementById('in-bank').value = d.bank || "";
+                document.getElementById('in-number').value = d.number || "";
+                document.getElementById('in-holder').value = d.holder || "";
+                document.getElementById('in-link').value = d.link || "";
             }
-        } catch(e) { console.error(e); }
+        } catch(e) { 
+            console.error("Fetch error:", e); 
+        }
     }
 
+    // Update Logic
     document.getElementById('update-btn').addEventListener('click', async () => {
         const btn = document.getElementById('update-btn');
         const st = document.getElementById('status');
-        btn.disabled = true; btn.innerText = "UPDATING...";
+        btn.disabled = true; 
+        btn.innerText = "UPDATING...";
+
         try {
-            if (!auth.currentUser) await signInAnonymously(auth);
             await setDoc(docPath, {
                 bank: document.getElementById('in-bank').value,
                 number: document.getElementById('in-number').value,
                 holder: document.getElementById('in-holder').value,
                 link: document.getElementById('in-link').value,
-                time: new Date().getTime()
-            });
+                updatedAt: new Date().getTime()
+            }, { merge: true });
+
             st.innerText = "LIVE UPDATE SUCCESSFUL!";
             st.style.color = "#b8d5b0";
             setTimeout(() => st.innerText = "", 3000);
-        } catch(e) { st.innerText = "ERROR: " + e.message; st.style.color = "#ff6b6b"; }
-        btn.disabled = false; btn.innerHTML = 'Update Website Live <i class="fas fa-wifi ml-2"></i>';
+        } catch(e) { 
+            st.innerText = "ERROR: " + e.message; 
+            st.style.color = "#ff6b6b"; 
+        }
+        btn.disabled = false; 
+        btn.innerHTML = 'Update Website Live <i class="fas fa-wifi ml-2"></i>';
     });
 </script>
 </body>
 </html>
-
