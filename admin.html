@@ -3,152 +3,230 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Stream Africa | Admin Control</title>
+    <title>Admin Dashboard | Stream Africa</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700;800&display=swap');
-        :root { --stream-green: #b8d5b0; --stream-dark: #0a1f1c; }
-        body { background: var(--stream-dark); color: #fff; font-family: 'Plus Jakarta Sans', sans-serif; min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 20px; }
-        .glass { background: rgba(255,255,255,0.03); border: 1px solid rgba(184, 213, 176, 0.15); backdrop-filter: blur(10px); border-radius: 30px; }
-        input { background: rgba(255,255,255,0.05) !important; border: 1px solid rgba(255,255,255,0.1) !important; color: white !important; width: 100%; padding: 16px; border-radius: 14px; outline: none; transition: 0.2s; }
-        input:focus { border-color: var(--stream-green) !important; background: rgba(255,255,255,0.08) !important; }
-        .btn-primary { background: var(--stream-green); color: var(--stream-dark); font-weight: 800; padding: 18px; border-radius: 14px; width: 100%; text-transform: uppercase; letter-spacing: 1px; transition: 0.3s; cursor: pointer; border: none; }
-        .btn-primary:active { transform: scale(0.98); }
-        .hidden { display: none !important; }
+        
+        :root { 
+            --stream-green: #b8d5b0; 
+            --stream-dark: #0a1f1c; 
+        }
+
+        body { 
+            background: var(--stream-dark); 
+            color: #fff; 
+            font-family: 'Plus Jakarta Sans', sans-serif; 
+            background-image: radial-gradient(circle at 50% 50%, rgba(184, 213, 176, 0.05) 0%, transparent 100%);
+        }
+
+        .glass { 
+            background: rgba(255,255,255,0.02); 
+            border: 2px solid rgba(184, 213, 176, 0.2); 
+            backdrop-filter: blur(15px); 
+        }
+
+        input { 
+            background: rgba(255,255,255,0.05) !important; 
+            border: 1px solid rgba(184, 213, 176, 0.1) !important; 
+            color: white !important; 
+            transition: all 0.3s ease;
+        }
+
+        input:focus {
+            border-color: var(--stream-green) !important;
+            background: rgba(184, 213, 176, 0.08) !important;
+            outline: none;
+        }
+
+        .hidden { display: none; }
+
+        .loader { 
+            width: 20px; 
+            height: 20px; 
+            border: 3px solid rgba(10, 31, 28, 0.3); 
+            border-top: 3px solid var(--stream-dark); 
+            border-radius: 50%; 
+            animation: spin 0.8s linear infinite; 
+        }
+
+        @keyframes spin { 100% { transform: rotate(360deg); } }
+
+        .stream-btn {
+            background: var(--stream-green);
+            color: var(--stream-dark);
+            font-weight: 900;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .stream-btn:hover {
+            filter: brightness(1.1);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+        }
+
+        .stream-btn:active { transform: translateY(0); }
     </style>
 </head>
-<body>
+<body class="flex items-center justify-center min-h-screen p-6">
 
-<div id="login-card" class="glass w-full max-w-sm p-8 shadow-2xl">
-    <div class="text-center mb-8">
-        <div class="w-16 h-16 bg-white/5 rounded-2xl flex items-center justify-center text-2xl mx-auto mb-4 border border-white/10 text-[#b8d5b0]">
-            <i class="fas fa-user-shield"></i>
+    <!-- Login Card -->
+    <div id="login-card" class="glass w-full max-w-sm rounded-[35px] p-10 text-center">
+        <div class="mb-8 flex flex-col items-center">
+            <img src="logo.png" alt="Logo" class="h-10 mb-4 brightness-0 invert opacity-80">
+            <h1 class="text-2xl font-black text-[#b8d5b0] uppercase tracking-widest">Master Admin</h1>
         </div>
-        <h1 class="text-2xl font-black">Admin Login</h1>
-        <p class="text-gray-500 text-[10px] font-bold uppercase tracking-widest mt-1">Authorized Access Only</p>
-    </div>
-    <div class="space-y-4">
-        <input type="text" id="user" placeholder="Username">
-        <input type="password" id="pass" placeholder="Password">
-        <button class="btn-primary" id="login-btn">Sign In</button>
-        <p id="error-msg" class="text-red-400 text-[10px] text-center font-bold uppercase hidden">Invalid Credentials</p>
-    </div>
-</div>
-
-<div id="dash-card" class="glass w-full max-w-lg p-8 hidden shadow-2xl">
-    <div class="flex justify-between items-center mb-8 border-b border-white/10 pb-4">
-        <div>
-            <h1 class="text-xl font-black text-[#b8d5b0] uppercase">Dashboard</h1>
-            <p class="text-[9px] text-gray-500 font-bold uppercase">Update Payment Details</p>
+        <div class="space-y-4">
+            <div class="relative">
+                <i class="fas fa-user absolute left-4 top-1/2 -translate-y-1/2 text-white/20 text-sm"></i>
+                <input type="text" id="user" placeholder="Username" class="w-full pl-12 p-4 rounded-2xl outline-none">
+            </div>
+            <div class="relative">
+                <i class="fas fa-key absolute left-4 top-1/2 -translate-y-1/2 text-white/20 text-sm"></i>
+                <input type="password" id="pass" placeholder="Password" class="w-full pl-12 p-4 rounded-2xl outline-none">
+            </div>
+            <button id="login-btn" onclick="handleLogin()" class="w-full stream-btn p-4 rounded-2xl mt-4 shadow-xl">AUTHENTICATE</button>
         </div>
-        <button onclick="location.reload()" class="text-gray-500 hover:text-white"><i class="fas fa-power-off"></i></button>
     </div>
 
-    <div class="space-y-5">
-        <div>
-            <label class="text-[10px] text-gray-400 ml-1 font-bold uppercase">Bank Name</label>
-            <input id="in-bank" placeholder="Loading Bank Name...">
+    <!-- Dashboard Card -->
+    <div id="dash-card" class="glass w-full max-w-lg rounded-[35px] p-8 hidden">
+        <div class="flex justify-between items-start mb-8 border-b border-white/5 pb-6">
+            <div>
+                <img src="logo.png" alt="Logo" class="h-8 mb-2 brightness-0 invert">
+                <h1 class="text-lg font-black text-[#b8d5b0] uppercase tracking-tighter">Command Center</h1>
+                <p class="text-[9px] text-white/40 font-bold uppercase tracking-widest">Live Site Control</p>
+            </div>
+            <div class="flex flex-col items-end gap-2">
+                <div class="bg-[#b8d5b0]/10 text-[#b8d5b0] text-[9px] font-black px-3 py-1.5 rounded-full border border-[#b8d5b0]/20 uppercase tracking-widest">
+                    <i class="fas fa-circle text-[6px] mr-1 animate-pulse"></i> Connected
+                </div>
+            </div>
         </div>
-        <div>
-            <label class="text-[10px] text-gray-400 ml-1 font-bold uppercase">Account Number</label>
-            <input id="in-number" placeholder="Loading Account Number...">
+        
+        <div class="space-y-6">
+            <!-- Nigeria Specific Section -->
+            <div class="p-6 rounded-3xl border border-white/5 bg-white/5">
+                <div class="flex items-center gap-3 mb-6">
+                    <span class="w-8 h-8 rounded-lg bg-[#b8d5b0]/10 flex items-center justify-center text-[#b8d5b0] text-xs">🇳🇬</span>
+                    <p class="text-xs font-black text-white uppercase tracking-widest">Nigeria Gateway Details</p>
+                </div>
+                
+                <div class="space-y-4">
+                    <div>
+                        <label class="text-[9px] font-bold text-white/30 uppercase tracking-widest ml-1 mb-1 block">Bank Name / Method</label>
+                        <input type="text" id="bank-in" class="w-full p-4 rounded-xl outline-none text-sm" placeholder="e.g. Kuda">
+                    </div>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="text-[9px] font-bold text-white/30 uppercase tracking-widest ml-1 mb-1 block">Account Number</label>
+                            <input type="text" id="num-in" class="w-full p-4 rounded-xl outline-none text-sm" placeholder="e.g. 3003439402">
+                        </div>
+                        <div>
+                            <label class="text-[9px] font-bold text-white/30 uppercase tracking-widest ml-1 mb-1 block">Amount</label>
+                            <input type="text" id="amount-in" class="w-full p-4 rounded-xl outline-none text-sm" placeholder="e.g. ₦12,000">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="text-[9px] font-bold text-white/30 uppercase tracking-widest ml-1 mb-1 block">Account Holder Name</label>
+                        <input type="text" id="name-in" class="w-full p-4 rounded-xl outline-none text-sm" placeholder="e.g. MORRISH M ENTERPRISE">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Global Redirect Section -->
+            <div class="p-6 rounded-3xl border border-white/5 bg-white/5">
+                <div class="flex items-center gap-3 mb-4">
+                    <span class="w-8 h-8 rounded-lg bg-blue-500/10 flex items-center justify-center text-blue-400 text-xs"><i class="fab fa-telegram-plane"></i></span>
+                    <p class="text-xs font-black text-white uppercase tracking-widest">Telegram Redirect Link</p>
+                </div>
+                <input type="text" id="link-in" class="w-full p-4 rounded-xl outline-none text-sm" placeholder="https://t.me/morrishmedia">
+                <p class="text-[8px] text-white/20 mt-2 ml-1 italic font-bold uppercase">This link is used for the "I Have Made Payment" button.</p>
+            </div>
+
+            <div class="pt-2">
+                <button onclick="handleUpdate()" id="up-btn" class="w-full stream-btn p-5 rounded-2xl shadow-2xl flex items-center justify-center gap-3">
+                    DEPLOY LIVE UPDATES
+                </button>
+            </div>
         </div>
-        <div>
-            <label class="text-[10px] text-gray-400 ml-1 font-bold uppercase">Account Holder</label>
-            <input id="in-holder" placeholder="Loading Holder Name...">
-        </div>
-        <div>
-            <label class="text-[10px] text-gray-400 ml-1 font-bold uppercase">Telegram Link</label>
-            <input id="in-link" placeholder="Loading Telegram Link...">
-        </div>
-        <button id="update-btn" class="btn-primary">Update Website Live <i class="fas fa-wifi ml-2"></i></button>
-        <p id="status" class="text-center text-[10px] font-bold uppercase mt-2"></p>
     </div>
-</div>
 
 <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
-    import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
-    import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+    import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+    import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
+    // Firebase Config (Matches your checkout/dashboard)
     const firebaseConfig = {
-        apiKey: "AIzaSyDnElnPVmXki1il5bnHU2QzkeQCEuRKCco",
-        authDomain: "stream-africa1.firebaseapp.com",
-        projectId: "stream-africa1",
-        storageBucket: "stream-africa1.firebasestorage.app",
-        messagingSenderId: "418092449756",
-        appId: "1:418092449756:web:f25270e84786d127e95919"
+        apiKey: "AIzaSyASDlQQMoXCeMZKs5O3KmO8zuFztt8rg2E",
+        authDomain: "celeste-web1.firebaseapp.com",
+        projectId: "celeste-web1",
+        storageBucket: "celeste-web1.firebasestorage.app",
+        messagingSenderId: "905722043319",
+        appId: "1:905722043319:web:83d032bf3608b8957b2632"
+    };
+    
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+    
+    const docRef = doc(db, "configs", "main");
+
+    window.handleLogin = () => {
+        const u = document.getElementById('user').value;
+        const p = document.getElementById('pass').value;
+        // Updated credentials for Stream Africa
+        if(u === "admin" && p === "stream2026") {
+            document.getElementById('login-card').classList.add('hidden');
+            document.getElementById('dash-card').classList.remove('hidden');
+            initDash();
+        } else {
+            alert("Unauthorized Access");
+        }
     };
 
-    const app = initializeApp(firebaseConfig);
-    const db = getFirestore(app);
-    const auth = getAuth(app);
-    const docPath = doc(db, 'artifacts', 'stream-africa1', 'public', 'data', 'paymentConfig');
-
-    // Login Logic
-    document.getElementById('login-btn').addEventListener('click', async () => {
-        const u = document.getElementById("user").value;
-        const p = document.getElementById("pass").value;
-
-        if (u === "admin" && p === "admin2026") {
-            document.getElementById("login-card").classList.add("hidden");
-            document.getElementById("dash-card").classList.remove("hidden");
-            
-            // Connect to Firebase and Load Data
-            try {
-                await signInAnonymously(auth);
-                await loadCurrent();
-            } catch (err) {
-                console.error("Auth failed:", err);
-            }
-        } else {
-            document.getElementById("error-msg").classList.remove("hidden");
-        }
-    });
-
-    // Function to get current live data
-    async function loadCurrent() {
-        try {
-            const snap = await getDoc(docPath);
-            if(snap.exists()){
-                const d = snap.data();
-                document.getElementById('in-bank').value = d.bank || "";
-                document.getElementById('in-number').value = d.number || "";
-                document.getElementById('in-holder').value = d.holder || "";
-                document.getElementById('in-link').value = d.link || "";
-            }
-        } catch(e) { 
-            console.error("Fetch error:", e); 
+    async function initDash() {
+        await signInAnonymously(auth);
+        const snap = await getDoc(docRef);
+        if(snap.exists()) {
+            const d = snap.data();
+            document.getElementById('bank-in').value = d.nigeriaBank || "Kuda";
+            document.getElementById('num-in').value = d.nigeriaNumber || "3003439402";
+            document.getElementById('name-in').value = d.nigeriaHolder || "MORRISH M ENTERPRISE";
+            document.getElementById('amount-in').value = d.nigeriaAmount || "₦12,000";
+            document.getElementById('link-in').value = d.telegramLink || "";
         }
     }
 
-    // Update Logic
-    document.getElementById('update-btn').addEventListener('click', async () => {
-        const btn = document.getElementById('update-btn');
-        const st = document.getElementById('status');
-        btn.disabled = true; 
-        btn.innerText = "UPDATING...";
+    window.handleUpdate = async () => {
+        const btn = document.getElementById('up-btn');
+        const originalText = btn.innerHTML;
+        btn.innerHTML = `<div class="loader"></div> SYNCHRONIZING...`;
+        btn.disabled = true;
 
         try {
-            await setDoc(docPath, {
-                bank: document.getElementById('in-bank').value,
-                number: document.getElementById('in-number').value,
-                holder: document.getElementById('in-holder').value,
-                link: document.getElementById('in-link').value,
-                updatedAt: new Date().getTime()
+            if(!auth.currentUser) await signInAnonymously(auth);
+            
+            await setDoc(docRef, {
+                nigeriaBank: document.getElementById('bank-in').value,
+                nigeriaNumber: document.getElementById('num-in').value,
+                nigeriaHolder: document.getElementById('name-in').value,
+                nigeriaAmount: document.getElementById('amount-in').value,
+                telegramLink: document.getElementById('link-in').value,
+                lastUpdated: new Date().toLocaleTimeString()
             }, { merge: true });
-
-            st.innerText = "LIVE UPDATE SUCCESSFUL!";
-            st.style.color = "#b8d5b0";
-            setTimeout(() => st.innerText = "", 3000);
-        } catch(e) { 
-            st.innerText = "ERROR: " + e.message; 
-            st.style.color = "#ff6b6b"; 
+            
+            alert("Site Updated Successfully!");
+        } catch (e) {
+            alert("Connection Error: " + e.message);
         }
-        btn.disabled = false; 
-        btn.innerHTML = 'Update Website Live <i class="fas fa-wifi ml-2"></i>';
-    });
+        
+        btn.innerHTML = originalText;
+        btn.disabled = false;
+    };
 </script>
 </body>
 </html>
+
