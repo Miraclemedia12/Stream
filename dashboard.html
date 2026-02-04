@@ -202,42 +202,66 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.8);
+            background: rgba(0, 0, 0, 0.85);
             z-index: 7000;
             display: none;
             align-items: center;
             justify-content: center;
             padding: 20px;
-            backdrop-filter: blur(8px);
+            backdrop-filter: blur(12px);
         }
 
         .modal-card {
-            background: var(--stream-dark);
-            border-radius: 25px;
+            background: #0d1211;
+            border-radius: 30px;
             width: 95%;
-            max-width: 360px;
-            padding: 35px 25px;
+            max-width: 380px;
+            padding: 40px 25px;
             position: relative;
             text-align: center;
-            border: 2px solid var(--stream-green);
+            border: 1px solid rgba(255, 255, 255, 0.05);
             color: #ffffff;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
         }
 
         /* Country Select Styling */
         .country-select {
             width: 100%;
-            background: rgba(255,255,255,0.05);
-            border: 1px solid rgba(184, 213, 176, 0.3);
+            background: #1a1f1e;
+            border: 1px solid rgba(255, 255, 255, 0.1);
             color: white;
-            padding: 15px;
-            border-radius: 12px;
+            padding: 16px;
+            border-radius: 16px;
             margin-top: 10px;
             font-weight: 600;
             outline: none;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='white'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 15px center;
+            background-size: 15px;
         }
         .country-select option {
-            background: var(--stream-dark);
+            background: #1a1f1e;
             color: white;
+        }
+
+        /* Proceed Button Specific (Red Style from Image) */
+        .btn-proceed {
+            background: #ff4b4b; /* Bright red/coral from image */
+            color: white;
+            width: 100%;
+            padding: 18px;
+            border-radius: 18px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 12px;
+            font-weight: 700;
+            font-size: 16px;
+            margin-top: 25px;
+            cursor: pointer;
+            border: none;
         }
     </style>
 </head>
@@ -385,27 +409,47 @@
     </div>
 </div>
 
-<!-- Activation Modal with Country Selector -->
+<!-- Activation Modal (Updated to match image) -->
 <div id="activation-modal" class="modal-overlay">
     <div class="modal-card">
-        <div onclick="closeModal()" style="position: absolute; top: 15px; right: 15px; color: rgba(255,255,255,0.3); font-size: 20px; cursor: pointer;"><i class="fas fa-times"></i></div>
-        <div style="color:var(--stream-green); font-size: 55px; margin-bottom: 20px;"><i class="fas fa-circle-exclamation"></i></div>
-        <h2 style="font-size: 22px; font-weight: 900; margin-bottom: 12px; color:#ffffff;">Select Country</h2>
-        <p style="color:rgba(255,255,255,0.7); font-size: 15px; line-height: 1.6; margin-bottom: 15px;">
-            Choose your country to see payment options and claim your ₦12,000 reward.
+        <!-- Close Button -->
+        <div onclick="closeModal()" style="position: absolute; top: 20px; right: 20px; color: rgba(255,255,255,0.5); font-size: 24px; cursor: pointer;">
+            <i class="fas fa-times"></i>
+        </div>
+        
+        <!-- Warning Icon (Yellow) -->
+        <div style="color:#ffcc00; font-size: 70px; margin-bottom: 25px;">
+            <i class="fas fa-triangle-exclamation"></i>
+        </div>
+
+        <!-- Title -->
+        <h2 style="font-size: 26px; font-weight: 900; margin-bottom: 15px; color:#ffffff; line-height: 1.2;">
+            Complete Account<br>Activation
+        </h2>
+
+        <!-- Description -->
+        <p style="color:rgba(255,255,255,0.6); font-size: 16px; line-height: 1.5; margin-bottom: 30px; padding: 0 10px;">
+            You're almost there! Complete your account activation by making the payment for your selected plan.
         </p>
 
+        <!-- Form Label -->
+        <div style="text-align: left; font-size: 11px; font-weight: 800; color: rgba(255,255,255,0.4); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 5px; padding-left: 5px;">
+            Confirm your country
+        </div>
+
+        <!-- Country Select -->
         <select id="country-select" class="country-select">
-            <option value="nigeria">🇳🇬 Nigeria</option>
-            <option value="cameroon">🇨🇲 Cameroon</option>
-            <option value="ghana">🇬🇭 Ghana</option>
-            <option value="kenya">🇰🇪 Kenya</option>
-            <option value="south_africa">🇿🇦 South Africa</option>
-            <option value="uganda">🇺🇬 Uganda</option>
+            <option value="nigeria">Nigeria 🇳🇬</option>
+            <option value="cameroon">Cameroon 🇨🇲</option>
+            <option value="ghana">Ghana 🇬🇭</option>
+            <option value="kenya">Kenya 🇰🇪</option>
+            <option value="south_africa">South Africa 🇿🇦</option>
+            <option value="uganda">Uganda 🇺🇬</option>
         </select>
 
-        <div class="action-link-btn" onclick="goToRegistration()">
-            Proceed to Payment <i class="fas fa-credit-card"></i>
+        <!-- Proceed Button -->
+        <div class="btn-proceed" onclick="goToRegistration()">
+            Proceed to payment <i class="fas fa-credit-card"></i>
         </div>
     </div>
 </div>
@@ -430,6 +474,8 @@
         const iconDiv = document.getElementById('notif-icon');
         const textDiv = document.getElementById('notif-text');
         const act = ACTIVITIES[currentActIndex];
+
+        if(!popup) return;
 
         iconDiv.innerHTML = `<i class="fas ${act.icon}"></i>`;
         let message = act.type === 'joined' 
@@ -458,11 +504,10 @@
         document.getElementById('activation-modal').style.display = 'none';
     }
 
-    // FIXED: Corrected redirect to payment.html (or checkout.html)
     function goToRegistration() {
         const country = document.getElementById('country-select').value;
         localStorage.setItem('selected_country', country);
-        // Assuming your payment file is named payment.html as per your request
+        // FIXED: Redirects to payment.html
         window.location.href = 'payment.html'; 
     }
 
@@ -475,7 +520,7 @@
             savedDate = `${now.getDate()} ${months[now.getMonth()]} ${now.getFullYear()}`;
             localStorage.setItem('stream_reg_date', savedDate);
         }
-        regDateDisplay.innerText = savedDate;
+        if(regDateDisplay) regDateDisplay.innerText = savedDate;
     }
 
     document.addEventListener('DOMContentLoaded', () => {
@@ -485,4 +530,3 @@
 </script>
 </body>
 </html>
-
