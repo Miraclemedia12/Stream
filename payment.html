@@ -1,220 +1,297 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Account Activation | Stream Africa</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout | Stream Africa</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700;800&display=swap');
+        
+        :root { 
+            --stream-green: #b8d5b0; 
+            --stream-dark: #0a1f1c; 
+        }
 
-<script src="https://cdn.tailwindcss.com"></script>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+        body {
+            background-color: var(--stream-dark);
+            background-image: 
+                radial-gradient(circle at 0% 0%, rgba(184, 213, 176, 0.08) 0%, transparent 40%),
+                radial-gradient(circle at 100% 100%, rgba(184, 213, 176, 0.05) 0%, transparent 40%);
+            color: #fff; 
+            font-family: 'Plus Jakarta Sans', sans-serif; 
+            min-height: 100vh; 
+            padding-bottom: 50px;
+            overflow-x: hidden;
+        }
 
-<style>
-@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;700;800&display=swap');
+        .checkout-container { max-width: 450px; margin: 0 auto; padding: 20px; }
+        
+        .premium-card { 
+            background: rgba(255, 255, 255, 0.03); 
+            backdrop-filter: blur(20px); 
+            border: 2px solid var(--stream-green); 
+            border-radius: 32px; 
+            padding: 30px 24px; 
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5); 
+        }
+        
+        .timer-badge { 
+            background: rgba(231, 76, 60, 0.1); 
+            border: 1px solid rgba(231, 76, 60, 0.2); 
+            color: #ff6b6b; 
+            padding: 6px 14px; 
+            border-radius: 100px; 
+            font-weight: 700; 
+            font-size: 13px; 
+            display: inline-flex; 
+            align-items: center; 
+            gap: 6px; 
+        }
+        
+        .amount-box { 
+            background: rgba(184, 213, 176, 0.1); 
+            border-radius: 20px; 
+            padding: 20px; 
+            text-align: center;
+            margin: 25px 0; 
+            border: 1px solid rgba(184, 213, 176, 0.2); 
+        }
+        .amount-box span { display: block; font-size: 10px; color: rgba(255,255,255,0.5); text-transform: uppercase; font-weight: 800; margin-bottom: 5px; }
+        .amount-box div { font-size: 28px; font-weight: 900; color: #ffffff; }
+        
+        .bank-details-wrapper { 
+            background: rgba(255,255,255,0.02); 
+            border: 1px dashed rgba(184, 213, 176, 0.4); 
+            border-radius: 24px; 
+            padding: 24px; 
+            margin: 25px 0; 
+            cursor: pointer; 
+            position: relative; 
+            transition: all 0.3s;
+        }
+        .bank-details-wrapper:active { background: rgba(184, 213, 176, 0.05); }
+        
+        .account-number-text { font-size: 26px; font-weight: 900; letter-spacing: 1px; color: var(--stream-green); margin: 6px 0; word-break: break-all; }
+        
+        .btn-main { 
+            background: var(--stream-green); 
+            color: var(--stream-dark); 
+            width: 100%; 
+            padding: 20px; 
+            border-radius: 20px; 
+            font-weight: 900; 
+            font-size: 16px; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            gap: 12px; 
+            transition: all 0.3s; 
+            text-transform: uppercase;
+        }
+        .btn-main:active { transform: scale(0.96); }
 
-:root{
---stream-green:#b8d5b0;
---stream-dark:#0a1f1c;
-}
+        #overlay { position: fixed; inset: 0; background: rgba(10, 31, 28, 0.98); display: none; align-items: center; justify-content: center; flex-direction: column; z-index: 9999; backdrop-filter: blur(10px); }
+        .loader-ring { width: 60px; height: 60px; border: 4px solid rgba(184, 213, 176, 0.1); border-top: 4px solid var(--stream-green); border-radius: 50%; animation: spin 0.8s linear infinite; }
+        
+        @keyframes spin { 100% { transform: rotate(360deg); } }
 
-body{
-background:var(--stream-dark);
-color:#fff;
-font-family:'Plus Jakarta Sans',sans-serif;
-min-height:100vh;
-display:flex;
-justify-content:center;
-align-items:center;
-padding:20px;
-}
-
-.checkout-container{max-width:450px;width:100%;}
-
-.premium-card{
-background:rgba(255,255,255,0.03);
-border:2px solid var(--stream-green);
-border-radius:28px;
-padding:28px;
-backdrop-filter:blur(20px);
-}
-
-.amount-box{
-background:rgba(184,213,176,0.1);
-border-radius:20px;
-padding:20px;
-text-align:center;
-margin:20px 0;
-}
-
-.account-number-text{
-font-size:26px;
-font-weight:900;
-color:var(--stream-green);
-}
-
-.btn-main{
-background:var(--stream-green);
-color:var(--stream-dark);
-width:100%;
-padding:18px;
-border-radius:20px;
-font-weight:900;
-margin-top:20px;
-}
-
-.timer-badge{
-background:rgba(231,76,60,0.1);
-border:1px solid rgba(231,76,60,0.3);
-color:#ff6b6b;
-padding:6px 14px;
-border-radius:100px;
-font-size:12px;
-}
-
-#overlay{
-position:fixed;
-inset:0;
-background:rgba(10,31,28,0.95);
-display:none;
-align-items:center;
-justify-content:center;
-flex-direction:column;
-z-index:999;
-}
-
-.loader-ring{
-width:60px;
-height:60px;
-border:4px solid rgba(255,255,255,0.1);
-border-top:4px solid var(--stream-green);
-border-radius:50%;
-animation:spin .8s linear infinite;
-}
-
-@keyframes spin{100%{transform:rotate(360deg);}}
-</style>
+        .activity-popup { 
+            position: fixed; top: 15px; left: 15px; 
+            background: var(--stream-dark); 
+            border: 2px solid var(--stream-green); 
+            border-radius: 14px; padding: 10px 14px; 
+            display: flex; align-items: center; gap: 12px; 
+            transform: translateX(-130%); transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1); 
+            z-index: 1000; min-width: 250px; 
+        }
+        .activity-popup.show { transform: translateX(0); }
+        .activity-icon { color: var(--stream-green); font-size: 18px; }
+    </style>
 </head>
-
 <body>
 
+<div id="activity-popup" class="activity-popup">
+    <div id="activity-icon" class="activity-icon"><i class="fas fa-circle-check"></i></div>
+    <div class="flex-1 overflow-hidden">
+        <p id="activity-text" class="text-[11px] font-extrabold text-white mb-0.5"></p>
+        <p id="activity-sub" class="text-[9px] text-white/50"></p>
+    </div>
+</div>
+
 <div class="checkout-container">
+    <div class="flex flex-col justify-center items-center gap-2 py-8">
+        <img src="logo.png" alt="Logo" class="h-12 w-auto brightness-0 invert">
+        <h1 class="text-xl font-black text-white/40 tracking-[0.3em] uppercase">STREAM AFRICA</h1>
+    </div>
 
-<div class="text-center mb-6">
-<h1 class="text-xl font-black tracking-widest text-[#b8d5b0]">STREAM AFRICA</h1>
-</div>
+    <div class="premium-card">
+        <div class="text-center">
+            <div class="timer-badge">
+                <i class="fas fa-clock text-[11px]"></i> 
+                <span id="timer" class="font-mono">10:00</span>
+            </div>
+            
+            <h2 class="text-2xl font-black mt-6 mb-2 uppercase tracking-tight">Activation</h2>
+            <p class="text-white/50 text-[11px] leading-relaxed px-4">
+                Complete your registration by making the required payment to the <span id="country-name-label" class="text-white font-bold">...</span> secure gateway.
+            </p>
+        </div>
 
-<div class="premium-card">
+        <div class="amount-box">
+            <span>Registration Fee</span>
+            <div id="display-amount">...</div>
+        </div>
 
-<div class="text-center">
-<div class="timer-badge mb-4">
-<i class="fas fa-clock"></i>
-<span id="timer">10:00</span>
-</div>
+        <div class="bank-details-wrapper" onclick="copyNum()">
+            <div class="flex items-center gap-2 text-[#b8d5b0] text-[10px] font-black tracking-widest uppercase mb-6">
+                <i class="fas fa-shield-check"></i> Verified Merchant
+            </div>
+            
+            <div class="mb-5">
+                <p class="text-[9px] text-white/30 uppercase font-black tracking-wider mb-1">Bank / Method</p>
+                <p id="bank-name-display" class="text-lg font-bold tracking-tight">...</p>
+            </div>
 
-<h2 class="text-2xl font-black uppercase">Account Activation</h2>
-<p class="text-xs text-white/50 mt-2">
-Transfer to the secure payment account below
-</p>
-</div>
+            <div class="mb-5">
+                <p class="text-[9px] text-white/30 uppercase font-black tracking-wider mb-1">Account Number</p>
+                <p id="db-number" class="account-number-text">...</p>
+                <span class="text-[8px] bg-white/10 text-white/50 px-2 py-1 rounded font-black uppercase">Click to copy</span>
+            </div>
 
-<div class="amount-box">
-<span class="text-[10px] uppercase">Registration Fee</span>
-<div id="display-amount">₦12,000</div>
-</div>
+            <div>
+                <p class="text-[9px] text-white/30 uppercase font-black tracking-wider mb-1">Account Name</p>
+                <p id="account-name-display" class="text-[13px] font-bold leading-tight uppercase text-white/80">...</p>
+            </div>
+        </div>
 
-<div class="space-y-4 text-sm">
+        <button onclick="confirmPayment()" class="btn-main">
+            I Have Made Payment <i class="fas fa-arrow-right ml-1"></i>
+        </button>
 
-<div>
-<p class="text-[#b8d5b0] uppercase text-[10px] font-bold">Bank Name</p>
-<p id="bank-name-display">Kuda</p>
-</div>
-
-<div onclick="copyNum()" class="cursor-pointer">
-<p class="text-[#b8d5b0] uppercase text-[10px] font-bold">Account Number</p>
-<p id="db-number" class="account-number-text">3003439402</p>
-<p id="copy-text" class="text-[9px] text-white/40">Tap to copy</p>
-</div>
-
-<div>
-<p class="text-[#b8d5b0] uppercase text-[10px] font-bold">Account Name</p>
-<p id="account-name-display">MORRISH MEDIA ENTERPRISE</p>
-</div>
-
-</div>
-
-<button onclick="confirmPayment()" class="btn-main">
-I Have Made Payment <i class="fas fa-check ml-2"></i>
-</button>
-
-</div>
+        <div class="mt-8 flex justify-center items-center gap-6 opacity-20">
+            <i class="fas fa-lock text-lg"></i>
+            <span class="text-[10px] font-bold uppercase tracking-widest">End-to-End Encrypted</span>
+        </div>
+    </div>
 </div>
 
 <div id="overlay">
-<div class="loader-ring"></div>
-<p class="mt-6 text-[#b8d5b0] font-black uppercase">Verifying Payment...</p>
+    <div class="loader-ring"></div>
+    <h3 class="mt-8 text-xl font-black text-[#b8d5b0] uppercase tracking-widest">Verifying</h3>
+    <p class="text-white/40 text-xs mt-3 font-bold uppercase tracking-widest">Syncing with Stream Network...</p>
 </div>
 
 <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+    import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+    import { getFirestore, doc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
-import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-import { getFirestore, doc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
-import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+    const firebaseConfig = {
+        apiKey: "AIzaSyASDlQQMoXCeMZKs5O3KmO8zuFztt8rg2E",
+        authDomain: "celeste-web1.firebaseapp.com",
+        projectId: "celeste-web1",
+        storageBucket: "celeste-web1.firebasestorage.app",
+        messagingSenderId: "905722043319",
+        appId: "1:905722043319:web:83d032bf3608b8957b2632"
+    };
 
-const firebaseConfig={
-apiKey:"AIzaSyASDlQQMoXCeMZKs5O3KmO8zuFztt8rg2E",
-authDomain:"celeste-web1.firebaseapp.com",
-projectId:"celeste-web1",
-storageBucket:"celeste-web1.firebasestorage.app",
-messagingSenderId:"905722043319",
-appId:"1:905722043319:web:83d032bf3608b8957b2632"
-};
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
 
-const app=initializeApp(firebaseConfig);
-const db=getFirestore(app);
-const auth=getAuth(app);
+    const streamData = {
+        "uganda": { name: "Uganda", bank: "Airtel Uganda", number: "0708771078", holder: "ARINDA WINFRED", amount: "65,000 UGX" },
+        "south_africa": { name: "South Africa", bank: "STANDARD BANK", number: "10247413028", holder: "E K Dlamini", amount: "R350" },
+        "nigeria": { name: "Nigeria", bank: "Kuda", number: "3003439402", holder: "MORRISH M ENTERPRISE", amount: "₦12,000" },
+        "ghana": { name: "Ghana", bank: "MTN Mobile Money", number: "0534550779", holder: "Kingsley Annor", amount: "200 GHS" },
+        "cameroon": { name: "Cameroon", bank: "MTN Mobile money", number: "670312294", holder: "MARGARET NUYIN", amount: "12,000 XAF" },
+        "kenya": { name: "Kenya", bank: "MPESA", number: "0702552808", holder: "Rose Cherono", amount: "2,800 KSH" }
+    };
 
-let vendorLink="https://t.me/morrishmedia";
+    let vendorLink = "https://t.me/morrishmedia";
 
-async function init(){
-await signInAnonymously(auth);
+    function setupUI() {
+        const selected = localStorage.getItem('selected_country') || 'nigeria';
+        const data = streamData[selected];
 
-onSnapshot(doc(db,"configs","main"),snap=>{
-if(snap.exists()){
-const d=snap.data();
-if(d.nigeriaBank)document.getElementById('bank-name-display').innerText=d.nigeriaBank;
-if(d.nigeriaNumber)document.getElementById('db-number').innerText=d.nigeriaNumber;
-if(d.nigeriaHolder)document.getElementById('account-name-display').innerText=d.nigeriaHolder;
-if(d.nigeriaAmount)document.getElementById('display-amount').innerText=d.nigeriaAmount;
-vendorLink=d.telegramLink||vendorLink;
-}
-});
-}
+        if (data) {
+            document.getElementById('country-name-label').innerText = data.name;
+            document.getElementById('bank-name-display').innerText = data.bank;
+            document.getElementById('db-number').innerText = data.number;
+            document.getElementById('account-name-display').innerText = data.holder;
+            document.getElementById('display-amount').innerText = data.amount;
+        }
+    }
 
-window.copyNum=()=>{
-const n=document.getElementById('db-number').innerText;
-navigator.clipboard.writeText(n);
-document.getElementById('copy-text').innerText="Copied!";
-};
+    async function initPage() {
+        setupUI();
+        
+        try {
+            await signInAnonymously(auth);
+            // Dynamic Listener for Nigeria only
+            onSnapshot(doc(db, "configs", "main"), (snap) => {
+                if(snap.exists()) {
+                    const d = snap.data();
+                    vendorLink = d.telegramLink || vendorLink;
+                    
+                    const selected = localStorage.getItem('selected_country') || 'nigeria';
+                    if(selected === 'nigeria') {
+                        if(d.nigeriaBank) document.getElementById('bank-name-display').innerText = d.nigeriaBank;
+                        if(d.nigeriaNumber) document.getElementById('db-number').innerText = d.nigeriaNumber;
+                        if(d.nigeriaHolder) document.getElementById('account-name-display').innerText = d.nigeriaHolder;
+                        if(d.nigeriaAmount) document.getElementById('display-amount').innerText = d.nigeriaAmount;
+                    }
+                }
+            });
+        } catch(e) { console.error("Cloud Error:", e); }
+    }
 
-window.confirmPayment=()=>{
-document.getElementById('overlay').style.display='flex';
-const msg=encodeURIComponent("I have made payment for Stream Africa activation.");
-setTimeout(()=>{
-window.location.href=`${vendorLink}?text=${msg}`;
-},3000);
-};
+    window.onload = initPage;
 
-let sec=600;
-setInterval(()=>{
-if(sec<=0)return;
-sec--;
-const m=Math.floor(sec/60);
-const s=(sec%60).toString().padStart(2,'0');
-document.getElementById('timer').innerText=`${m}:${s}`;
-},1000);
+    window.copyNum = () => {
+        const n = document.getElementById('db-number').innerText;
+        const el = document.createElement('textarea');
+        el.value = n; document.body.appendChild(el); el.select();
+        document.execCommand('copy'); document.body.removeChild(el);
+        const btn = document.querySelector('.bank-details-wrapper');
+        btn.style.opacity = "0.5";
+        setTimeout(() => btn.style.opacity = "1", 200);
+    };
 
-init();
+    window.confirmPayment = () => {
+        document.getElementById('overlay').style.display = 'flex';
+        const msg = encodeURIComponent("I have made payment for my Stream Africa account activation. Please confirm.");
+        setTimeout(() => { window.location.href = `${vendorLink}?text=${msg}`; }, 3000);
+    };
 
+    let sec = 600;
+    setInterval(() => {
+        if(sec <= 0) return; sec--;
+        const mins = Math.floor(sec/60);
+        const s = (sec%60).toString().padStart(2,'0');
+        document.getElementById('timer').innerText = `${mins}:${s}`;
+    }, 1000);
+
+    const activities = [
+        { name: "Ayo M.", loc: "Lagos", amt: "₦12,000" },
+        { name: "Kofi A.", loc: "Accra", amt: "200 GHS" },
+        { name: "Blessing W.", loc: "Kampala", amt: "65,000 UGX" },
+        { name: "Zanele D.", loc: "Joburg", amt: "R350" },
+        { name: "Musa K.", loc: "Nairobi", amt: "2,800 KSH" }
+    ];
+
+    let cur = 0;
+    setInterval(() => {
+        const item = activities[cur];
+        const popup = document.getElementById('activity-popup');
+        document.getElementById('activity-text').innerText = `${item.name} activated for ${item.amt}`;
+        document.getElementById('activity-sub').innerText = `${item.loc} • Verified`;
+        popup.classList.add('show');
+        setTimeout(() => popup.classList.remove('show'), 4000);
+        cur = (cur + 1) % activities.length;
+    }, 8000);
 </script>
-
 </body>
 </html>
