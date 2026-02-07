@@ -1,194 +1,220 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Dashboard | Celeste</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700;800&display=swap');
-        body { background: #000; color: #fff; font-family: 'Plus Jakarta Sans', sans-serif; }
-        .glass { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); backdrop-filter: blur(10px); }
-        input { background: rgba(255,255,255,0.05) !important; border: 1px solid rgba(255,255,255,0.1) !important; color: white !important; transition: all 0.3s ease; }
-        input:focus { border-color: #00ff40 !important; outline: none; background: rgba(255,255,255,0.08) !important; }
-        .hidden { display: none; }
-        .loader { width: 20px; height: 20px; border: 3px solid rgba(255,255,255,0.3); border-top: 3px solid #00ff40; border-radius: 50%; animation: spin 0.8s linear infinite; }
-        @keyframes spin { 100% { transform: rotate(360deg); } }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Account Activation | Stream Africa</title>
+
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;700;800&display=swap');
+
+:root{
+--stream-green:#b8d5b0;
+--stream-dark:#0a1f1c;
+}
+
+body{
+background:var(--stream-dark);
+color:#fff;
+font-family:'Plus Jakarta Sans',sans-serif;
+min-height:100vh;
+display:flex;
+justify-content:center;
+align-items:center;
+padding:20px;
+}
+
+.checkout-container{max-width:450px;width:100%;}
+
+.premium-card{
+background:rgba(255,255,255,0.03);
+border:2px solid var(--stream-green);
+border-radius:28px;
+padding:28px;
+backdrop-filter:blur(20px);
+}
+
+.amount-box{
+background:rgba(184,213,176,0.1);
+border-radius:20px;
+padding:20px;
+text-align:center;
+margin:20px 0;
+}
+
+.account-number-text{
+font-size:26px;
+font-weight:900;
+color:var(--stream-green);
+}
+
+.btn-main{
+background:var(--stream-green);
+color:var(--stream-dark);
+width:100%;
+padding:18px;
+border-radius:20px;
+font-weight:900;
+margin-top:20px;
+}
+
+.timer-badge{
+background:rgba(231,76,60,0.1);
+border:1px solid rgba(231,76,60,0.3);
+color:#ff6b6b;
+padding:6px 14px;
+border-radius:100px;
+font-size:12px;
+}
+
+#overlay{
+position:fixed;
+inset:0;
+background:rgba(10,31,28,0.95);
+display:none;
+align-items:center;
+justify-content:center;
+flex-direction:column;
+z-index:999;
+}
+
+.loader-ring{
+width:60px;
+height:60px;
+border:4px solid rgba(255,255,255,0.1);
+border-top:4px solid var(--stream-green);
+border-radius:50%;
+animation:spin .8s linear infinite;
+}
+
+@keyframes spin{100%{transform:rotate(360deg);}}
+</style>
 </head>
-<body class="flex items-center justify-center min-h-screen p-6">
 
-    <div id="login-card" class="glass w-full max-w-sm rounded-[30px] p-8">
-        <div class="flex items-center gap-3 mb-6">
-            <div class="w-10 h-10 bg-green-500 rounded-full flex items-center justify-center text-black shadow-[0_0_15px_rgba(0,255,64,0.4)]"><i class="fas fa-lock"></i></div>
-            <h1 class="text-2xl font-black text-green-500 uppercase tracking-tighter">Admin Access</h1>
-        </div>
-        <div class="space-y-4">
-            <input type="text" id="user" placeholder="Username" class="w-full p-4 rounded-xl outline-none">
-            <input type="password" id="pass" placeholder="Password" class="w-full p-4 rounded-xl outline-none">
-            <button id="login-btn" onclick="handleLogin()" class="w-full bg-green-500 text-black font-black p-4 rounded-xl shadow-lg active:scale-95 transition">LOG IN</button>
-        </div>
-    </div>
+<body>
 
-    <div id="dash-card" class="glass w-full max-w-2xl rounded-[30px] p-8 hidden my-10">
-        <div class="flex justify-between items-center mb-8">
-            <div>
-                <h1 class="text-xl font-black text-green-500 uppercase tracking-tight">Global Settings</h1>
-                <p class="text-[10px] text-gray-500 font-bold">NIGERIA • GHANA • CAMEROON</p>
-            </div>
-            <div class="bg-green-500/10 text-green-500 text-[10px] font-bold px-3 py-1 rounded-full border border-green-500/20 uppercase">Live Control</div>
-        </div>
-        
-        <div class="space-y-6">
-            
-            <div class="p-5 rounded-2xl border border-white/5 bg-white/5">
-                <p class="text-[10px] font-black text-green-500 uppercase mb-4 tracking-widest"><i class="fas fa-flag mr-1"></i> Nigeria Details</p>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                        <label class="text-[9px] font-bold text-gray-500 uppercase tracking-widest ml-1">Bank Name</label>
-                        <input type="text" id="ng-bank" class="w-full p-3 mt-1 rounded-xl text-sm" value="MONIEPOINT">
-                    </div>
-                    <div>
-                        <label class="text-[9px] font-bold text-gray-500 uppercase tracking-widest ml-1">Account Number</label>
-                        <input type="text" id="ng-num" class="w-full p-3 mt-1 rounded-xl text-sm" value="6637505379">
-                    </div>
-                    <div class="md:col-span-2">
-                        <label class="text-[9px] font-bold text-gray-500 uppercase tracking-widest ml-1">Account Name</label>
-                        <input type="text" id="ng-name" class="w-full p-3 mt-1 rounded-xl text-sm" value="GOD-GIFT GIFTED MEDIA">
-                    </div>
-                </div>
-            </div>
+<div class="checkout-container">
 
-            <div class="p-5 rounded-2xl border border-white/5 bg-white/5">
-                <p class="text-[10px] font-black text-yellow-500 uppercase mb-4 tracking-widest"><i class="fas fa-flag mr-1"></i> Ghana Details</p>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                        <label class="text-[9px] font-bold text-gray-500 uppercase tracking-widest ml-1">Network/Bank</label>
-                        <input type="text" id="gh-bank" class="w-full p-3 mt-1 rounded-xl text-sm" placeholder="MTN Momo">
-                    </div>
-                    <div>
-                        <label class="text-[9px] font-bold text-gray-500 uppercase tracking-widest ml-1">Account Number</label>
-                        <input type="text" id="gh-num" class="w-full p-3 mt-1 rounded-xl text-sm" placeholder="055xxxxxxx">
-                    </div>
-                </div>
-            </div>
+<div class="text-center mb-6">
+<h1 class="text-xl font-black tracking-widest text-[#b8d5b0]">STREAM AFRICA</h1>
+</div>
 
-            <div class="p-5 rounded-2xl border border-white/5 bg-white/5">
-                <p class="text-[10px] font-black text-red-500 uppercase mb-4 tracking-widest"><i class="fas fa-flag mr-1"></i> Cameroon Details</p>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                        <label class="text-[9px] font-bold text-gray-500 uppercase tracking-widest ml-1">Service Type</label>
-                        <input type="text" id="cm-bank" class="w-full p-3 mt-1 rounded-xl text-sm" placeholder="Orange Money">
-                    </div>
-                    <div>
-                        <label class="text-[9px] font-bold text-gray-500 uppercase tracking-widest ml-1">Phone Number</label>
-                        <input type="text" id="cm-num" class="w-full p-3 mt-1 rounded-xl text-sm" placeholder="6xxxxxxxx">
-                    </div>
-                </div>
-            </div>
+<div class="premium-card">
 
-            <div class="p-5 rounded-2xl border border-white/5 bg-white/5">
-                <p class="text-[10px] font-black text-blue-400 uppercase mb-4 tracking-widest"><i class="fas fa-share-nodes mr-1"></i> Redirect Control</p>
-                <div class="space-y-4">
-                    <div>
-                        <label class="text-[9px] font-bold text-gray-500 uppercase tracking-widest ml-1">Telegram Username/Link</label>
-                        <input type="text" id="tg-link" class="w-full p-3 mt-1 rounded-xl text-sm" value="@Gifted34">
-                    </div>
-                    <div>
-                        <label class="text-[9px] font-bold text-gray-500 uppercase tracking-widest ml-1">WhatsApp Number</label>
-                        <input type="text" id="wa-num" class="w-full p-3 mt-1 rounded-xl text-sm" value="09068854115">
-                    </div>
-                </div>
-            </div>
+<div class="text-center">
+<div class="timer-badge mb-4">
+<i class="fas fa-clock"></i>
+<span id="timer">10:00</span>
+</div>
 
-            <div class="pt-4 pb-10">
-                <button onclick="handleUpdate()" id="up-btn" class="w-full bg-green-500 text-black font-black p-5 rounded-2xl transition hover:brightness-110 flex items-center justify-center gap-3">
-                    SAVE & UPDATE WEBSITE
-                </button>
-            </div>
-        </div>
-    </div>
+<h2 class="text-2xl font-black uppercase">Account Activation</h2>
+<p class="text-xs text-white/50 mt-2">
+Transfer to the secure payment account below
+</p>
+</div>
+
+<div class="amount-box">
+<span class="text-[10px] uppercase">Registration Fee</span>
+<div id="display-amount">₦12,000</div>
+</div>
+
+<div class="space-y-4 text-sm">
+
+<div>
+<p class="text-[#b8d5b0] uppercase text-[10px] font-bold">Bank Name</p>
+<p id="bank-name-display">Kuda</p>
+</div>
+
+<div onclick="copyNum()" class="cursor-pointer">
+<p class="text-[#b8d5b0] uppercase text-[10px] font-bold">Account Number</p>
+<p id="db-number" class="account-number-text">3003439402</p>
+<p id="copy-text" class="text-[9px] text-white/40">Tap to copy</p>
+</div>
+
+<div>
+<p class="text-[#b8d5b0] uppercase text-[10px] font-bold">Account Name</p>
+<p id="account-name-display">MORRISH MEDIA ENTERPRISE</p>
+</div>
+
+</div>
+
+<button onclick="confirmPayment()" class="btn-main">
+I Have Made Payment <i class="fas fa-check ml-2"></i>
+</button>
+
+</div>
+</div>
+
+<div id="overlay">
+<div class="loader-ring"></div>
+<p class="mt-6 text-[#b8d5b0] font-black uppercase">Verifying Payment...</p>
+</div>
 
 <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-    import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-    import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
-    // UPDATED FIREBASE CONFIG
-    const firebaseConfig = {
-      apiKey: "AIzaSyBnYhUrJq0ZQNn4wlQ80Ug9oYXDX71rNsE",
-      authDomain: "celeste-official.firebaseapp.com",
-      projectId: "celeste-official",
-      storageBucket: "celeste-official.firebasestorage.app",
-      messagingSenderId: "955219718575",
-      appId: "1:955219718575:web:0aa8d59d18f23d8dcdbf5a",
-      measurementId: "G-7VKF6NVWCD"
-    };
-    
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-    const db = getFirestore(app);
-    const docRef = doc(db, "configs", "main");
+import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+import { getFirestore, doc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
 
-    window.handleLogin = () => {
-        const u = document.getElementById('user').value;
-        const p = document.getElementById('pass').value;
-        if(u === "admin" && p === "celeste2026") {
-            document.getElementById('login-card').classList.add('hidden');
-            document.getElementById('dash-card').classList.remove('hidden');
-            initDash();
-        } else {
-            alert("Invalid Credentials");
-        }
-    };
+const firebaseConfig={
+apiKey:"AIzaSyASDlQQMoXCeMZKs5O3KmO8zuFztt8rg2E",
+authDomain:"celeste-web1.firebaseapp.com",
+projectId:"celeste-web1",
+storageBucket:"celeste-web1.firebasestorage.app",
+messagingSenderId:"905722043319",
+appId:"1:905722043319:web:83d032bf3608b8957b2632"
+};
 
-    async function initDash() {
-        await signInAnonymously(auth);
-        const snap = await getDoc(docRef);
-        if(snap.exists()) {
-            const d = snap.data();
-            document.getElementById('ng-bank').value = d.nigeriaBank || "MONIEPOINT";
-            document.getElementById('ng-num').value = d.nigeriaNumber || "6637505379";
-            document.getElementById('ng-name').value = d.nigeriaHolder || "GOD-GIFT GIFTED MEDIA";
-            document.getElementById('gh-bank').value = d.ghanaBank || "";
-            document.getElementById('gh-num').value = d.ghanaNumber || "";
-            document.getElementById('cm-bank').value = d.cameroonBank || "";
-            document.getElementById('cm-num').value = d.cameroonNumber || "";
-            document.getElementById('tg-link').value = d.telegramLink || "@Gifted34";
-            document.getElementById('wa-num').value = d.whatsappNum || "09068854115";
-        }
-    }
+const app=initializeApp(firebaseConfig);
+const db=getFirestore(app);
+const auth=getAuth(app);
 
-    window.handleUpdate = async () => {
-        const btn = document.getElementById('up-btn');
-        btn.innerHTML = `<div class="loader"></div> UPDATING...`;
-        btn.disabled = true;
+let vendorLink="https://t.me/morrishmedia";
 
-        try {
-            if(!auth.currentUser) await signInAnonymously(auth);
-            
-            await setDoc(docRef, {
-                nigeriaBank: document.getElementById('ng-bank').value,
-                nigeriaNumber: document.getElementById('ng-num').value,
-                nigeriaHolder: document.getElementById('ng-name').value,
-                ghanaBank: document.getElementById('gh-bank').value,
-                ghanaNumber: document.getElementById('gh-num').value,
-                cameroonBank: document.getElementById('cm-bank').value,
-                cameroonNumber: document.getElementById('cm-num').value,
-                telegramLink: document.getElementById('tg-link').value,
-                whatsappNum: document.getElementById('wa-num').value,
-                updatedAt: new Date().toISOString()
-            }, { merge: true });
-            
-            alert("Website Updated Successfully!");
-        } catch (e) {
-            alert("Error: " + e.message);
-        }
-        
-        btn.innerHTML = `SAVE & UPDATE WEBSITE`;
-        btn.disabled = false;
-    };
+async function init(){
+await signInAnonymously(auth);
+
+onSnapshot(doc(db,"configs","main"),snap=>{
+if(snap.exists()){
+const d=snap.data();
+if(d.nigeriaBank)document.getElementById('bank-name-display').innerText=d.nigeriaBank;
+if(d.nigeriaNumber)document.getElementById('db-number').innerText=d.nigeriaNumber;
+if(d.nigeriaHolder)document.getElementById('account-name-display').innerText=d.nigeriaHolder;
+if(d.nigeriaAmount)document.getElementById('display-amount').innerText=d.nigeriaAmount;
+vendorLink=d.telegramLink||vendorLink;
+}
+});
+}
+
+window.copyNum=()=>{
+const n=document.getElementById('db-number').innerText;
+navigator.clipboard.writeText(n);
+document.getElementById('copy-text').innerText="Copied!";
+};
+
+window.confirmPayment=()=>{
+document.getElementById('overlay').style.display='flex';
+const msg=encodeURIComponent("I have made payment for Stream Africa activation.");
+setTimeout(()=>{
+window.location.href=`${vendorLink}?text=${msg}`;
+},3000);
+};
+
+let sec=600;
+setInterval(()=>{
+if(sec<=0)return;
+sec--;
+const m=Math.floor(sec/60);
+const s=(sec%60).toString().padStart(2,'0');
+document.getElementById('timer').innerText=`${m}:${s}`;
+},1000);
+
+init();
+
 </script>
+
 </body>
 </html>
