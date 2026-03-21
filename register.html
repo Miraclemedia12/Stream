@@ -178,7 +178,7 @@
             btn.innerText = "REGISTER";
             
             let errorMsg = "Registration Failed";
-            if(error.code === 'auth/email-already-in-use') errorMsg = "Email already linked to a node";
+            if(error.code === 'auth/email-already-in-use') errorMsg = "Email already linked to an account, proceed to login";
             if(error.code === 'auth/weak-password') errorMsg = "Security key too weak";
             
             showStreamAlert(errorMsg, "error");
