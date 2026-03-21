@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stream Africa | Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700;800&display=swap');
+        
+        :root { 
+            --stream-green: #b8d5b0; 
+            --stream-dark: #0a1f1c; 
+            --card-bg: rgba(255, 255, 255, 0.03);
+        }
+
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; font-family: 'Plus Jakarta Sans', sans-serif; }
+        
+        body { 
+            background-color: var(--stream-dark); 
+            background-image: radial-gradient(circle at 0% 0%, rgba(184, 213, 176, 0.05) 0%, transparent 40%);
+            color: #fff; margin: 0; padding: 15px; padding-bottom: 120px;
+            overflow-x: hidden;
+        }
+
+        /* SIDEBAR MENU */
+        #sidebar {
+            position: fixed; top: 0; left: -280px; width: 280px; height: 100%;
+            background: #0d1211; border-right: 1px solid rgba(184, 213, 176, 0.2);
+            transition: 0.4s cubic-bezier(0.23, 1, 0.32, 1); z-index: 10001; padding: 40px 25px;
+        }
+        #sidebar.active { left: 0; }
+        .nav-item { display: flex; align-items: center; gap: 15px; color: #fff; text-decoration: none; padding: 18px 0; border-bottom: 1px solid rgba(255,255,255,0.03); font-weight: 600; font-size: 14px; }
+        .nav-item i { color: var(--stream-green); width: 20px; }
+
+        .overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.8); display: none; z-index: 10000; backdrop-filter: blur(4px); }
+
+        /* STATUS MODAL (Maintenance) */
+        #statusModal { 
+            position: fixed; inset: 0; background: rgba(0,0,0,0.96); 
+            display: none; align-items: center; justify-content: center; 
+            z-index: 10005; padding: 25px; backdrop-filter: blur(15px);
+        }
+        .status-box { 
+            background: #0d1211; border: 1px solid var(--stream-green); 
+            padding: 45px 30px; border-radius: 40px; width: 100%; max-width: 360px; text-align: center;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+        }
+        .brand-logo-container { width: 80px; height: 80px; background: rgba(184, 213, 176, 0.1); border-radius: 24px; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; font-size: 40px; color: #fff; }
+
+        /* WELCOME BONUS MODAL */
+        #bonusModal { position: fixed; inset: 0; background: rgba(0,0,0,0.94); display: flex; align-items: center; justify-content: center; z-index: 9999; padding: 20px; backdrop-filter: blur(12px); }
+        .bonus-box { background: #0d1211; border: 2px solid var(--stream-green); padding: 45px 25px; border-radius: 40px; width: 100%; max-width: 380px; text-align: center; }
+
+        /* HEADER */
+        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; padding-top: 10px; }
+        .menu-trigger { font-size: 24px; color: var(--stream-green); cursor: pointer; }
+        .user-pill { display: flex; align-items: center; gap: 12px; background: rgba(255,255,255,0.03); padding: 6px 16px 6px 6px; border-radius: 100px; border: 1px solid rgba(255,255,255,0.05); }
+        .user-initials { width: 34px; height: 34px; background: var(--stream-green); color: var(--stream-dark); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 14px; }
+
+        /* BALANCE CARD */
+        .balance-card { 
+            background: linear-gradient(145deg, #0d1211, #080a0a); 
+            border: 1px solid rgba(184, 213, 176, 0.25); 
+            padding: 40px 25px; border-radius: 35px; text-align: center; margin-bottom: 35px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.3);
+        }
+        .balance-card h1 { font-size: 44px; font-weight: 900; color: #fff; margin: 10px 0; letter-spacing: -1px; }
+        .balance-card p { font-size: 10px; color: var(--stream-green); text-transform: uppercase; font-weight: 800; letter-spacing: 2px; }
+
+        /* TASK SLIDER */
+        .task-row { display: flex; overflow-x: auto; gap: 18px; padding-bottom: 10px; scrollbar-width: none; }
+        .task-row::-webkit-scrollbar { display: none; }
+        .task-item { text-align: center; flex: 0 0 auto; width: 100px; cursor: pointer; }
+        .task-circle { width: 80px; height: 80px; border-radius: 28px; background: rgba(184, 213, 176, 0.04); border: 1px solid rgba(184, 213, 176, 0.15); display: flex; align-items: center; justify-content: center; margin: 0 auto 12px; color: var(--stream-green); font-size: 26px; transition: 0.3s; }
+        .task-item:active .task-circle { transform: scale(0.92); background: rgba(184, 213, 176, 0.1); }
+        .task-item span { font-size: 11px; font-weight: 700; color: rgba(255,255,255,0.8); display: block; }
+
+        /* HISTORY */
+        .history-list { background: rgba(255,255,255,0.02); border-radius: 32px; padding: 25px; border: 1px solid rgba(255,255,255,0.05); }
+        .history-item { display: flex; align-items: center; justify-content: space-between; padding: 15px 0; border-bottom: 1px solid rgba(255,255,255,0.03); }
+        .history-item:last-child { border-bottom: none; }
+
+        /* BOTTOM NAVIGATION */
+        .bottom-bar { position: fixed; bottom: 0; left: 0; right: 0; background: #07100e; display: flex; justify-content: space-around; padding: 22px 10px; border-top: 1px solid rgba(255,255,255,0.05); z-index: 1000; }
+        .nav-link { color: #444; text-decoration: none; font-size: 10px; text-align: center; font-weight: 800; text-transform: uppercase; }
+        .nav-link i { font-size: 22px; margin-bottom: 6px; display: block; }
+        .nav-link.active { color: var(--stream-green); }
+        .btn-withdraw-nav { background: var(--stream-green); color: var(--stream-dark) !important; padding: 12px 25px; border-radius: 15px; margin-top: -12px; font-weight: 900; box-shadow: 0 8px 20px rgba(184, 213, 176, 0.2); }
+    </style>
+</head>
+<body>
+
+    <div class="overlay" id="menuOverlay" onclick="toggleMenu()"></div>
+    <div id="sidebar">
+        <div class="flex items-center gap-3 mb-10">
+            <img src="logo.png" class="h-8 invert brightness-0" alt="">
+            <span class="font-black text-sm tracking-widest text-white/40">STREAM AFRICA</span>
+        </div>
+        <a href="#" class="nav-item"><i class="fas fa-grid-2"></i> Dashboard</a>
+        <a href="profile.html" class="nav-item"><i class="fas fa-user-circle"></i> My Profile</a>
+        <a href="withdraw.html" class="nav-item"><i class="fas fa-wallet"></i> Withdraw Funds</a>
+        <a href="history.html" class="nav-item"><i class="fas fa-list-check"></i> Task History</a>
+        <a href="support.html" class="nav-item"><i class="fas fa-headset"></i> 24/7 Support</a>
+        <a href="index.html" class="nav-item text-red-400 mt-10"><i class="fas fa-right-from-bracket"></i> Logout</a>
+    </div>
+
+    <div id="statusModal">
+        <div class="status-box">
+            <div id="brandIcon" class="brand-logo-container"></div>
+            <h2 id="streamName" class="text-xl font-black mb-2 uppercase"></h2>
+            <p class="text-white/40 text-xs leading-relaxed px-4">Our high-traffic servers are currently being optimized. This stream will be accessible within 24 hours.</p>
+            <button onclick="closeStatus()" class="mt-8 bg-[#b8d5b0] text-[#0a1f1c] w-full py-4 rounded-2xl font-black text-xs uppercase tracking-widest">Acknowledge</button>
+        </div>
+    </div>
+
+    <div id="bonusModal">
+        <div class="bonus-box">
+            <i class="fas fa-gift text-5xl text-[#b8d5b0] mb-6 block"></i>
+            <h2 class="text-2xl font-black mb-2">BONUS UNLOCKED</h2>
+            <p class="text-white/50 text-sm mb-10 px-4">Your registration is verified. <b>₦12,000.00</b> has been added to your payout balance.</p>
+            <button onclick="window.location.href='withdraw.html'" class="w-full bg-[#b8d5b0] text-[#0a1f1c] py-5 rounded-2xl font-black text-sm mb-4 uppercase">Withdraw Now</button>
+            <button onclick="document.getElementById('bonusModal').style.display='none'" class="w-full border border-white/10 text-white/40 py-4 rounded-2xl font-bold text-xs uppercase">Continue Earning</button>
+        </div>
+    </div>
+
+    <div class="header">
+        <i class="fas fa-bars-staggered menu-trigger" onclick="toggleMenu()"></i>
+        <div class="user-pill">
+            <div class="text-right mr-1">
+                <span id="uName" class="text-[11px] font-black text-[#b8d5b0] block leading-none">...</span>
+                <span class="text-[8px] text-white/30 uppercase font-bold tracking-widest">Stream Partner</span>
+            </div>
+            <div id="uInit" class="user-initials">?</div>
+        </div>
+    </div>
+
+    <div class="balance-card">
+        <p>Available Revenue</p>
+        <h1 id="balTxt">₦12,000.00</h1>
+        <div class="inline-flex items-center gap-2 bg-[#b8d5b0]/10 px-4 py-2 rounded-xl text-[#b8d5b0] text-[10px] font-black uppercase tracking-widest">
+            <i class="fas fa-shield-check"></i> Active Account
+        </div>
+    </div>
+
+    <h3 class="text-[11px] font-black text-white/30 uppercase tracking-[3px] mb-5 pl-2">Earning Streams</h3>
+    <div class="task-row">
+        <div class="task-item" onclick="openStatus('Live Stream', 'fa-brands fa-tiktok', '#ff0050')">
+            <div class="task-circle"><i class="fas fa-tower-broadcast"></i></div>
+            <span>Live Stream</span>
+        </div>
+        <div class="task-item" onclick="openStatus('Audio Collab', 'fa-solid fa-microphone-lines', '#1DB954')">
+            <div class="task-circle"><i class="fas fa-waveform-lines"></i></div>
+            <span>Audio Collab</span>
+        </div>
+        <div class="task-item" onclick="openStatus('Video Collab', 'fa-brands fa-youtube', '#FF0000')">
+            <div class="task-circle"><i class="fas fa-clapperboard"></i></div>
+            <span>Video Collab</span>
+        </div>
+        <div class="task-item" onclick="openStatus('Snap Collab', 'fa-brands fa-snapchat', '#FFFC00')">
+            <div class="task-circle"><i class="fas fa-bolt"></i></div>
+            <span>Snap Collab</span>
+        </div>
+        <div class="task-item" onclick="openStatus('Files Download', 'fa-solid fa-cloud-arrow-down', '#0061FF')">
+            <div class="task-circle"><i class="fas fa-file-zipper"></i></div>
+            <span>Files Download</span>
+        </div>
+    </div>
+
+    <h3 class="text-[11px] font-black text-white/30 uppercase tracking-[3px] mt-10 mb-5 pl-2">Revenue History</h3>
+    <div class="history-list">
+        <div class="history-item">
+            <div class="flex items-center gap-4">
+                <div class="w-10 h-10 bg-[#b8d5b0]/10 rounded-xl flex items-center justify-center text-[#b8d5b0]"><i class="fas fa-plus"></i></div>
+                <div><b class="text-sm block">Registration Reward</b><span class="text-[10px] text-white/30">System Credit • Just now</span></div>
+            </div>
+            <div class="text-right"><b class="text-[#b8d5b0] font-black">+₦12,000</b></div>
+        </div>
+    </div>
+
+    <nav class="bottom-bar">
+        <a href="#" class="nav-link active"><i class="fas fa-house-chimney"></i>Home</a>
+        <a href="withdraw.html" class="nav-link btn-withdraw-nav">Withdraw</a>
+        <a href="profile.html" class="nav-link"><i class="fas fa-user-circle"></i>Profile</a>
+    </nav>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyASDlQQMoXCeMZKs5O3KmO8zuFztt8rg2E",
+            authDomain: "celeste-web1.firebaseapp.com",
+            projectId: "celeste-web1",
+            storageBucket: "celeste-web1.firebasestorage.app",
+            messagingSenderId: "905722043319",
+            appId: "1:905722043319:web:83d032bf3608b8957b2632"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+
+        // SYNC USER DATA FROM FIREBASE
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                const nameStr = user.email.split('@')[0].toUpperCase().replace(/[^a-zA-Z]/g, ' ');
+                document.getElementById('uName').innerText = nameStr;
+                document.getElementById('uInit').innerText = nameStr.charAt(0);
+            } else {
+                window.location.href = 'index.html';
+            }
+        });
+
+        // MENU LOGIC
+        window.toggleMenu = () => {
+            document.getElementById('sidebar').classList.toggle('active');
+            const overlay = document.getElementById('menuOverlay');
+            overlay.style.display = overlay.style.display === 'block' ? 'none' : 'block';
+        };
+
+        // STATUS MODAL LOGIC
+        window.openStatus = (name, icon, color) => {
+            document.getElementById('streamName').innerText = name + " Offline";
+            const container = document.getElementById('brandIcon');
+            container.innerHTML = `<i class="${icon}"></i>`;
+            container.style.color = color;
+            document.getElementById('statusModal').style.display = 'flex';
+        };
+
+        window.closeStatus = () => {
+            document.getElementById('statusModal').style.display = 'none';
+        };
+    </script>
+</body>
+              </html>
+              
