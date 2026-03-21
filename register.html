@@ -18,7 +18,6 @@
             display: flex; flex-direction: column; align-items: center;
         }
 
-        /* --- STYLES REMAIN SAME AS BEFORE --- */
         .topbar { width: 100%; background: #0a1f1c; padding: 15px 5%; display: flex; flex-direction: column; align-items: center; border-bottom: 2px solid #b8d5b0; }
         .logo-container { height: 60px; margin-bottom: 15px; }
         .logo-img { height: 100%; width: auto; filter: brightness(0) invert(1); }
@@ -40,33 +39,32 @@
         
         .register-button { width: 100%; padding: 18px; background: #b8d5b0; color: #0a1f1c; border-radius: 12px; font-weight: 900; text-transform: uppercase; cursor: pointer; }
 
-        /* --- NEW PROFESSIONAL MODAL SYSTEM --- */
+        /* THE LOGIN LINK YOU NEEDED */
+        .login-link {
+            display: block; text-align: center; margin-top: 20px; font-size: 14px; color: #ffffff; text-decoration: none;
+        }
+        .login-link span { color: #b8d5b0; font-weight: bold; }
+
+        /* MODAL STYLES */
         #custom-modal-overlay {
             display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(0, 0, 0, 0.85); z-index: 3000;
             backdrop-filter: blur(5px); justify-content: center; align-items: center;
         }
-
         .modal-card {
             background: #0a1f1c; border: 2px solid #b8d5b0; width: 90%; max-width: 400px;
             border-radius: 24px; padding: 30px; text-align: center;
             transform: scale(0.8); transition: 0.3s;
         }
-
         .modal-card.active { transform: scale(1); }
         .modal-logo { height: 50px; margin: 0 auto 20px; filter: brightness(0) invert(1); }
         .modal-title { color: #b8d5b0; font-weight: 900; font-size: 20px; margin-bottom: 10px; text-transform: uppercase; }
         .modal-text { color: #ffffff; font-size: 15px; margin-bottom: 25px; line-height: 1.5; }
-        .modal-btn { 
-            background: #b8d5b0; color: #0a1f1c; padding: 12px 30px; border-radius: 10px; 
-            font-weight: 800; border: none; cursor: pointer; text-transform: uppercase;
-        }
+        .modal-btn { background: #b8d5b0; color: #0a1f1c; padding: 12px 30px; border-radius: 10px; font-weight: 800; border: none; cursor: pointer; text-transform: uppercase; }
 
-        /* Loading Feed styling */
         .activity-feed-container {
             position: fixed; top: 20px; left: -400px; z-index: 2000; width: 320px; padding: 12px;
-            background: #0a1f1c; border: 2px solid #b8d5b0; border-radius: 15px;
-            display: flex; align-items: center; transition: left 0.6s; 
+            background: #0a1f1c; border: 2px solid #b8d5b0; border-radius: 15px; display: flex; align-items: center; transition: left 0.6s; 
         }
         .show-activity { left: 20px; }
     </style>
@@ -85,12 +83,15 @@
 <div class="register-container">
     <div class="main-title">Create Account</div>
     <form id="registration-form">
-        <div class="form-group"><label>Full Name</label><input type="text" id="full-name" required></div>
-        <div class="form-group"><label>Username</label><input type="text" id="username" required></div>
-        <div class="form-group"><label>Email Address</label><input type="email" id="email" required></div>
-        <div class="form-group"><label>Phone Number</label><input type="tel" id="phone-number" required></div>
+        <div class="form-group"><label>Full Name</label><input type="text" id="full-name" placeholder="Miracle Okon" required></div>
+        <div class="form-group"><label>Username</label><input type="text" id="username" placeholder="Choose username" required></div>
+        <div class="form-group"><label>Email Address</label><input type="email" id="email" placeholder="email@example.com" required></div>
+        <div class="form-group"><label>Phone Number</label><input type="tel" id="phone-number" placeholder="WhatsApp Number" required></div>
         <div class="form-group"><label>Password</label><input type="password" id="password" required></div>
+        
         <button type="submit" id="reg-btn" class="register-button">REGISTER</button>
+        
+        <a href="login.html" class="login-link">Already have an account? <span>Login</span></a>
     </form>
 </div>
 
@@ -98,7 +99,7 @@
     <div class="modal-card" id="modal-card">
         <img src="logo.png" class="modal-logo" alt="Stream Logo">
         <div class="modal-title" id="m-title">Alert</div>
-        <p class="modal-text" id="m-text">Sample Message</p>
+        <p class="modal-text" id="m-text"></p>
         <button class="modal-btn" onclick="closeModal()">OK, GOT IT</button>
     </div>
 </div>
@@ -126,7 +127,6 @@
     const auth = getAuth(app);
     const db = getFirestore(app);
 
-    // Function to show Branded Modal
     window.showBrandedModal = function(title, message) {
         document.getElementById('m-title').innerText = title;
         document.getElementById('m-text').innerText = message;
@@ -141,7 +141,6 @@
 
     document.getElementById('registration-form').addEventListener('submit', async function(e) {
         e.preventDefault();
-        
         const btn = document.getElementById('reg-btn');
         const feed = document.getElementById('activity-feed');
         const feedText = document.getElementById('activity-text');
@@ -176,7 +175,7 @@
             feed.classList.remove('show-activity');
 
             if (error.code === 'auth/email-already-in-use') {
-                showBrandedModal("Account Exists", "This email is already registered with STREAM. Please try logging in or use a different email address.");
+                showBrandedModal("Account Exists", "This email is already registered. Try logging in or use a different address.");
             } else {
                 showBrandedModal("Registration Error", error.message);
             }
