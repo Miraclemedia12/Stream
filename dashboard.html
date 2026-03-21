@@ -26,7 +26,6 @@
             overflow-x: hidden;
         }
 
-        /* Header Styles */
         .dashboard-header {
             padding: 25px 20px;
             display: flex;
@@ -44,7 +43,6 @@
             color: #ffffff;
         }
 
-        /* CARD STYLES */
         .glass-card {
             background: rgba(255, 255, 255, 0.05);
             border: 2px solid var(--stream-green);
@@ -91,7 +89,6 @@
         }
         .action-link-btn:active { transform: scale(0.97); }
 
-        /* FEATURE ITEMS */
         .feature-item {
             background: rgba(255, 255, 255, 0.05);
             border-radius: 20px;
@@ -116,7 +113,6 @@
             margin-bottom: 5px;
         }
 
-        /* Sidebar Menu */
         .side-menu {
             position: fixed;
             top: 0;
@@ -152,7 +148,6 @@
             filter: brightness(0) invert(1);
         }
 
-        /* Floating Menu Button */
         .menu-toggle {
             position: fixed;
             bottom: 30px;
@@ -171,7 +166,6 @@
             color: var(--stream-dark);
         }
 
-        /* NOTIFICATION POPUP (TOP LEFT) */
         .notif-popup {
             position: fixed;
             top: 20px;
@@ -193,9 +187,7 @@
         .notif-body { font-size: 12px; color: #ffffff; line-height: 1.4; }
         .notif-user { color: var(--stream-green); font-weight: 800; }
         .notif-amount { color: #ffffff; font-weight: 900; }
-        .notif-amount.withdrawal { color: #ff6b6b; }
 
-        /* Modal */
         .modal-overlay {
             position: fixed;
             top: 0;
@@ -221,10 +213,8 @@
             text-align: center;
             border: 1px solid rgba(255, 255, 255, 0.05);
             color: #ffffff;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
         }
 
-        /* Country Select Styling */
         .country-select {
             width: 100%;
             background: #1a1f1e;
@@ -241,14 +231,9 @@
             background-position: right 15px center;
             background-size: 15px;
         }
-        .country-select option {
-            background: #1a1f1e;
-            color: white;
-        }
 
-        /* Proceed Button Specific (Red Style from Image) */
         .btn-proceed {
-            background: #ff4b4b; /* Bright red/coral from image */
+            background: #ff4b4b;
             color: white;
             width: 100%;
             padding: 18px;
@@ -285,9 +270,7 @@
 
 <div id="notif-popup" class="notif-popup">
     <div class="notif-icon" id="notif-icon"><i class="fas fa-circle-check"></i></div>
-    <div class="notif-body" id="notif-text">
-        Connecting to Stream...
-    </div>
+    <div class="notif-body" id="notif-text">Connecting to Stream...</div>
 </div>
 
 <div class="dashboard-header">
@@ -408,18 +391,8 @@
         <div onclick="closeModal()" style="position: absolute; top: 20px; right: 20px; color: rgba(255,255,255,0.5); font-size: 24px; cursor: pointer;">
             <i class="fas fa-times"></i>
         </div>
-        <div style="color:#ffcc00; font-size: 70px; margin-bottom: 25px;">
-            <i class="fas fa-triangle-exclamation"></i>
-        </div>
-        <h2 style="font-size: 26px; font-weight: 900; margin-bottom: 15px; color:#ffffff; line-height: 1.2;">
-            Complete Account<br>Activation
-        </h2>
-        <p style="color:rgba(255,255,255,0.6); font-size: 16px; line-height: 1.5; margin-bottom: 30px; padding: 0 10px;">
-            You're almost there! Complete your account activation by making the payment for your selected plan.
-        </p>
-        <div style="text-align: left; font-size: 11px; font-weight: 800; color: rgba(255,255,255,0.4); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 5px; padding-left: 5px;">
-            Confirm your country
-        </div>
+        <div style="color:#ffcc00; font-size: 70px; margin-bottom: 25px;"><i class="fas fa-triangle-exclamation"></i></div>
+        <h2 style="font-size: 26px; font-weight: 900; margin-bottom: 15px; color:#ffffff; line-height: 1.2;">Complete Account Activation</h2>
         <select id="country-select" class="country-select">
             <option value="nigeria">Nigeria 🇳🇬</option>
             <option value="cameroon">Cameroon 🇨🇲</option>
@@ -428,15 +401,11 @@
             <option value="south_africa">South Africa 🇿🇦</option>
             <option value="uganda">Uganda 🇺🇬</option>
         </select>
-        <div class="btn-proceed" onclick="goToRegistration()">
-            Proceed to payment <i class="fas fa-credit-card"></i>
-        </div>
+        <div class="btn-proceed" onclick="goToRegistration()">Proceed to payment <i class="fas fa-credit-card"></i></div>
     </div>
 </div>
 
-<div class="menu-toggle" onclick="toggleMenu()">
-    <i class="fas fa-bars"></i>
-</div>
+<div class="menu-toggle" onclick="toggleMenu()"><i class="fas fa-bars"></i></div>
 
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
@@ -464,41 +433,27 @@
             if (userSnap.exists()) {
                 const data = userSnap.data();
                 
-                // Update UI with Firebase Data
+                // CRITICAL: Skip page if user already paid
+                if (data.status === "Active" || data.status === "paid") {
+                    window.location.href = 'main-dashboard.html';
+                    return;
+                }
+
                 document.getElementById('user-greeting').innerText = `Hello, ${data.username || 'Member'}`;
                 document.getElementById('dash-reg-date').innerText = data.regDate || '...';
-                document.getElementById('acc-status').innerText = data.status || "Inactive";
-                document.getElementById('dash-status-text').innerText = data.status || "Inactive";
                 document.getElementById('dash-plan').innerText = data.plan || "None";
                 document.getElementById('dash-price').innerText = data.price || "Pending";
-
-                if (data.status === "Active") {
-                    const statusBadge = document.getElementById('acc-status');
-                    const statusText = document.getElementById('dash-status-text');
-                    
-                    statusBadge.innerText = "Active";
-                    statusBadge.style.color = "#2ecc71";
-             statusBadge.style.background = "rgba(46, 204, 113, 0.2)";
-                    statusBadge.style.border = "1px solid rgba(46, 204, 113, 0.4)";
-                    
-                    statusText.innerText = "Active";
-                    statusText.style.color = "#2ecc71";
-
-                    // Update Balances
-                    document.getElementById('dash-balance').innerText = `₦${(data.balance || 0).toLocaleString()}`;
-                    document.getElementById('dash-balance').style.color = "white";
-                    document.getElementById('dash-live-status').innerText = "Streaming";
-                    document.getElementById('dash-live-status').style.color = "white";
-                    document.getElementById('dash-ads-views').innerText = `${data.adsViews || 0} Views`;
-                    document.getElementById('dash-ads-views').style.color = "white";
-                    document.getElementById('dash-network').innerText = `${data.networkSize || 0} Members`;
-                    document.getElementById('dash-network').style.color = "white";
-                }
             }
         } else {
             window.location.href = 'login.html';
         }
     });
+
+    window.goToRegistration = function() {
+        const country = document.getElementById('country-select').value;
+        localStorage.setItem('selected_country', country);
+        window.location.href = 'payment.html'; 
+    }
 </script>
 
 <script>
@@ -508,53 +463,29 @@
         { type: 'joined', name: "Kwame O.", loc: "Accra", amount: "12,000", time: "5m ago", icon: "fa-user-check" },
         { type: 'withdrawn', name: "Banda L.", loc: "Nairobi", amount: "15,000", time: "8m ago", icon: "fa-wallet" }
     ];
-
     let currentActIndex = 0;
-
     function cycleActivities() {
         const popup = document.getElementById('notif-popup');
         const iconDiv = document.getElementById('notif-icon');
         const textDiv = document.getElementById('notif-text');
         const act = ACTIVITIES[currentActIndex];
-
         if(!popup) return;
-
         iconDiv.innerHTML = `<i class="fas ${act.icon}"></i>`;
         let message = act.type === 'joined' 
-            ? `<span class="notif-user">${act.name}</span> (${act.loc}) joined <span style="font-weight:800; color:var(--stream-green)">STREAM</span> and earned <span class="notif-amount">₦${act.amount}</span>`
-            : `<span class="notif-user">${act.name}</span> (${act.loc}) withdrew <span class="notif-amount withdrawal">₦${act.amount}</span> from <span style="font-weight:800; color:var(--stream-green)">STREAM</span>`;
-
+            ? `<span class="notif-user">${act.name}</span> (${act.loc}) joined and earned <span class="notif-amount">₦${act.amount}</span>`
+            : `<span class="notif-user">${act.name}</span> (${act.loc}) withdrew <span class="notif-amount">₦${act.amount}</span>`;
         textDiv.innerHTML = `${message}<div style="font-size:10px; color:rgba(255,255,255,0.4); margin-top:2px;">${act.time}</div>`;
         popup.classList.add('active');
-        
         setTimeout(() => {
             popup.classList.remove('active');
             currentActIndex = (currentActIndex + 1) % ACTIVITIES.length;
             setTimeout(cycleActivities, 4000);
         }, 6000);
     }
-
-    window.toggleMenu = function() {
-        document.getElementById('side-menu').classList.toggle('open');
-    }
-
-    window.openModal = function() {
-        document.getElementById('activation-modal').style.display = 'flex';
-    }
-
-    window.closeModal = function() {
-        document.getElementById('activation-modal').style.display = 'none';
-    }
-
-    window.goToRegistration = function() {
-        const country = document.getElementById('country-select').value;
-        localStorage.setItem('selected_country', country);
-        window.location.href = 'payment.html'; 
-    }
-
-    document.addEventListener('DOMContentLoaded', () => {
-        setTimeout(cycleActivities, 2000);
-    });
+    window.toggleMenu = () => document.getElementById('side-menu').classList.toggle('open');
+    window.openModal = () => document.getElementById('activation-modal').style.display = 'flex';
+    window.closeModal = () => document.getElementById('activation-modal').style.display = 'none';
+    document.addEventListener('DOMContentLoaded', () => setTimeout(cycleActivities, 2000));
 </script>
 </body>
 </html>
