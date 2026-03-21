@@ -9,19 +9,23 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700;800&display=swap');
         
-        :root { --stream-green: #b8d5b0; --stream-dark: #0a1f1c; }
+        :root { --stream-green: #b8d5b0; --stream-dark: #0a1f1c; --stream-red: #ff4b4b; }
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; font-family: 'Plus Jakarta Sans', sans-serif; }
         body { background-color: var(--stream-dark); color: #fff; margin: 0; padding: 15px; }
 
         /* PROFESSIONAL STREAM ALERT (TOAST) */
         #streamToast {
-            position: fixed; top: -100px; left: 50%; transform: translateX(-50%);
+            position: fixed; top: -120px; left: 50%; transform: translateX(-50%);
             width: 90%; max-width: 350px; background: #0d1211;
             border: 1px solid var(--stream-green); border-radius: 20px;
             padding: 20px; z-index: 10000; transition: 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             box-shadow: 0 15px 30px rgba(0,0,0,0.5);
         }
         #streamToast.show { top: 20px; }
+        #streamToast.error { border-color: var(--stream-red); }
+        #streamToast.error .toast-icon-bg { background: rgba(255, 75, 75, 0.1); color: var(--stream-red); }
+        #streamToast.error .toast-progress { background: var(--stream-red); }
+
         .toast-progress {
             position: absolute; bottom: 0; left: 0; height: 3px;
             background: var(--stream-green); width: 100%; border-radius: 0 0 20px 20px;
@@ -51,11 +55,11 @@
 
     <div id="streamToast">
         <div class="flex items-center gap-4">
-            <div class="w-10 h-10 rounded-full bg-[#b8d5b0]/10 flex items-center justify-center text-[#b8d5b0]">
+            <div class="toast-icon-bg w-10 h-10 rounded-full bg-[#b8d5b0]/10 flex items-center justify-center text-[#b8d5b0]">
                 <i class="fas fa-shield-exclamation" id="toastIcon"></i>
             </div>
             <div>
-                <b class="text-[10px] uppercase tracking-widest text-[#b8d5b0] block">System Protocol</b>
+                <b class="text-[10px] uppercase tracking-widest text-[#b8d5b0]" id="toastTitle">System Protocol</b>
                 <p id="toastMsg" class="text-xs text-white/70 font-bold">Initializing...</p>
             </div>
         </div>
@@ -100,7 +104,7 @@
 
     <div class="bg-[#b8d5b0]/5 border border-[#b8d5b0]/20 rounded-[35px] p-8 text-center mb-8">
         <p class="text-[10px] font-black text-[#b8d5b0] uppercase tracking-[3px] mb-2">Available for Withdrawal</p>
-        <h2 class="text-4xl font-black">₦12,000.00</h2>
+        <h2 class="text-4xl font-black" id="currentBalDisplay">₦12,000.00</h2>
     </div>
 
     <div class="space-y-6">
@@ -139,6 +143,7 @@
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         let currentUser = null;
+        const currentBalance = 12000; // Fixed starting balance
 
         onAuthStateChanged(auth, (user) => {
             if (user) {
@@ -146,16 +151,26 @@
                 const bName = localStorage.getItem(`bankName_${user.uid}`);
                 const bAcc = localStorage.getItem(`accNum_${user.uid}`);
                 document.getElementById('bank-status').innerText = bName ? `${bName} (${bAcc})` : "Bank Not Set";
+            } else {
+                window.location.href = 'index.html';
             }
         });
 
-        // PROFESSIONAL ALERT FUNCTION
-        window.showStreamAlert = (msg, icon = 'fa-shield-exclamation') => {
+        // TOAST SYSTEM WITH ERROR SUPPORT
+        window.showStreamAlert = (msg, type = 'info', icon = 'fa-shield-exclamation') => {
             const toast = document.getElementById('streamToast');
             document.getElementById('toastMsg').innerText = msg;
             document.getElementById('toastIcon').className = `fas ${icon}`;
-            toast.classList.add('show');
             
+            if(type === 'error') {
+                toast.classList.add('error');
+                document.getElementById('toastTitle').innerText = "SECURITY ALERT";
+            } else {
+                toast.classList.remove('error');
+                document.getElementById('toastTitle').innerText = "SYSTEM PROTOCOL";
+            }
+
+            toast.classList.add('show');
             let width = 100;
             const interval = setInterval(() => {
                 width -= 1;
@@ -169,17 +184,32 @@
         };
 
         window.handleWithdrawal = () => {
-            const amount = document.getElementById('w-amount').value;
+            const amountInput = document.getElementById('w-amount').value;
+            const amount = parseInt(amountInput);
             const bName = localStorage.getItem(`bankName_${currentUser.uid}`);
 
+            // 1. BANK CHECK
             if (!bName) {
-                showStreamAlert("Link bank account in profile first", "fa-university");
+                showStreamAlert("Link bank account in profile first", "error", "fa-university");
                 return;
             }
 
+            // 2. INSUFFICIENT FUNDS CHECK
+            if (amount > currentBalance) {
+                showStreamAlert("Insufficient funds for this payout", "error", "fa-wallet");
+                return;
+            }
+
+            // 3. MINIMUM PAYOUT (Optional but professional)
+            if (amount < 1000) {
+                showStreamAlert("Minimum payout is ₦1,000", "error", "fa-circle-minus");
+                return;
+            }
+
+            // Populate and Show Receipt
             document.getElementById('r-user').innerText = localStorage.getItem(`legalName_${currentUser.uid}`) || "USER";
             document.getElementById('r-bank').innerText = `${bName} - ${localStorage.getItem(`accNum_${currentUser.uid}`)}`;
-            document.getElementById('r-amt').innerText = "₦" + parseInt(amount).toLocaleString();
+            document.getElementById('r-amt').innerText = "₦" + amount.toLocaleString();
             document.getElementById('r-date').innerText = new Date().toLocaleDateString();
             document.getElementById('receiptModal').style.display = 'flex';
         };
@@ -192,7 +222,7 @@
             document.getElementById('r-date').innerText = new Date().toLocaleString();
             document.getElementById('modal-actions').classList.add('hidden');
             document.getElementById('done-btn').classList.remove('hidden');
-            showStreamAlert("Payout Processed Successfully", "fa-check-circle");
+            showStreamAlert("Payout Processed Successfully", "info", "fa-check-circle");
         };
     </script>
 </body>
