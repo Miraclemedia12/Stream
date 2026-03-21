@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Profile | Stream Africa</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700;800&display=swap');
+        
+        :root { 
+            --stream-green: #b8d5b0; 
+            --stream-dark: #0a1f1c; 
+        }
+
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; font-family: 'Plus Jakarta Sans', sans-serif; }
+        
+        body { 
+            background-color: var(--stream-dark); 
+            background-image: radial-gradient(circle at 50% -20%, rgba(184, 213, 176, 0.1) 0%, transparent 60%);
+            color: #fff; margin: 0; padding: 15px; padding-bottom: 50px; 
+            overflow-x: hidden;
+        }
+
+        /* HEADER */
+        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; padding-top: 10px; }
+        .back-btn { display: flex; align-items: center; justify-content: center; background: rgba(255,255,255,0.03); border-radius: 16px; border: 1px solid rgba(255,255,255,0.05); }
+
+        /* PULSING GREEN CIRCLE WITH PROFILE ICON */
+        .logo-container { text-align: center; margin-bottom: 40px; }
+        .logo-circle {
+            display: inline-flex; align-items: center; justify-content: center;
+            width: 100px; height: 100px;
+            border-radius: 50%;
+            border: 4px solid var(--stream-green);
+            background: rgba(184, 213, 176, 0.05);
+            margin-bottom: 20px;
+            position: relative;
+            box-shadow: 0 0 20px rgba(184, 213, 176, 0.3);
+            animation: pulse 2.5s infinite;
+            color: var(--stream-green);
+            font-size: 45px; /* Size of the profile icon */
+        }
+        @keyframes pulse { 0% { transform: scale(1); box-shadow: 0 0 20px rgba(184, 213, 176, 0.3); } 50% { transform: scale(1.05); box-shadow: 0 0 40px rgba(184, 213, 176, 0.5); } 100% { transform: scale(1); box-shadow: 0 0 20px rgba(184, 213, 176, 0.3); } }
+        
+        .authorized-node { font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 2px; color: rgba(255,255,255,0.4); }
+
+        /* INPUTS (Pill style) */
+        .form-label { font-size: 11px; font-weight: 900; color: rgba(255,255,255,0.9); text-transform: uppercase; letter-spacing: 1.5px; margin-left: 20px; margin-bottom: 8px; display: block; }
+        
+        .profile-pill-input {
+            background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);
+            width: 100%; padding: 22px 28px; border-radius: 100px; color: #fff; font-weight: 600;
+            outline: none; transition: 0.3s; font-size: 15px; margin-bottom: 25px;
+        }
+        .profile-pill-input:focus { border-color: var(--stream-green); background: rgba(184, 213, 176, 0.05); }
+        .profile-pill-input::placeholder { color: rgba(255,255,255,0.3); font-weight: 500; }
+
+        /* DOTTED INPUT */
+        .dotted-input { border-style: dashed !important; border-color: rgba(255,255,255,0.2) !important; background: transparent; }
+
+        /* FINANCIAL GATEWAY HEADER */
+        .financial-header { display: flex; align-items: center; gap: 12px; margin-top: 40px; margin-bottom: 25px; color: var(--stream-green); }
+        .financial-header i { font-size: 18px; }
+        .financial-header span { font-size: 16px; font-weight: 900; text-transform: uppercase; letter-spacing: 2px; }
+
+        /* SUBMIT BUTTON */
+        .btn-submit { 
+            background: var(--stream-green); color: var(--stream-dark); 
+            width: 100%; padding: 22px; border-radius: 100px; 
+            font-weight: 900; font-size: 15px; 
+            text-transform: uppercase; letter-spacing: 1.5px;
+            margin-top: 40px; margin-bottom: 25px;
+            border: none; cursor: pointer; transition: 0.2s;
+            box-shadow: 0 10px 25px rgba(184, 213, 176, 0.2);
+        }
+        .btn-submit:active { transform: scale(0.97); opacity: 0.9; }
+
+        /* LOGOUT */
+        .logout-link { display: block; text-align: center; color: #ff4b4b; font-weight: 800; text-transform: uppercase; letter-spacing: 2px; font-size: 12px; text-decoration: none; margin-top: 20px; }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <a href="main-dashboard.html" class="back-btn w-12 h-12">
+            <i class="fas fa-arrow-left text-[#b8d5b0]"></i>
+        </a>
+        <h1 class="text-sm font-black tracking-widest uppercase text-white/40">Edit Profile</h1>
+        <div class="w-12"></div>
+    </div>
+
+    <div class="logo-container">
+        <div class="logo-circle">
+            <i class="fas fa-user"></i>
+        </div>
+        <p style="font-size: 24px; font-weight: 900; margin-bottom: 5px;">LOADING...</p>
+        <p class="authorized-node">Authorized Node</p>
+    </div>
+
+    <div class="form-section">
+        <label class="form-label">Full Name</label>
+        <input type="text" id="legalName" class="profile-pill-input" placeholder="Legal Name">
+
+        <label class="form-label">Email Protocol</label>
+        <input type="email" id="emailProtocol" class="profile-pill-input dotted-input" placeholder="Protocol Address" readonly>
+
+        <label class="form-label">Phone Line</label>
+        <input type="tel" id="phoneLine" class="profile-pill-input" placeholder="+234...">
+
+        <label class="form-label">Display Username</label>
+        <input type="text" id="displayUsername" class="profile-pill-input" placeholder="@username">
+    </div>
+
+    <div class="financial-header">
+        <i class="fas fa-university"></i>
+        <span>Financial Gateway</span>
+    </div>
+
+    <div class="form-section">
+        <label class="form-label">Bank Institution</label>
+        <select id="bankName" class="profile-pill-input appearance-none">
+            <option value="">Select Bank</option>
+            <option value="OPay">OPay</option>
+            <option value="Moniepoint">Moniepoint</option>
+            <option value="Palmpay">Palmpay</option>
+            <option value="Kuda Bank">Kuda Bank</option>
+            <option value="Access Bank">Access Bank</option>
+            <option value="Zenith Bank">Zenith Bank</option>
+            <option value="GTBank">Guaranty Trust Bank</option>
+            <option value="UBA">UBA</option>
+        </select>
+
+        <label class="form-label">Account Number</label>
+        <input type="number" id="accNumber" class="profile-pill-input" placeholder="10 Digits">
+
+        <label class="form-label">Holder Name</label>
+        <input type="text" id="holderName" class="profile-pill-input" placeholder="Full Bank Name">
+    </div>
+
+    <button onclick="saveProfileChanges()" class="btn-submit">
+        Save Changes
+    </button>
+
+    <a href="index.html" class="logout-link" onclick="handleLogout()">
+        Logout
+    </a>
+
+    <p class="text-center text-[10px] text-white/20 mt-12 font-bold uppercase tracking-widest">STREAM AFRICA v1.0 | SECURE SHELL</p>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyASDlQQMoXCeMZKs5O3KmO8zuFztt8rg2E",
+            authDomain: "celeste-web1.firebaseapp.com",
+            projectId: "celeste-web1",
+            storageBucket: "celeste-web1.firebasestorage.app",
+            messagingSenderId: "905722043319",
+            appId: "1:905722043319:web:83d032bf3608b8957b2632"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        let currentUserId = null;
+
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                currentUserId = user.uid;
+                document.getElementById('emailProtocol').value = user.email;
+                
+                // Load saved data
+                document.getElementById('legalName').value = localStorage.getItem(`legalName_${user.uid}`) || '';
+                document.getElementById('phoneLine').value = localStorage.getItem(`phoneLine_${user.uid}`) || '';
+                document.getElementById('displayUsername').value = localStorage.getItem(`displayUsername_${user.uid}`) || '';
+                document.getElementById('bankName').value = localStorage.getItem(`bankName_${user.uid}`) || '';
+                document.getElementById('accNumber').value = localStorage.getItem(`accNum_${user.uid}`) || '';
+                document.getElementById('holderName').value = localStorage.getItem(`holderName_${user.uid}`) || '';
+            } else {
+                window.location.href = 'index.html';
+            }
+        });
+
+        window.saveProfileChanges = () => {
+            const name = document.getElementById('legalName').value;
+            const phone = document.getElementById('phoneLine').value;
+            const bank = document.getElementById('bankName').value;
+            const acc = document.getElementById('accNumber').value;
+            const holder = document.getElementById('holderName').value;
+
+            if(!name || !bank || !acc || !holder) {
+                alert("PROTOCOL ERROR: All required fields must be filled.");
+                return;
+            }
+
+            localStorage.setItem(`legalName_${currentUserId}`, name);
+            localStorage.setItem(`phoneLine_${currentUserId}`, phone);
+            localStorage.setItem(`displayUsername_${currentUserId}`, document.getElementById('displayUsername').value);
+            localStorage.setItem(`bankName_${currentUserId}`, bank);
+            localStorage.setItem(`accNum_${currentUserId}`, acc);
+            localStorage.setItem(`holderName_${currentUserId}`, holder);
+            localStorage.setItem(`bank_${currentUserId}`, `${bank} - ${acc}`);
+
+            alert("SUCCESS: Node profile synchronized.");
+            window.location.href = 'withdraw.html';
+        };
+
+        window.handleLogout = async () => {
+            await signOut(auth);
+            window.location.href = 'index.html';
+        };
+    </script>
+</body>
+      </html>
+
