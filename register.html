@@ -14,7 +14,7 @@
             padding: 0;
             background: #0a1f1c; /* Dark Forest Background */
             font-family: 'Inter', sans-serif;
-            color: #ffffff; /* White text */
+            color: #ffffff;
             min-height: 100vh;
             display: flex;
             flex-direction: column;
@@ -32,25 +32,10 @@
             box-shadow: 0 4px 12px rgba(0,0,0,0.3);
         }
 
-        .logo-container {
-            height: 60px;
-            margin-bottom: 15px;
-        }
+        .logo-container { height: 60px; margin-bottom: 15px; }
+        .logo-img { height: 100%; width: auto; object-fit: contain; filter: brightness(0) invert(1); }
 
-        .logo-img {
-            height: 100%;
-            width: auto;
-            object-fit: contain;
-            filter: brightness(0) invert(1); /* Makes logo white to match theme */
-        }
-
-        .navbar {
-            display: flex;
-            justify-content: center;
-            gap: 25px;
-            width: 100%;
-        }
-
+        .navbar { display: flex; justify-content: center; gap: 25px; width: 100%; }
         .navbar a {
             color: #ffffff;
             text-decoration: none;
@@ -60,14 +45,13 @@
             padding-bottom: 5px;
             transition: all 0.3s;
         }
-
         .navbar a.active { border-bottom: 3px solid #b8d5b0; color: #b8d5b0; }
 
         .register-container {
             width: 95%;
             max-width: 450px;
             margin: 40px auto;
-            background: rgba(255, 255, 255, 0.05); /* Subtle dark card */
+            background: rgba(255, 255, 255, 0.05);
             border: 2px solid #b8d5b0;
             border-radius: 20px;
             padding: 35px 25px;
@@ -85,15 +69,13 @@
         }
 
         .form-group { margin-bottom: 20px; }
-
         .form-group label {
             display: block;
             margin-bottom: 8px;
             font-size: 12px;
             font-weight: 800;
-            color: #b8d5b0; /* Matcha accent for labels */
+            color: #b8d5b0;
             text-transform: uppercase;
-            letter-spacing: 1px;
         }
 
         .form-group input {
@@ -104,7 +86,6 @@
             background-color: rgba(255, 255, 255, 0.03);
             color: #ffffff;
             font-size: 15px;
-            box-sizing: border-box;
             transition: 0.3s;
         }
         
@@ -129,12 +110,7 @@
             text-transform: uppercase;
         }
 
-        .register-button:hover {
-            opacity: 0.9;
-            transform: translateY(-2px);
-        }
-
-        /* TOP-LEFT ACTIVITY FEED (MEDIUM SIZE) */
+        /* ACTIVITY FEED NOTIFICATION */
         .activity-feed-container {
             position: fixed; 
             top: 20px; 
@@ -156,11 +132,11 @@
         #activity-text { flex-grow: 1; font-size: 12px; line-height: 1.4; color: #ffffff; text-align: left;}
         .stream-brand { color: #b8d5b0; font-weight: 900; text-transform: uppercase; }
         .activity-user { color: #ffffff; font-weight: 700; }
-        .activity-amount { color: #ffffff; font-weight: 900; } /* Bold white amount */
+        .activity-amount { color: #ffffff; font-weight: 900; }
         .activity-amount.withdrawal { color: #e74c3c; }
         .activity-time { color: rgba(255,255,255,0.4); font-size: 10px; display: block; margin-top: 2px; }
 
-        .footer { width: 100%; text-align: center; padding: 30px 0; color: #555; font-size: 12px; border-top: 1px solid rgba(184, 213, 176, 0.1); margin-top: auto; }
+        .footer { width: 100%; text-align: center; padding: 30px 0; color: #555; font-size: 12px; margin-top: auto; }
     </style>
 </head>
 <body>
@@ -200,85 +176,118 @@
             <label>Password</label>
             <input type="password" id="password" placeholder="Min 8 characters" required>
         </div>
-        <button type="submit" class="register-button">REGISTER</button>
+        <button type="submit" id="reg-btn" class="register-button">REGISTER</button>
     </form>
 </div>
 
-<div class="footer">
-    &copy; 2026 STREAM AFRICA. All rights reserved. 
-</div>
+<div class="footer">&copy; 2026 STREAM AFRICA. All rights reserved.</div>
 
 <div id="activity-feed" class="activity-feed-container">
     <div class="activity-icon">
-        <i id="act-icon" class="fas fa-circle-check"></i>
+        <i id="act-icon" class="fas fa-circle-notch fa-spin"></i>
     </div>
-    <div id="activity-text">Authenticating...</div>
+    <div id="activity-text">Processing...</div>
 </div>
 
-<script>
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
+    import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js";
+    import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyASDlQQMoXCeMZKs5O3KmO8zuFztt8rg2E",
+        authDomain: "celeste-web1.firebaseapp.com",
+        projectId: "celeste-web1",
+        storageBucket: "celeste-web1.firebasestorage.app",
+        messagingSenderId: "905722043319",
+        appId: "1:905722043319:web:83d032bf3608b8957b2632"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
     const ACTIVITIES = [
         { name: "Blessing U.", type: "joined", amount: "12,000", location: "Benin", time: "just now" },
         { name: "Kelechi O.", type: "withdrawn", amount: "67,500", location: "Asaba", time: "1m ago" },
         { name: "Suleiman Y.", type: "joined", amount: "12,000", location: "Jos", time: "3m ago" },
-        { name: "Ifeanyi P.", type: "withdrawn", amount: "150,000", location: "Lekki", time: "just now" },
-        { name: "Damilola F.", type: "joined", amount: "12,000", location: "Akure", time: "6m ago" },
-        { name: "Umar G.", type: "withdrawn", amount: "28,200", location: "Sokoto", time: "4m ago" },
-        { name: "Chinwe H.", type: "joined", amount: "12,000", location: "Calabar", time: "2m ago" },
-        { name: "Rita X.", type: "withdrawn", amount: "41,300", location: "Uyo", time: "7m ago" }
+        { name: "Ifeanyi P.", type: "withdrawn", amount: "150,000", location: "Lekki", time: "just now" }
     ];
 
     let activityIndex = 0;
+    let isRegistering = false;
 
     function cycleActivityFeed() {
+        if (isRegistering) return; // Don't cycle if we are showing registration status
+        
         const activityElement = document.getElementById('activity-text');
         const feedContainer = document.getElementById('activity-feed');
         const actIcon = document.getElementById('act-icon');
         const act = ACTIVITIES[activityIndex];
         
-        if (act.type === 'joined') {
-            actIcon.className = "fas fa-user-plus";
-            activityElement.innerHTML = `<span class="activity-user">${act.name}</span> (${act.location}) joined <span class="stream-brand">STREAM</span> and earned <span class="activity-amount">₦${act.amount}</span>!<span class="activity-time">${act.time}</span>`;
-        } else {
-            actIcon.className = "fas fa-money-bill-transfer";
-            activityElement.innerHTML = `<span class="activity-user">${act.name}</span> (${act.location}) withdrew <span class="activity-amount withdrawal">₦${act.amount}</span> from <span class="stream-brand">STREAM</span>!<span class="activity-time">${act.time}</span>`;
-        }
+        actIcon.className = act.type === 'joined' ? "fas fa-user-plus" : "fas fa-money-bill-transfer";
+        activityElement.innerHTML = `<span class="activity-user">${act.name}</span> (${act.location}) ${act.type} <span class="stream-brand">STREAM</span> and earned <span class="activity-amount">₦${act.amount}</span>!<span class="activity-time">${act.time}</span>`;
 
         feedContainer.classList.add('show-activity');
         setTimeout(() => {
             feedContainer.classList.remove('show-activity');
             activityIndex = (activityIndex + 1) % ACTIVITIES.length;
-        }, 5000); 
+        }, 4000); 
     }
 
-    // Handle Form Submission and Redirection
-    document.getElementById('registration-form').addEventListener('submit', function(e) {
+    document.getElementById('registration-form').addEventListener('submit', async function(e) {
         e.preventDefault();
+        isRegistering = true;
         
-        // Capture data
+        const btn = document.getElementById('reg-btn');
+        const feed = document.getElementById('activity-feed');
+        const feedText = document.getElementById('activity-text');
+        const feedIcon = document.getElementById('act-icon');
+
+        btn.disabled = true;
+        btn.innerText = "CREATING ACCOUNT...";
+        feedIcon.className = "fas fa-circle-notch fa-spin";
+        feedText.innerText = "Securing your dashboard details...";
+        feed.classList.add('show-activity');
+
         const fullName = document.getElementById('full-name').value;
         const userName = document.getElementById('username').value;
-        
-        // Generate and save registration date if not exists
-        if (!localStorage.getItem('stream_reg_date')) {
-            const now = new Date();
-            const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-            const formattedDate = `${now.getDate()} ${months[now.getMonth()]} ${now.getFullYear()}`;
-            localStorage.setItem('stream_reg_date', formattedDate);
+        const email = document.getElementById('email').value;
+        const phone = document.getElementById('phone-number').value;
+        const password = document.getElementById('password').value;
+
+        try {
+            // 1. Create User
+            const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+            const user = userCredential.user;
+
+            // 2. Save to Firestore
+            await setDoc(doc(db, "users", user.uid), {
+                fullName,
+                username: userName,
+                email,
+                phone,
+                status: "Pending",
+                balance: 0,
+                is_active: false,
+                regDate: new Date().toLocaleDateString()
+            });
+
+            feedText.innerText = "Success! Redirecting to Dashboard...";
+            setTimeout(() => { window.location.href = 'dashboard.html'; }, 1500);
+
+        } catch (error) {
+            isRegistering = false;
+            btn.disabled = false;
+            btn.innerText = "REGISTER";
+            feed.classList.remove('show-activity');
+            alert(error.message);
         }
-
-        // Optional: Save user info for dashboard personalization
-        localStorage.setItem('stream_user_name', fullName);
-        localStorage.setItem('stream_username', userName);
-
-        // Redirect to dashboard
-        window.location.href = 'dashboard.html';
     });
 
     document.addEventListener('DOMContentLoaded', () => {
-        setTimeout(cycleActivityFeed, 2000);
-        setInterval(cycleActivityFeed, 10000);
+        setInterval(cycleActivityFeed, 8000);
     });
 </script>
 </body>
 </html>
-
