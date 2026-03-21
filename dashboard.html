@@ -267,7 +267,6 @@
 </head>
 <body>
 
-<!-- Side Menu -->
 <div id="side-menu" class="side-menu">
     <div style="margin-bottom: 40px;">
         <img src="logo.png" alt="Logo" class="logo-img">
@@ -284,7 +283,6 @@
     </button>
 </div>
 
-<!-- Live Notifications -->
 <div id="notif-popup" class="notif-popup">
     <div class="notif-icon" id="notif-icon"><i class="fas fa-circle-check"></i></div>
     <div class="notif-body" id="notif-text">
@@ -294,7 +292,7 @@
 
 <div class="dashboard-header">
     <div class="welcome-text">
-        <h1>Dashboard</h1>
+        <h1 id="user-greeting">Dashboard</h1>
         <p style="color:rgba(255,255,255,0.6); font-size: 14px; margin-top: 5px;">Welcome to your <br> <span style="color:var(--stream-green); font-weight: 800;">STREAM AFRICA</span> account</p>
     </div>
     <div style="background: rgba(184, 213, 176, 0.1); width: 45px; height: 45px; border-radius: 50%; display: flex; align-items: center; justify-content: center; position: relative; border: 1px solid rgba(184, 213, 176, 0.2);">
@@ -303,14 +301,13 @@
     </div>
 </div>
 
-<!-- Account Status -->
 <div class="glass-card">
     <div class="flex justify-between items-start mb-6">
         <div class="flex items-center gap-3">
             <i class="fas fa-shield-halved text-3xl" style="color:var(--stream-green)"></i>
             <h2 style="font-size: 20px; font-weight: 800; color: #ffffff">Account<br>Status</h2>
         </div>
-        <div class="status-badge">Inactive</div>
+        <div class="status-badge" id="acc-status">Inactive</div>
     </div>
     <p style="color:rgba(255,255,255,0.7); font-size: 14px; line-height: 1.5; margin-bottom: 20px;">
         Your Stream account is currently inactive. Complete your onboarding to unlock your earnings and dashboard features.
@@ -320,7 +317,6 @@
     </div>
 </div>
 
-<!-- Onboarding Details -->
 <div class="glass-card">
     <div class="flex items-center gap-3 mb-6">
         <i class="fas fa-file-invoice-dollar text-xl" style="color:var(--stream-green)"></i>
@@ -330,15 +326,15 @@
     <div class="space-y-4">
         <div class="flex justify-between border-b border-white/10 pb-3">
             <span style="color:rgba(255,255,255,0.5)">Plan:</span>
-            <span style="color:#ff6b6b; font-weight: 800;">None</span>
+            <span id="dash-plan" style="color:#ff6b6b; font-weight: 800;">None</span>
         </div>
         <div class="flex justify-between border-b border-white/10 pb-3">
             <span style="color:rgba(255,255,255,0.5)">Price:</span>
-            <span style="color:#ff6b6b; font-weight: 800;">Pending</span>
+            <span id="dash-price" style="color:#ff6b6b; font-weight: 800;">Pending</span>
         </div>
         <div class="flex justify-between border-b border-white/10 pb-3">
             <span style="color:rgba(255,255,255,0.5)">Status:</span>
-            <span style="color:#ff6b6b; font-weight: 800;">Inactive</span>
+            <span id="dash-status-text" style="color:#ff6b6b; font-weight: 800;">Inactive</span>
         </div>
         <div class="flex justify-between pb-1">
             <span style="color:rgba(255,255,255,0.5)">Joined:</span>
@@ -351,7 +347,6 @@
     </div>
 </div>
 
-<!-- Features Section -->
 <div style="margin: 30px 20px 15px; font-size: 18px; font-weight: 900; display: flex; align-items: center; gap: 10px; text-transform: uppercase; color: #ffffff;">
     <i class="fas fa-grip-vertical" style="color:var(--stream-green)"></i> Stream Features
 </div>
@@ -360,33 +355,32 @@
     <div class="feature-item" onclick="openModal()">
         <div class="feature-icon-box"><i class="fas fa-wallet"></i></div>
         <h3 style="color:rgba(255,255,255,0.4); font-weight: 700; font-size: 13px; text-transform: uppercase;">Stream Balance</h3>
-        <div style="font-size: 24px; font-weight: 900; color:rgba(255,255,255,0.2);">₦0.00</div>
+        <div id="dash-balance" style="font-size: 24px; font-weight: 900; color:rgba(255,255,255,0.2);">₦0.00</div>
         <div style="font-size: 11px; color: rgba(255,255,255,0.3);">Real-time earnings tracker</div>
     </div>
 
     <div class="feature-item" onclick="openModal()">
         <div class="feature-icon-box"><i class="fas fa-tower-broadcast"></i></div>
         <h3 style="color:rgba(255,255,255,0.4); font-weight: 700; font-size: 13px; text-transform: uppercase;">Livestream</h3>
-        <div style="font-size: 24px; font-weight: 900; color:rgba(255,255,255,0.2);">Inactive</div>
+        <div id="dash-live-status" style="font-size: 24px; font-weight: 900; color:rgba(255,255,255,0.2);">Inactive</div>
         <div style="font-size: 11px; color: rgba(255,255,255,0.3);">Earn while streaming content</div>
     </div>
 
     <div class="feature-item" onclick="openModal()">
         <div class="feature-icon-box"><i class="fas fa-clapperboard"></i></div>
         <h3 style="color:rgba(255,255,255,0.4); font-weight: 700; font-size: 13px; text-transform: uppercase;">Video Ads</h3>
-        <div style="font-size: 24px; font-weight: 900; color:rgba(255,255,255,0.2);">0 Views</div>
+        <div id="dash-ads-views" style="font-size: 24px; font-weight: 900; color:rgba(255,255,255,0.2);">0 Views</div>
         <div style="font-size: 11px; color: rgba(255,255,255,0.3);">Monetize your watch time</div>
     </div>
 
     <div class="feature-item" onclick="openModal()">
         <div class="feature-icon-box"><i class="fas fa-network-wired"></i></div>
         <h3 style="color:rgba(255,255,255,0.4); font-weight: 700; font-size: 13px; text-transform: uppercase;">My Network</h3>
-        <div style="font-size: 24px; font-weight: 900; color:rgba(255,255,255,0.2);">0 Members</div>
+        <div id="dash-network" style="font-size: 24px; font-weight: 900; color:rgba(255,255,255,0.2);">0 Members</div>
         <div style="font-size: 11px; color: rgba(255,255,255,0.3);">Growth statistics</div>
     </div>
 </div>
 
-<!-- Recent Activity -->
 <div class="glass-card-bright mt-10">
     <div style="font-size: 18px; font-weight: 800; margin-bottom: 25px; color: #ffffff;">Account History</div>
     <div class="space-y-6">
@@ -409,35 +403,23 @@
     </div>
 </div>
 
-<!-- Activation Modal (Updated to match image) -->
 <div id="activation-modal" class="modal-overlay">
     <div class="modal-card">
-        <!-- Close Button -->
         <div onclick="closeModal()" style="position: absolute; top: 20px; right: 20px; color: rgba(255,255,255,0.5); font-size: 24px; cursor: pointer;">
             <i class="fas fa-times"></i>
         </div>
-        
-        <!-- Warning Icon (Yellow) -->
         <div style="color:#ffcc00; font-size: 70px; margin-bottom: 25px;">
             <i class="fas fa-triangle-exclamation"></i>
         </div>
-
-        <!-- Title -->
         <h2 style="font-size: 26px; font-weight: 900; margin-bottom: 15px; color:#ffffff; line-height: 1.2;">
             Complete Account<br>Activation
         </h2>
-
-        <!-- Description -->
         <p style="color:rgba(255,255,255,0.6); font-size: 16px; line-height: 1.5; margin-bottom: 30px; padding: 0 10px;">
             You're almost there! Complete your account activation by making the payment for your selected plan.
         </p>
-
-        <!-- Form Label -->
         <div style="text-align: left; font-size: 11px; font-weight: 800; color: rgba(255,255,255,0.4); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 5px; padding-left: 5px;">
             Confirm your country
         </div>
-
-        <!-- Country Select -->
         <select id="country-select" class="country-select">
             <option value="nigeria">Nigeria 🇳🇬</option>
             <option value="cameroon">Cameroon 🇨🇲</option>
@@ -446,18 +428,78 @@
             <option value="south_africa">South Africa 🇿🇦</option>
             <option value="uganda">Uganda 🇺🇬</option>
         </select>
-
-        <!-- Proceed Button -->
         <div class="btn-proceed" onclick="goToRegistration()">
             Proceed to payment <i class="fas fa-credit-card"></i>
         </div>
     </div>
 </div>
 
-<!-- Menu Toggle Button -->
 <div class="menu-toggle" onclick="toggleMenu()">
     <i class="fas fa-bars"></i>
 </div>
+
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js";
+    import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyASDlQQMoXCeMZKs5O3KmO8zuFztt8rg2E",
+        authDomain: "celeste-web1.firebaseapp.com",
+        projectId: "celeste-web1",
+        storageBucket: "celeste-web1.firebasestorage.app",
+        messagingSenderId: "905722043319",
+        appId: "1:905722043319:web:83d032bf3608b8957b2632"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    onAuthStateChanged(auth, async (user) => {
+        if (user) {
+            const userRef = doc(db, "users", user.uid);
+            const userSnap = await getDoc(userRef);
+
+            if (userSnap.exists()) {
+                const data = userSnap.data();
+                
+                // Update UI with Firebase Data
+                document.getElementById('user-greeting').innerText = `Hello, ${data.username || 'Member'}`;
+                document.getElementById('dash-reg-date').innerText = data.regDate || '...';
+                document.getElementById('acc-status').innerText = data.status || "Inactive";
+                document.getElementById('dash-status-text').innerText = data.status || "Inactive";
+                document.getElementById('dash-plan').innerText = data.plan || "None";
+                document.getElementById('dash-price').innerText = data.price || "Pending";
+
+                if (data.status === "Active") {
+                    const statusBadge = document.getElementById('acc-status');
+                    const statusText = document.getElementById('dash-status-text');
+                    
+                    statusBadge.innerText = "Active";
+                    statusBadge.style.color = "#2ecc71";
+             statusBadge.style.background = "rgba(46, 204, 113, 0.2)";
+                    statusBadge.style.border = "1px solid rgba(46, 204, 113, 0.4)";
+                    
+                    statusText.innerText = "Active";
+                    statusText.style.color = "#2ecc71";
+
+                    // Update Balances
+                    document.getElementById('dash-balance').innerText = `₦${(data.balance || 0).toLocaleString()}`;
+                    document.getElementById('dash-balance').style.color = "white";
+                    document.getElementById('dash-live-status').innerText = "Streaming";
+                    document.getElementById('dash-live-status').style.color = "white";
+                    document.getElementById('dash-ads-views').innerText = `${data.adsViews || 0} Views`;
+                    document.getElementById('dash-ads-views').style.color = "white";
+                    document.getElementById('dash-network').innerText = `${data.networkSize || 0} Members`;
+                    document.getElementById('dash-network').style.color = "white";
+                }
+            }
+        } else {
+            window.location.href = 'login.html';
+        }
+    });
+</script>
 
 <script>
     const ACTIVITIES = [
@@ -492,39 +534,25 @@
         }, 6000);
     }
 
-    function toggleMenu() {
+    window.toggleMenu = function() {
         document.getElementById('side-menu').classList.toggle('open');
     }
 
-    function openModal() {
+    window.openModal = function() {
         document.getElementById('activation-modal').style.display = 'flex';
     }
 
-    function closeModal() {
+    window.closeModal = function() {
         document.getElementById('activation-modal').style.display = 'none';
     }
 
-    function goToRegistration() {
+    window.goToRegistration = function() {
         const country = document.getElementById('country-select').value;
         localStorage.setItem('selected_country', country);
-        // FIXED: Redirects to payment.html
         window.location.href = 'payment.html'; 
     }
 
-    function initUserTracking() {
-        const regDateDisplay = document.getElementById('dash-reg-date');
-        let savedDate = localStorage.getItem('stream_reg_date');
-        if (!savedDate) {
-            const now = new Date();
-            const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-            savedDate = `${now.getDate()} ${months[now.getMonth()]} ${now.getFullYear()}`;
-            localStorage.setItem('stream_reg_date', savedDate);
-        }
-        if(regDateDisplay) regDateDisplay.innerText = savedDate;
-    }
-
     document.addEventListener('DOMContentLoaded', () => {
-        initUserTracking();
         setTimeout(cycleActivities, 2000);
     });
 </script>
