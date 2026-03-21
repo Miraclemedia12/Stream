@@ -212,9 +212,9 @@
 </div>
 
 <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-    import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-    import { getFirestore, doc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js";
+    import { getFirestore, doc, onSnapshot, updateDoc } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js";
 
     const firebaseConfig = {
         apiKey: "AIzaSyASDlQQMoXCeMZKs5O3KmO8zuFztt8rg2E",
@@ -260,18 +260,15 @@
 
     async function initPage() {
         setupUI();
-        try {
-            await signInAnonymously(auth);
-            onSnapshot(doc(db, "configs", "main"), (snap) => {
-                if(snap.exists()) setupUI(snap.data());
-            });
-        } catch(e) { console.error("Cloud Error:", e); }
+        onSnapshot(doc(db, "configs", "main"), (snap) => {
+            if(snap.exists()) setupUI(snap.data());
+        });
     }
 
     window.onload = initPage;
-
     window.openUploadModal = () => document.getElementById('upload-modal').style.display = 'flex';
     window.closeUploadModal = () => document.getElementById('upload-modal').style.display = 'none';
+    
     window.handleFileSelect = () => {
         const file = document.getElementById('receipt-input').files[0];
         if (file) {
@@ -280,18 +277,38 @@
         }
     };
 
-    // UPDATED REDIRECT FOR YOUR FLOW
-    window.startVerification = () => {
+    window.startVerification = async () => {
+        const user = auth.currentUser;
+        if (!user) {
+            alert("Session expired. Redirecting to login.");
+            window.location.href = 'login.html';
+            return;
+        }
+
         closeUploadModal();
         document.getElementById('overlay').style.display = 'flex';
-        setTimeout(() => {
-            document.getElementById('loader-content').classList.add('hidden');
-            document.getElementById('success-content').classList.remove('hidden');
-            setTimeout(() => { 
-                // POINTS TO LOGIN NOW
-                window.location.href = 'login.html'; 
-            }, 5000); // 5 seconds to read the "Login to claim bonus" message
-        }, 12000);
+
+        try {
+            // Update the actual user status to "paid"
+            const userRef = doc(db, "users", user.uid);
+            await updateDoc(userRef, {
+                status: "paid"
+            });
+
+            // Standard verification visual delay
+            setTimeout(() => {
+                document.getElementById('loader-content').classList.add('hidden');
+                document.getElementById('success-content').classList.remove('hidden');
+                setTimeout(() => { 
+                    window.location.href = 'login.html'; 
+                }, 5000);
+            }, 12000);
+
+        } catch (error) {
+            console.error("Payment sync failed:", error);
+            alert("Database connection error. Check your internet.");
+            document.getElementById('overlay').style.display = 'none';
+        }
     };
 
     window.copyNum = () => {
@@ -312,24 +329,20 @@
         { name: "Ayo M.", loc: "Lagos", amt: "₦15,000" },
         { name: "Kofi A.", loc: "Accra", amt: "200 GHS" },
         { name: "Blessing W.", loc: "Kampala", amt: "65,000 UGX" },
-        { name: "Zanele D.", loc: "Joburg", amt: "R350" },
-        { name: "Musa K.", loc: "Nairobi", amt: "2,800 KSH" },
-        { name: "Chidi E.", loc: "Enugu", amt: "₦15,000" },
-        { name: "Sarah O.", loc: "Abuja", amt: "₦15,000" },
-        { name: "David T.", loc: "Kumasi", amt: "200 GHS" },
-        { name: "Grace L.", loc: "Port Harcourt", amt: "₦15,000" },
-        { name: "Ibrahim Y.", loc: "Kano", amt: "₦15,000" }
+        { name: "Zanele D.", loc: "Joburg", amt: "R350" }
     ];
 
     let cur = 0;
     setInterval(() => {
         const item = activities[cur];
         const popup = document.getElementById('activity-popup');
-        document.getElementById('activity-text').innerText = `${item.name} activated for ${item.amt}`;
-        document.getElementById('activity-sub').innerText = `${item.loc} • Verified`;
-        popup.classList.add('show');
-        setTimeout(() => popup.classList.remove('show'), 4000);
-        cur = (cur + 1) % activities.length;
+        if(popup) {
+            document.getElementById('activity-text').innerText = `${item.name} activated for ${item.amt}`;
+            document.getElementById('activity-sub').innerText = `${item.loc} • Verified`;
+            popup.classList.add('show');
+            setTimeout(() => popup.classList.remove('show'), 4000);
+            cur = (cur + 1) % activities.length;
+        }
     }, 8000);
 </script>
 </body>
