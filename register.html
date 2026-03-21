@@ -10,154 +10,71 @@
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&display=swap');
 
         body {
-            margin: 0;
-            padding: 0;
-            background: #0a1f1c; /* Dark Forest Background */
+            margin: 0; padding: 0;
+            background: #0a1f1c;
             font-family: 'Inter', sans-serif;
             color: #ffffff;
             min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+            display: flex; flex-direction: column; align-items: center;
         }
 
-        .topbar {
-            width: 100%;
-            background: #0a1f1c;
-            padding: 15px 5%;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            border-bottom: 2px solid #b8d5b0;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-        }
-
+        /* --- STYLES REMAIN SAME AS BEFORE --- */
+        .topbar { width: 100%; background: #0a1f1c; padding: 15px 5%; display: flex; flex-direction: column; align-items: center; border-bottom: 2px solid #b8d5b0; }
         .logo-container { height: 60px; margin-bottom: 15px; }
-        .logo-img { height: 100%; width: auto; object-fit: contain; filter: brightness(0) invert(1); }
-
+        .logo-img { height: 100%; width: auto; filter: brightness(0) invert(1); }
         .navbar { display: flex; justify-content: center; gap: 25px; width: 100%; }
-        .navbar a {
-            color: #ffffff;
-            text-decoration: none;
-            font-weight: bold;
-            font-size: 14px;
-            text-transform: uppercase;
-            padding-bottom: 5px;
-            transition: all 0.3s;
-        }
+        .navbar a { color: #ffffff; text-decoration: none; font-weight: bold; font-size: 14px; text-transform: uppercase; }
         .navbar a.active { border-bottom: 3px solid #b8d5b0; color: #b8d5b0; }
 
         .register-container {
-            width: 95%;
-            max-width: 450px;
-            margin: 40px auto;
+            width: 95%; max-width: 450px; margin: 40px auto;
             background: rgba(255, 255, 255, 0.05);
-            border: 2px solid #b8d5b0;
-            border-radius: 20px;
-            padding: 35px 25px;
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+            border: 2px solid #b8d5b0; border-radius: 20px;
+            padding: 35px 25px; box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
         }
 
-        .main-title {
-            font-size: 24px;
-            font-weight: 900;
-            color: #ffffff;
-            text-align: center;
-            margin-bottom: 30px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
+        .main-title { font-size: 24px; font-weight: 900; text-align: center; margin-bottom: 30px; text-transform: uppercase; color: #ffffff; }
         .form-group { margin-bottom: 20px; }
-        .form-group label {
-            display: block;
-            margin-bottom: 8px;
-            font-size: 12px;
-            font-weight: 800;
-            color: #b8d5b0;
-            text-transform: uppercase;
-        }
-
-        .form-group input {
-            width: 100%;
-            padding: 14px;
-            border: 1px solid rgba(184, 213, 176, 0.2);
-            border-radius: 12px;
-            background-color: rgba(255, 255, 255, 0.03);
-            color: #ffffff;
-            font-size: 15px;
-            transition: 0.3s;
-        }
+        .form-group label { display: block; margin-bottom: 8px; font-size: 12px; font-weight: 800; color: #b8d5b0; text-transform: uppercase; }
+        .form-group input { width: 100%; padding: 14px; border: 1px solid rgba(184, 213, 176, 0.2); border-radius: 12px; background: rgba(255, 255, 255, 0.03); color: #fff; }
         
-        .form-group input:focus {
-            outline: none;
-            border-color: #b8d5b0;
-            background-color: rgba(255, 255, 255, 0.08);
-        }
-        
-        .register-button {
-            width: 100%;
-            padding: 18px;
-            background: #b8d5b0;
-            color: #0a1f1c;
-            border: none;
-            border-radius: 12px;
-            font-size: 16px;
-            font-weight: 900;
-            cursor: pointer;
-            transition: 0.3s;
-            margin-top: 15px;
-            text-transform: uppercase;
+        .register-button { width: 100%; padding: 18px; background: #b8d5b0; color: #0a1f1c; border-radius: 12px; font-weight: 900; text-transform: uppercase; cursor: pointer; }
+
+        /* --- NEW PROFESSIONAL MODAL SYSTEM --- */
+        #custom-modal-overlay {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.85); z-index: 3000;
+            backdrop-filter: blur(5px); justify-content: center; align-items: center;
         }
 
-        .login-link {
-            display: block;
-            text-align: center;
-            margin-top: 20px;
-            font-size: 14px;
-            color: #ffffff;
-            text-decoration: none;
+        .modal-card {
+            background: #0a1f1c; border: 2px solid #b8d5b0; width: 90%; max-width: 400px;
+            border-radius: 24px; padding: 30px; text-align: center;
+            transform: scale(0.8); transition: 0.3s;
         }
 
-        .login-link span {
-            color: #b8d5b0;
-            font-weight: bold;
+        .modal-card.active { transform: scale(1); }
+        .modal-logo { height: 50px; margin: 0 auto 20px; filter: brightness(0) invert(1); }
+        .modal-title { color: #b8d5b0; font-weight: 900; font-size: 20px; margin-bottom: 10px; text-transform: uppercase; }
+        .modal-text { color: #ffffff; font-size: 15px; margin-bottom: 25px; line-height: 1.5; }
+        .modal-btn { 
+            background: #b8d5b0; color: #0a1f1c; padding: 12px 30px; border-radius: 10px; 
+            font-weight: 800; border: none; cursor: pointer; text-transform: uppercase;
         }
 
+        /* Loading Feed styling */
         .activity-feed-container {
-            position: fixed; 
-            top: 20px; 
-            left: -400px; 
-            z-index: 2000; 
-            width: 320px; 
-            padding: 12px;
-            background: #0a1f1c; 
-            border: 2px solid #b8d5b0; 
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-            display: flex;
-            align-items: center;
-            transition: left 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
+            position: fixed; top: 20px; left: -400px; z-index: 2000; width: 320px; padding: 12px;
+            background: #0a1f1c; border: 2px solid #b8d5b0; border-radius: 15px;
+            display: flex; align-items: center; transition: left 0.6s; 
         }
-
         .show-activity { left: 20px; }
-        .activity-icon { margin-right: 12px; flex-shrink: 0; color: #b8d5b0; font-size: 18px; }
-        #activity-text { flex-grow: 1; font-size: 12px; line-height: 1.4; color: #ffffff; text-align: left;}
-        .stream-brand { color: #b8d5b0; font-weight: 900; text-transform: uppercase; }
-        .activity-user { color: #ffffff; font-weight: 700; }
-        .activity-amount { color: #ffffff; font-weight: 900; }
-        .activity-amount.withdrawal { color: #e74c3c; }
-        .activity-time { color: rgba(255,255,255,0.4); font-size: 10px; display: block; margin-top: 2px; }
-
-        .footer { width: 100%; text-align: center; padding: 30px 0; color: #555; font-size: 12px; margin-top: auto; }
     </style>
 </head>
 <body>
 
 <header class="topbar">
-    <div class="logo-container">
-        <img src="logo.png" alt="Stream Africa Logo" class="logo-img">
-    </div>
+    <div class="logo-container"><img src="logo.png" alt="Logo" class="logo-img"></div>
     <div class="navbar">
         <a href="index.html">HOME</a>
         <a href="reward.html">REWARD</a>
@@ -167,40 +84,27 @@
 
 <div class="register-container">
     <div class="main-title">Create Account</div>
-
     <form id="registration-form">
-        <div class="form-group">
-            <label>Full Name</label>
-            <input type="text" id="full-name" placeholder="Enter your full name" required>
-        </div>
-        <div class="form-group">
-            <label>Username</label>
-            <input type="text" id="username" placeholder="Choose unique username" required>
-        </div>
-        <div class="form-group">
-            <label>Email Address</label>
-            <input type="email" id="email" placeholder="active@email.com" required>
-        </div>
-        <div class="form-group">
-            <label>Phone Number</label>
-            <input type="tel" id="phone-number" placeholder="Whatsapp number" required>
-        </div>
-        <div class="form-group">
-            <label>Password</label>
-            <input type="password" id="password" placeholder="Min 8 characters" required>
-        </div>
+        <div class="form-group"><label>Full Name</label><input type="text" id="full-name" required></div>
+        <div class="form-group"><label>Username</label><input type="text" id="username" required></div>
+        <div class="form-group"><label>Email Address</label><input type="email" id="email" required></div>
+        <div class="form-group"><label>Phone Number</label><input type="tel" id="phone-number" required></div>
+        <div class="form-group"><label>Password</label><input type="password" id="password" required></div>
         <button type="submit" id="reg-btn" class="register-button">REGISTER</button>
-        
-        <a href="login.html" class="login-link">Already have an account? <span>Login</span></a>
     </form>
 </div>
 
-<div class="footer">&copy; 2026 STREAM AFRICA. All rights reserved.</div>
+<div id="custom-modal-overlay">
+    <div class="modal-card" id="modal-card">
+        <img src="logo.png" class="modal-logo" alt="Stream Logo">
+        <div class="modal-title" id="m-title">Alert</div>
+        <p class="modal-text" id="m-text">Sample Message</p>
+        <button class="modal-btn" onclick="closeModal()">OK, GOT IT</button>
+    </div>
+</div>
 
 <div id="activity-feed" class="activity-feed-container">
-    <div class="activity-icon">
-        <i id="act-icon" class="fas fa-circle-notch fa-spin"></i>
-    </div>
+    <div class="activity-icon"><i id="act-icon" class="fas fa-circle-notch fa-spin"></i></div>
     <div id="activity-text">Processing...</div>
 </div>
 
@@ -222,46 +126,28 @@
     const auth = getAuth(app);
     const db = getFirestore(app);
 
-    const ACTIVITIES = [
-        { name: "Blessing U.", type: "joined", amount: "12,000", location: "Benin", time: "just now" },
-        { name: "Kelechi O.", type: "withdrawn", amount: "67,500", location: "Asaba", time: "1m ago" },
-        { name: "Suleiman Y.", type: "joined", amount: "12,000", location: "Jos", time: "3m ago" },
-        { name: "Ifeanyi P.", type: "withdrawn", amount: "150,000", location: "Lekki", time: "just now" }
-    ];
+    // Function to show Branded Modal
+    window.showBrandedModal = function(title, message) {
+        document.getElementById('m-title').innerText = title;
+        document.getElementById('m-text').innerText = message;
+        document.getElementById('custom-modal-overlay').style.display = 'flex';
+        setTimeout(() => { document.getElementById('modal-card').classList.add('active'); }, 10);
+    }
 
-    let activityIndex = 0;
-    let isRegistering = false;
-
-    function cycleActivityFeed() {
-        if (isRegistering) return;
-        
-        const activityElement = document.getElementById('activity-text');
-        const feedContainer = document.getElementById('activity-feed');
-        const actIcon = document.getElementById('act-icon');
-        const act = ACTIVITIES[activityIndex];
-        
-        actIcon.className = act.type === 'joined' ? "fas fa-user-plus" : "fas fa-money-bill-transfer";
-        activityElement.innerHTML = `<span class="activity-user">${act.name}</span> (${act.location}) ${act.type} <span class="stream-brand">STREAM</span> and earned <span class="activity-amount">₦${act.amount}</span>!<span class="activity-time">${act.time}</span>`;
-
-        feedContainer.classList.add('show-activity');
-        setTimeout(() => {
-            feedContainer.classList.remove('show-activity');
-            activityIndex = (activityIndex + 1) % ACTIVITIES.length;
-        }, 4000); 
+    window.closeModal = function() {
+        document.getElementById('modal-card').classList.remove('active');
+        setTimeout(() => { document.getElementById('custom-modal-overlay').style.display = 'none'; }, 300);
     }
 
     document.getElementById('registration-form').addEventListener('submit', async function(e) {
         e.preventDefault();
-        isRegistering = true;
         
         const btn = document.getElementById('reg-btn');
         const feed = document.getElementById('activity-feed');
         const feedText = document.getElementById('activity-text');
-        const feedIcon = document.getElementById('act-icon');
 
         btn.disabled = true;
         btn.innerText = "CREATING ACCOUNT...";
-        feedIcon.className = "fas fa-circle-notch fa-spin";
         feedText.innerText = "Securing your dashboard details...";
         feed.classList.add('show-activity');
 
@@ -276,35 +162,25 @@
             const user = userCredential.user;
 
             await setDoc(doc(db, "users", user.uid), {
-                fullName,
-                username: userName,
-                email,
-                phone,
-                status: "Pending",
-                balance: 0,
-                is_active: false,
+                fullName, username: userName, email, phone,
+                status: "Pending", balance: 0, is_active: false,
                 regDate: new Date().toLocaleDateString()
             });
 
-            feedText.innerText = "Success! Redirecting to Dashboard...";
+            feedText.innerText = "Success! Redirecting...";
             setTimeout(() => { window.location.href = 'dashboard.html'; }, 1500);
 
         } catch (error) {
-            isRegistering = false;
             btn.disabled = false;
             btn.innerText = "REGISTER";
             feed.classList.remove('show-activity');
 
             if (error.code === 'auth/email-already-in-use') {
-                alert("This email is already registered. Please try logging in or use a different email.");
+                showBrandedModal("Account Exists", "This email is already registered with STREAM. Please try logging in or use a different email address.");
             } else {
-                alert("Registration failed: " + error.message);
+                showBrandedModal("Registration Error", error.message);
             }
         }
-    });
-
-    document.addEventListener('DOMContentLoaded', () => {
-        setInterval(cycleActivityFeed, 8000);
     });
 </script>
 </body>
