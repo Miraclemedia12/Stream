@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stream Africa | Login</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700;800&display=swap');
+        
+        :root { 
+            --stream-green: #b8d5b0; 
+            --stream-dark: #0a1f1c; 
+            --stream-red: #ff4b4b;
+        }
+
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; font-family: 'Plus Jakarta Sans', sans-serif; }
+        
+        body { 
+            background-color: var(--stream-dark); 
+            background-image: radial-gradient(circle at 50% 120%, rgba(184, 213, 176, 0.15) 0%, transparent 50%);
+            color: #fff; margin: 0; display: flex; align-items: center; justify-content: center; min-height: 100vh; padding: 20px;
+        }
+
+        .login-card { width: 100%; max-width: 400px; text-align: center; }
+
+        .logo-box {
+            width: 80px; height: 80px; background: rgba(184, 213, 176, 0.05);
+            border: 1px solid rgba(184, 213, 176, 0.2); border-radius: 24px;
+            display: flex; align-items: center; justify-content: center;
+            margin: 0 auto 25px; font-size: 32px; color: var(--stream-green);
+        }
+
+        .input-group { position: relative; margin-bottom: 20px; text-align: left; }
+        .input-group i { position: absolute; left: 22px; top: 50%; transform: translateY(-50%); color: rgba(255,255,255,0.2); }
+        
+        .login-input {
+            width: 100%; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08);
+            padding: 22px 22px 22px 60px; border-radius: 20px; color: #fff; font-weight: 600;
+            outline: none; transition: 0.3s; font-size: 15px;
+        }
+        .login-input:focus { border-color: var(--stream-green); background: rgba(184, 213, 176, 0.05); }
+
+        .btn-login {
+            width: 100%; background: var(--stream-green); color: var(--stream-dark);
+            padding: 22px; border-radius: 20px; font-weight: 900; font-size: 15px;
+            text-transform: uppercase; letter-spacing: 2px; margin-top: 10px;
+            border: none; cursor: pointer; transition: 0.3s;
+            box-shadow: 0 10px 25px rgba(184, 213, 176, 0.2);
+        }
+
+        /* TOAST SYSTEM */
+        #streamToast {
+            position: fixed; top: -120px; left: 50%; transform: translateX(-50%);
+            width: 90%; max-width: 350px; background: #0d1211;
+            border: 1px solid var(--stream-green); border-radius: 20px;
+            padding: 20px; z-index: 10000; transition: 0.5s;
+        }
+        #streamToast.show { top: 20px; }
+        #streamToast.error { border-color: var(--stream-red); }
+        .toast-progress { position: absolute; bottom: 0; left: 0; height: 3px; background: var(--stream-green); width: 100%; border-radius: 0 0 20px 20px; }
+        #streamToast.error .toast-progress { background: var(--stream-red); }
+    </style>
+</head>
+<body>
+
+    <div id="streamToast">
+        <div class="flex items-center gap-4">
+            <div id="toastIconBg" class="w-10 h-10 rounded-full bg-[#b8d5b0]/10 flex items-center justify-center text-[#b8d5b0]">
+                <i class="fas fa-shield-halved" id="toastIcon"></i>
+            </div>
+            <div>
+                <b class="text-[10px] uppercase tracking-widest text-[#b8d5b0]" id="toastTitle">Security Protocol</b>
+                <p id="toastMsg" class="text-xs text-white/70 font-bold">Validating...</p>
+            </div>
+        </div>
+        <div id="toastBar" class="toast-progress"></div>
+    </div>
+
+    <div class="login-card">
+        <div class="logo-box"><i class="fas fa-bolt-lightning"></i></div>
+        <h1 class="text-3xl font-black mb-2 tracking-tighter">Welcome Back</h1>
+        <p class="text-white/30 text-xs font-bold uppercase tracking-[3px] mb-10">Secure Entry Portal</p>
+
+        <div class="input-group">
+            <input type="email" id="email" class="login-input" placeholder="Protocol Email">
+            <i class="fas fa-envelope"></i>
+        </div>
+
+        <div class="input-group">
+            <input type="password" id="password" class="login-input" placeholder="Security Password">
+            <i class="fas fa-lock"></i>
+        </div>
+
+        <button onclick="handleLogin()" class="btn-login" id="loginBtn">Access Dashboard</button>
+
+        <p class="mt-8 text-white/30 text-[11px] font-bold">
+            NEW NODE? <a href="register.html" class="text-[#b8d5b0] hover:underline">CREATE ACCOUNT</a>
+        </p>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyASDlQQMoXCeMZKs5O3KmO8zuFztt8rg2E",
+            authDomain: "celeste-web1.firebaseapp.com",
+            projectId: "celeste-web1",
+            storageBucket: "celeste-web1.firebasestorage.app",
+            messagingSenderId: "905722043319",
+            appId: "1:905722043319:web:83d032bf3608b8957b2632"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+
+        window.showStreamAlert = (msg, type = 'info') => {
+            const toast = document.getElementById('streamToast');
+            document.getElementById('toastMsg').innerText = msg;
+            if(type === 'error') toast.classList.add('error'); else toast.classList.remove('error');
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 3000);
+        };
+
+        window.handleLogin = async () => {
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const btn = document.getElementById('loginBtn');
+
+            if(!email || !password) { showStreamAlert("Missing credentials", "error"); return; }
+
+            btn.innerText = "AUTHENTICATING...";
+
+            try {
+                const userCredential = await signInWithEmailAndPassword(auth, email, password);
+                const user = userCredential.user;
+
+                // CHECK PAYMENT STATUS
+                const isPaid = localStorage.getItem(`paid_${user.uid}`);
+
+                if (isPaid === "true") {
+                    showStreamAlert("Access Granted. Loading Main Node...", "info");
+                    setTimeout(() => window.location.href = 'main-dashboard.html', 1500);
+                } else {
+                    showStreamAlert("Payment Pending. Redirecting...", "info");
+                    setTimeout(() => window.location.href = 'first-dashboard.html', 1500);
+                }
+
+            } catch (error) {
+                btn.innerText = "ACCESS DASHBOARD";
+                showStreamAlert("Invalid Login Protocol", "error");
+            }
+        };
+    </script>
+</body>
+</html>
