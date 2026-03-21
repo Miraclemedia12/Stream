@@ -209,6 +209,111 @@
         projectId: "celeste-web1",
         storageBucket: "celeste-web1.firebasestorage.app",
         messagingSenderId: "905722043319",
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>REGISTER | STREAM AFRICA</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700;800&display=swap');
+
+        :root { --stream-green: #b8d5b0; --stream-dark: #0a1f1c; --stream-red: #ff4b4b; }
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; font-family: 'Plus Jakarta Sans', sans-serif; }
+        
+        body { background: var(--stream-dark); color: #fff; min-height: 100vh; display: flex; flex-direction: column; align-items: center; margin: 0; }
+
+        .topbar { width: 100%; background: var(--stream-dark); padding: 15px 5%; display: flex; flex-direction: column; align-items: center; border-bottom: 2px solid var(--stream-green); }
+        .logo-img { height: 40px; filter: brightness(0) invert(1); margin-bottom: 12px; }
+        .navbar { display: flex; justify-content: center; gap: 25px; width: 100%; }
+        .navbar a { color: #fff; text-decoration: none; font-weight: bold; font-size: 13px; text-transform: uppercase; }
+        .navbar a.active { border-bottom: 3px solid var(--stream-green); color: var(--stream-green); padding-bottom: 5px; }
+
+        /* PROFESSIONAL TOAST */
+        #streamToast {
+            position: fixed; top: -120px; left: 50%; transform: translateX(-50%);
+            width: 90%; max-width: 350px; background: #0d1211;
+            border: 1px solid var(--stream-green); border-radius: 20px;
+            padding: 20px; z-index: 10000; transition: 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.5);
+        }
+        #streamToast.show { top: 20px; }
+        #streamToast.error { border-color: var(--stream-red); }
+        .toast-progress { position: absolute; bottom: 0; left: 0; height: 3px; background: var(--stream-green); width: 100%; border-radius: 0 0 20px 20px; }
+        #streamToast.error .toast-progress { background: var(--stream-red); }
+
+        .register-container {
+            width: 95%; max-width: 450px; margin: 30px auto;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(184, 213, 176, 0.2); border-radius: 25px;
+            padding: 35px 25px;
+        }
+
+        .form-group { margin-bottom: 20px; position: relative; }
+        .form-group label { display: block; margin-bottom: 8px; font-size: 11px; font-weight: 800; color: var(--stream-green); text-transform: uppercase; }
+        .form-group input { width: 100%; padding: 15px; border: 1px solid rgba(184, 213, 176, 0.2); border-radius: 12px; background: rgba(255, 255, 255, 0.03); color: #fff; outline: none; }
+        
+        .eye-icon { position: absolute; right: 15px; top: 42px; color: rgba(255,255,255,0.3); cursor: pointer; font-size: 18px; }
+        .register-button { width: 100%; padding: 18px; background: var(--stream-green); color: var(--stream-dark); border-radius: 12px; font-weight: 900; text-transform: uppercase; border: none; }
+        .login-link { display: block; text-align: center; margin-top: 20px; font-size: 14px; color: #fff; text-decoration: none; }
+        .login-link span { color: var(--stream-green); font-weight: bold; }
+    </style>
+</head>
+<body>
+
+<div id="streamToast">
+    <div class="flex items-center gap-4">
+        <div id="toastIconBg" class="w-10 h-10 rounded-full bg-[#b8d5b0]/10 flex items-center justify-center text-[#b8d5b0]">
+            <i class="fas fa-shield-halved" id="toastIcon"></i>
+        </div>
+        <div>
+            <b class="text-[10px] uppercase tracking-widest text-[#b8d5b0]" id="toastTitle">Security Protocol</b>
+            <p id="toastMsg" class="text-xs text-white/70 font-bold">Validating...</p>
+        </div>
+    </div>
+    <div id="toastBar" class="toast-progress"></div>
+</div>
+
+<header class="topbar">
+    <img src="logo.png" alt="Stream Logo" class="logo-img">
+    <div class="navbar">
+        <a href="index.html">HOME</a>
+        <a href="reward.html">REWARD</a>
+        <a href="register.html" class="active">REGISTER</a>
+    </div>
+</header>
+
+<div class="register-container">
+    <h1 class="text-center font-black text-2xl uppercase mb-8">Create Account</h1>
+    <form id="registration-form">
+        <div class="form-group"><label>Full Name</label><input type="text" id="full-name" placeholder="Miracle Okon" required></div>
+        <div class="form-group"><label>Username</label><input type="text" id="username" placeholder="Choose username" required></div>
+        <div class="form-group"><label>Email Address</label><input type="email" id="email" placeholder="email@example.com" required></div>
+        <div class="form-group"><label>Phone Number</label><input type="tel" id="phone-number" placeholder="WhatsApp Number" required></div>
+        <div class="form-group">
+            <label>Password</label>
+            <input type="password" id="password" required>
+            <i class="fas fa-eye eye-icon" id="togglePassword"></i>
+        </div>
+        
+        <button type="submit" id="reg-btn" class="register-button">REGISTER</button>
+        <a href="login.html" class="login-link">Already have an account? <span>Login</span></a>
+    </form>
+</div>
+
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
+    import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js";
+    import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyASDlQQMoXCeMZKs5O3KmO8zuFztt8rg2E",
+        authDomain: "celeste-web1.firebaseapp.com",
+        projectId: "celeste-web1",
+        storageBucket: "celeste-web1.firebasestorage.app",
+        messagingSenderId: "905722043319",
         appId: "1:905722043319:web:83d032bf3608b8957b2632"
     };
 
@@ -216,107 +321,80 @@
     const auth = getAuth(app);
     const db = getFirestore(app);
 
-    const streamData = {
-        "uganda": { name: "Uganda", bank: "Airtel Uganda", number: "0708771078", holder: "ARINDA WINFRED", amount: "65,000 UGX" },
-        "south_africa": { name: "South Africa", bank: "STANDARD BANK", number: "10247413028", holder: "E K Dlamini", amount: "R350" },
-        "nigeria": { name: "Nigeria", bank: "Kuda", number: "3003439402", holder: "MORRISH M ENTERPRISE", amount: "₦15,000" },
-        "ghana": { name: "Ghana", bank: "MTN Mobile Money", number: "0534550779", holder: "Kingsley Annor", amount: "200 GHS" },
-        "cameroon": { name: "Cameroon", bank: "MTN Mobile money", number: "670312294", holder: "MARGARET NUYIN", amount: "12,000 XAF" },
-        "kenya": { name: "Kenya", bank: "MPESA", number: "0702552808", holder: "Rose Cherono", amount: "2,800 KSH" }
-    };
-
-    function setupUI(adminData = null) {
-        const selected = localStorage.getItem('selected_country') || 'nigeria';
-        const data = streamData[selected];
+    // TOAST SYSTEM
+    window.showStreamAlert = (msg, type = 'info') => {
+        const toast = document.getElementById('streamToast');
+        const title = document.getElementById('toastTitle');
+        document.getElementById('toastMsg').innerText = msg;
         
-        if (data) {
-            document.getElementById('country-name-label').innerText = data.name;
-            document.getElementById('bank-name-display').innerText = data.bank;
-            document.getElementById('db-number').innerText = data.number;
-            document.getElementById('account-name-display').innerText = data.holder;
-            document.getElementById('display-amount').innerText = data.amount;
+        if(type === 'error') {
+            toast.classList.add('error');
+            title.innerText = "SECURITY BREACH";
+        } else {
+            toast.classList.remove('error');
+            title.innerText = "SYSTEM PROTOCOL";
+        }
 
-            if(selected === 'nigeria' && adminData) {
-                if(adminData.nigeriaBank) document.getElementById('bank-name-display').innerText = adminData.nigeriaBank;
-                if(adminData.nigeriaNumber) document.getElementById('db-number').innerText = adminData.nigeriaNumber;
-                if(adminData.nigeriaHolder) document.getElementById('account-name-display').innerText = adminData.nigeriaHolder;
-                if(adminData.nigeriaAmount) document.getElementById('display-amount').innerText = adminData.nigeriaAmount;
+        toast.classList.add('show');
+        let width = 100;
+        const interval = setInterval(() => {
+            width -= 2;
+            document.getElementById('toastBar').style.width = width + '%';
+            if (width <= 0) {
+                clearInterval(interval);
+                toast.classList.remove('show');
+                setTimeout(() => { document.getElementById('toastBar').style.width = '100%'; }, 500);
             }
-        }
-    }
+        }, 60);
+    };
 
-    async function initPage() {
-        setupUI();
+    // EYE TOGGLE
+    document.getElementById('togglePassword').addEventListener('click', function() {
+        const passInput = document.getElementById('password');
+        const type = passInput.getAttribute('type') === 'password' ? 'text' : 'password';
+        passInput.setAttribute('type', type);
+        this.classList.toggle('fa-eye-slash');
+    });
+
+    document.getElementById('registration-form').addEventListener('submit', async function(e) {
+        e.preventDefault();
+        const btn = document.getElementById('reg-btn');
+        btn.disabled = true;
+        btn.innerText = "INITIALIZING...";
+
+        const fullName = document.getElementById('full-name').value;
+        const userName = document.getElementById('username').value;
+        const email = document.getElementById('email').value;
+        const phone = document.getElementById('phone-number').value;
+        const password = document.getElementById('password').value;
+
         try {
-            await signInAnonymously(auth);
-            onSnapshot(doc(db, "configs", "main"), (snap) => {
-                if(snap.exists()) setupUI(snap.data());
+            const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+            const user = userCredential.user;
+
+            localStorage.setItem(`paid_${user.uid}`, 'false');
+            localStorage.setItem(`legalName_${user.uid}`, fullName);
+
+            await setDoc(doc(db, "users", user.uid), {
+                fullName, username: userName, email, phone,
+                paidStatus: false, balance: 0,
+                regDate: new Date().toLocaleDateString()
             });
-        } catch(e) { console.error("Cloud Error:", e); }
-    }
 
-    window.onload = initPage;
+            showStreamAlert("Node Created! Redirecting...", "info");
+            setTimeout(() => { window.location.href = 'first-dashboard.html'; }, 2000);
 
-    window.openUploadModal = () => document.getElementById('upload-modal').style.display = 'flex';
-    window.closeUploadModal = () => document.getElementById('upload-modal').style.display = 'none';
-    window.handleFileSelect = () => {
-        const file = document.getElementById('receipt-input').files[0];
-        if (file) {
-            document.getElementById('file-name').innerText = file.name;
-            document.getElementById('verify-btn').classList.remove('opacity-30', 'pointer-events-none');
+        } catch (error) {
+            btn.disabled = false;
+            btn.innerText = "REGISTER";
+            
+            let errorMsg = "Registration Failed";
+            if(error.code === 'auth/email-already-in-use') errorMsg = "Email already linked to an account, proceed to login";
+            if(error.code === 'auth/weak-password') errorMsg = "Security key too weak";
+            
+            showStreamAlert(errorMsg, "error");
         }
-    };
-
-    window.startVerification = () => {
-        closeUploadModal();
-        document.getElementById('overlay').style.display = 'flex';
-        setTimeout(() => {
-            document.getElementById('loader-content').classList.add('hidden');
-            document.getElementById('success-content').classList.remove('hidden');
-            setTimeout(() => { 
-                // FIXED REDIRECT TO dashboard.html
-                window.location.href = 'dashboard.html'; 
-            }, 3000);
-        }, 12000);
-    };
-
-    window.copyNum = () => {
-        const n = document.getElementById('db-number').innerText;
-        navigator.clipboard.writeText(n);
-        const btn = document.querySelector('.bank-details-wrapper');
-        btn.style.opacity = "0.5";
-        setTimeout(() => btn.style.opacity = "1", 200);
-    };
-
-    let sec = 600;
-    setInterval(() => {
-        if(sec <= 0) return; sec--;
-        document.getElementById('timer').innerText = `${Math.floor(sec/60)}:${(sec%60).toString().padStart(2,'0')}`;
-    }, 1000);
-
-    const activities = [
-        { name: "Ayo M.", loc: "Lagos", amt: "₦15,000" },
-        { name: "Kofi A.", loc: "Accra", amt: "200 GHS" },
-        { name: "Blessing W.", loc: "Kampala", amt: "65,000 UGX" },
-        { name: "Zanele D.", loc: "Joburg", amt: "R350" },
-        { name: "Musa K.", loc: "Nairobi", amt: "2,800 KSH" },
-        { name: "Chidi E.", loc: "Enugu", amt: "₦15,000" },
-        { name: "Sarah O.", loc: "Abuja", amt: "₦15,000" },
-        { name: "David T.", loc: "Kumasi", amt: "200 GHS" },
-        { name: "Grace L.", loc: "Port Harcourt", amt: "₦15,000" },
-        { name: "Ibrahim Y.", loc: "Kano", amt: "₦15,000" }
-    ];
-
-    let cur = 0;
-    setInterval(() => {
-        const item = activities[cur];
-        const popup = document.getElementById('activity-popup');
-        document.getElementById('activity-text').innerText = `${item.name} activated for ${item.amt}`;
-        document.getElementById('activity-sub').innerText = `${item.loc} • Verified`;
-        popup.classList.add('show');
-        setTimeout(() => popup.classList.remove('show'), 4000);
-        cur = (cur + 1) % activities.length;
-    }, 8000);
+    });
 </script>
 </body>
 </html>
