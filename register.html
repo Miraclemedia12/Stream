@@ -110,7 +110,20 @@
             text-transform: uppercase;
         }
 
-        /* ACTIVITY FEED NOTIFICATION */
+        .login-link {
+            display: block;
+            text-align: center;
+            margin-top: 20px;
+            font-size: 14px;
+            color: #ffffff;
+            text-decoration: none;
+        }
+
+        .login-link span {
+            color: #b8d5b0;
+            font-weight: bold;
+        }
+
         .activity-feed-container {
             position: fixed; 
             top: 20px; 
@@ -177,6 +190,8 @@
             <input type="password" id="password" placeholder="Min 8 characters" required>
         </div>
         <button type="submit" id="reg-btn" class="register-button">REGISTER</button>
+        
+        <a href="login.html" class="login-link">Already have an account? <span>Login</span></a>
     </form>
 </div>
 
@@ -218,7 +233,7 @@
     let isRegistering = false;
 
     function cycleActivityFeed() {
-        if (isRegistering) return; // Don't cycle if we are showing registration status
+        if (isRegistering) return;
         
         const activityElement = document.getElementById('activity-text');
         const feedContainer = document.getElementById('activity-feed');
@@ -257,11 +272,9 @@
         const password = document.getElementById('password').value;
 
         try {
-            // 1. Create User
             const userCredential = await createUserWithEmailAndPassword(auth, email, password);
             const user = userCredential.user;
 
-            // 2. Save to Firestore
             await setDoc(doc(db, "users", user.uid), {
                 fullName,
                 username: userName,
@@ -281,7 +294,12 @@
             btn.disabled = false;
             btn.innerText = "REGISTER";
             feed.classList.remove('show-activity');
-            alert(error.message);
+
+            if (error.code === 'auth/email-already-in-use') {
+                alert("This email is already registered. Please try logging in or use a different email.");
+            } else {
+                alert("Registration failed: " + error.message);
+            }
         }
     });
 
