@@ -22,12 +22,20 @@
         #streamToast.show { top: 20px; }
         #streamToast.error { border-color: var(--stream-red); }
 
-        /* RECEIPT MODAL */
+        /* PROFESSIONAL RECEIPT MODAL */
         #receiptModal { 
             position: fixed; inset: 0; background: rgba(0,0,0,0.95); 
             display: none; align-items: center; justify-content: center; z-index: 5000; padding: 20px;
         }
-        .receipt-paper { background: #fff; color: #000; width: 100%; max-width: 350px; border-radius: 24px; padding: 30px; }
+        .receipt-paper { 
+            background: #fff; color: #000; width: 100%; max-width: 360px; 
+            border-radius: 30px; padding: 35px 30px; position: relative;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+        }
+        .receipt-paper::before, .receipt-paper::after {
+            content: ""; position: absolute; bottom: -10px; left: 5%; width: 90%;
+            height: 20px; background: #fff; z-index: -1; filter: blur(10px); opacity: 0.3;
+        }
 
         /* LEDGER STYLING */
         .history-card {
@@ -64,23 +72,44 @@
 
     <div id="receiptModal">
         <div class="receipt-paper">
-            <div class="text-center border-b border-dashed border-gray-300 pb-4 mb-4">
-                <h2 class="font-black text-xl tracking-tighter">STREAM AFRICA</h2>
-                <p class="text-[10px] text-orange-500 uppercase font-bold tracking-widest">Awaiting Disbursement</p>
+            <div class="text-center mb-6">
+                <div class="w-16 h-16 bg-green-100 text-green-600 rounded-full flex items-center justify-center mx-auto mb-4 text-2xl">
+                    <i class="fas fa-check-double"></i>
+                </div>
+                <h2 class="font-black text-2xl tracking-tighter uppercase">Withdrawal Successful</h2>
+                <p class="text-[10px] text-gray-400 font-bold tracking-widest mt-1" id="r-datetime">MARCH 22, 2026 • 02:00 AM</p>
             </div>
-            <div class="space-y-3 mb-6">
-                <div class="flex justify-between text-[11px]"><span class="text-gray-400">Ref ID:</span><span id="r-ref" class="font-bold">...</span></div>
-                <div class="flex justify-between text-[11px]"><span class="text-gray-400">Payee:</span><span id="r-user" class="font-bold uppercase">...</span></div>
-                <div class="flex justify-between text-[11px]"><span class="text-gray-400">Gateway:</span><span id="r-bank" class="font-bold text-right w-1/2">...</span></div>
+
+            <div class="space-y-4 border-t border-b border-dashed border-gray-200 py-6 mb-6">
+                <div class="flex justify-between items-center">
+                    <span class="text-[11px] font-bold text-gray-400 uppercase">Reference</span>
+                    <span id="r-ref" class="text-[11px] font-black font-mono">STRM-AF-9928-X021</span>
+                </div>
+                <div class="flex justify-between items-center">
+                    <span class="text-[11px] font-bold text-gray-400 uppercase">Beneficiary</span>
+                    <span id="r-user" class="text-[11px] font-black uppercase">...</span>
+                </div>
+                <div class="flex justify-between items-center">
+                    <span class="text-[11px] font-bold text-gray-400 uppercase">Bank Detail</span>
+                    <span id="r-bank" class="text-[11px] font-black text-right truncate ml-4">...</span>
+                </div>
+                <div class="flex justify-between items-center">
+                    <span class="text-[11px] font-bold text-gray-400 uppercase">Status</span>
+                    <span class="text-[10px] bg-orange-100 text-orange-600 px-2 py-1 rounded font-black uppercase">Pending Verification</span>
+                </div>
             </div>
-            <div class="bg-gray-100 p-5 rounded-2xl text-center mb-6">
-                <h3 class="text-3xl font-black" id="r-amt">₦0.00</h3>
+
+            <div class="bg-gray-50 p-6 rounded-2xl text-center mb-8">
+                <p class="text-[10px] font-bold text-gray-400 uppercase mb-1">Amount Debited</p>
+                <h3 class="text-4xl font-black" id="r-amt">₦0.00</h3>
             </div>
+
             <div id="modal-actions">
-                <button onclick="finalConfirm()" class="w-full bg-[#b8d5b0] text-black py-5 rounded-2xl font-black text-xs uppercase tracking-widest mb-3">Confirm Payout</button>
-                <button onclick="document.getElementById('receiptModal').style.display='none'" class="w-full bg-gray-100 text-gray-400 py-4 rounded-2xl font-bold text-[10px] uppercase">Cancel</button>
+                <button onclick="finalConfirm()" class="w-full bg-black text-white py-5 rounded-2xl font-black text-xs uppercase tracking-widest mb-3 shadow-lg">Confirm & Proceed</button>
+                <button onclick="document.getElementById('receiptModal').style.display='none'" class="w-full text-gray-400 py-2 rounded-2xl font-bold text-[10px] uppercase">Cancel Request</button>
             </div>
-            <button id="done-btn" onclick="window.location.href='main-dashboard.html'" class="hidden w-full bg-black text-white py-5 rounded-2xl font-black text-xs uppercase tracking-widest">Return to Wallet</button>
+            
+            <button id="done-btn" onclick="window.location.href='main-dashboard.html'" class="hidden w-full bg-[#0a1f1c] text-white py-5 rounded-2xl font-black text-xs uppercase tracking-widest">Return to Dashboard</button>
         </div>
     </div>
 
@@ -153,35 +182,36 @@
 
         window.handleWithdrawal = () => {
             const amount = parseInt(document.getElementById('w-amount').value);
-            
             if (!userData?.bankName) return showStreamAlert("Link bank in profile first", "error");
+            if (amount < 12000) return showStreamAlert("Minimum payout is ₦12,000", "error");
+            if (amount > currentBalance) return showStreamAlert("Exceeds available balance", "error");
             
-            if (amount < 12000) {
-                return showStreamAlert("Minimum payout is ₦12,000", "error");
-            }
+            // Set Receipt Data
+            const now = new Date();
+            const dateStr = now.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+            const timeStr = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true });
             
-            if (amount > currentBalance) {
-                return showStreamAlert("Exceeds available balance", "error");
-            }
-            
-            document.getElementById('r-user').innerText = userData.fullName || "MEMBER";
-            document.getElementById('r-bank').innerText = `${userData.bankName} - ${userData.accountNumber}`;
+            document.getElementById('r-datetime').innerText = `${dateStr} • ${timeStr}`.toUpperCase();
+            document.getElementById('r-user').innerText = userData.fullName || "STREAM MEMBER";
+            document.getElementById('r-bank').innerText = `${userData.bankName} (${userData.accountNumber})`;
             document.getElementById('r-amt').innerText = "₦" + amount.toLocaleString();
-            document.getElementById('r-ref').innerText = "STRM-" + Math.random().toString(36).substr(2, 6).toUpperCase();
+            
+            // Generate longer professional Ref
+            const randomPart = Math.random().toString(36).substr(2, 8).toUpperCase();
+            document.getElementById('r-ref').innerText = `STRM-AF-${randomPart}`;
+            
             document.getElementById('receiptModal').style.display = 'flex';
         };
 
         window.finalConfirm = () => {
             const amount = document.getElementById('r-amt').innerText;
             const ref = document.getElementById('r-ref').innerText;
-            
-            // 1. Save locally for history display
             const record = { amount, ref, date: new Date().toLocaleDateString(), status: 'Pending' };
             let history = JSON.parse(localStorage.getItem(`history_${currentUser.uid}`)) || [];
             history.unshift(record);
             localStorage.setItem(`history_${currentUser.uid}`, JSON.stringify(history));
 
-            // 2. SET THE SUPPORT LOCK FLAG FOR DASHBOARD
+            // Set Lock Flag
             localStorage.setItem(`needs_support_verify_${currentUser.uid}`, "true");
 
             document.getElementById('modal-actions').classList.add('hidden');
