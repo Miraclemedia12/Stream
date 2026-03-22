@@ -12,7 +12,7 @@
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; font-family: 'Plus Jakarta Sans', sans-serif; }
         body { background-color: var(--stream-dark); color: #fff; margin: 0; padding: 15px; min-height: 100vh; overflow-x: hidden; }
 
-        /* TOAST & MODALS */
+        /* TOAST NOTIFICATION */
         #streamToast {
             position: fixed; top: -120px; left: 50%; transform: translateX(-50%);
             width: 90%; max-width: 350px; background: #0d1211;
@@ -20,13 +20,16 @@
             padding: 20px; z-index: 10000; transition: 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
         #streamToast.show { top: 20px; }
+        #streamToast.error { border-color: var(--stream-red); }
+
+        /* RECEIPT MODAL */
         #receiptModal { 
             position: fixed; inset: 0; background: rgba(0,0,0,0.95); 
             display: none; align-items: center; justify-content: center; z-index: 5000; padding: 20px;
         }
         .receipt-paper { background: #fff; color: #000; width: 100%; max-width: 350px; border-radius: 24px; padding: 30px; }
 
-        /* HISTORY STYLING */
+        /* LEDGER STYLING */
         .history-card {
             background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05);
             border-radius: 24px; padding: 20px; margin-top: 30px;
@@ -35,12 +38,10 @@
             display: flex; justify-content: space-between; align-items: center;
             padding: 15px 0; border-bottom: 1px solid rgba(255,255,255,0.05);
         }
-        .history-item:last-child { border-bottom: none; }
         .status-pill {
             font-size: 9px; font-weight: 900; padding: 4px 10px; border-radius: 100px;
-            text-transform: uppercase; letter-spacing: 1px;
+            text-transform: uppercase; background: rgba(255, 165, 0, 0.1); color: #ffa500;
         }
-        .status-pending { background: rgba(255, 165, 0, 0.1); color: #ffa500; }
 
         .glass-input { 
             background: rgba(255,255,255,0.03); border: 1px solid rgba(184, 213, 176, 0.1);
@@ -65,21 +66,21 @@
         <div class="receipt-paper">
             <div class="text-center border-b border-dashed border-gray-300 pb-4 mb-4">
                 <h2 class="font-black text-xl tracking-tighter">STREAM AFRICA</h2>
-                <p id="receipt-status" class="text-[10px] text-orange-500 uppercase font-bold tracking-widest">Pending Verification</p>
+                <p class="text-[10px] text-orange-500 uppercase font-bold tracking-widest">Awaiting Disbursement</p>
             </div>
             <div class="space-y-3 mb-6">
-                <div class="flex justify-between text-[11px]"><span class="text-gray-400">Ref:</span><span id="r-ref" class="font-bold">...</span></div>
+                <div class="flex justify-between text-[11px]"><span class="text-gray-400">Ref ID:</span><span id="r-ref" class="font-bold">...</span></div>
                 <div class="flex justify-between text-[11px]"><span class="text-gray-400">Payee:</span><span id="r-user" class="font-bold uppercase">...</span></div>
-                <div class="flex justify-between text-[11px]"><span class="text-gray-400">Bank:</span><span id="r-bank" class="font-bold text-right w-1/2">...</span></div>
+                <div class="flex justify-between text-[11px]"><span class="text-gray-400">Gateway:</span><span id="r-bank" class="font-bold text-right w-1/2">...</span></div>
             </div>
             <div class="bg-gray-100 p-5 rounded-2xl text-center mb-6">
                 <h3 class="text-3xl font-black" id="r-amt">₦0.00</h3>
             </div>
             <div id="modal-actions">
                 <button onclick="finalConfirm()" class="w-full bg-[#b8d5b0] text-black py-5 rounded-2xl font-black text-xs uppercase tracking-widest mb-3">Confirm Payout</button>
-                <button onclick="document.getElementById('receiptModal').style.display='none'" class="w-full bg-gray-50 text-gray-400 py-4 rounded-2xl font-bold text-[10px] uppercase">Cancel</button>
+                <button onclick="document.getElementById('receiptModal').style.display='none'" class="w-full bg-gray-100 text-gray-400 py-4 rounded-2xl font-bold text-[10px] uppercase">Cancel</button>
             </div>
-            <button id="done-btn" onclick="location.reload()" class="hidden w-full bg-black text-white py-5 rounded-2xl font-black text-xs uppercase tracking-widest">Done</button>
+            <button id="done-btn" onclick="location.reload()" class="hidden w-full bg-black text-white py-5 rounded-2xl font-black text-xs uppercase tracking-widest">Return to Wallet</button>
         </div>
     </div>
 
@@ -90,7 +91,7 @@
     </div>
 
     <div class="bg-[#b8d5b0]/5 border border-[#b8d5b0]/20 rounded-[35px] p-10 text-center mb-8">
-        <p class="text-[10px] font-black text-[#b8d5b0] uppercase tracking-[3px] mb-2">Available Balance</p>
+        <p class="text-[10px] font-black text-[#b8d5b0] uppercase tracking-[3px] mb-2">Withdrawable Balance</p>
         <h2 class="text-5xl font-black" id="currentBalDisplay">₦12,000.00</h2>
     </div>
 
@@ -98,18 +99,15 @@
         <input type="number" id="w-amount" class="glass-input" value="12000">
         <div class="bg-white/5 border border-white/10 rounded-3xl p-6 flex items-center gap-5">
             <div class="w-14 h-14 bg-[#b8d5b0]/10 rounded-2xl flex items-center justify-center text-[#b8d5b0] text-2xl"><i class="fas fa-university"></i></div>
-            <div><p id="bank-status" class="text-xs font-black text-white/80">Loading Bank...</p></div>
+            <div><p id="bank-status" class="text-xs font-black text-white/80">Syncing Node...</p></div>
         </div>
-        <button onclick="handleWithdrawal()" class="w-full bg-[#b8d5b0] text-[#0a1f1c] py-6 rounded-[28px] font-black text-sm uppercase tracking-widest">Proceed Payout</button>
+        <button onclick="handleWithdrawal()" class="w-full bg-[#b8d5b0] text-[#0a1f1c] py-6 rounded-[28px] font-black text-sm uppercase tracking-widest shadow-xl shadow-[#b8d5b0]/5">Initiate Payout</button>
     </div>
 
     <div class="history-card">
-        <div class="flex items-center justify-between mb-5 px-2">
-            <h3 class="text-[10px] font-black uppercase tracking-[2px] text-white/40">Transaction Ledger</h3>
-            <i class="fas fa-history text-white/20"></i>
-        </div>
+        <h3 class="text-[10px] font-black uppercase tracking-[2px] text-white/40 mb-5 px-2">Transaction History</h3>
         <div id="history-list" class="space-y-2">
-            <p id="no-history" class="text-center py-5 text-white/10 text-[10px] font-bold uppercase tracking-widest">No Recent Activity</p>
+            <p id="no-history" class="text-center py-5 text-white/10 text-[10px] font-bold uppercase tracking-widest">No Records Found</p>
         </div>
     </div>
 
@@ -125,6 +123,7 @@
 
         let currentUser = null;
         let userData = null;
+        const currentBalance = 12000; // Total fixed balance
 
         onAuthStateChanged(auth, async (user) => {
             if (user) {
@@ -132,7 +131,7 @@
                 const snap = await getDoc(doc(db, "users", user.uid));
                 if (snap.exists()) {
                     userData = snap.data();
-                    document.getElementById('bank-status').innerText = userData.bankName ? `${userData.bankName} (${userData.accountNumber})` : "Bank Not Set";
+                    document.getElementById('bank-status').innerText = userData.bankName ? `${userData.bankName} (${userData.accountNumber})` : "Bank Details Missing";
                 }
                 loadLocalHistory();
             } else { window.location.href = 'index.html'; }
@@ -141,14 +140,31 @@
         window.showStreamAlert = (msg, type = 'info') => {
             const toast = document.getElementById('streamToast');
             document.getElementById('toastMsg').innerText = msg;
+            if(type === 'error') {
+                toast.classList.add('error');
+                document.getElementById('toastTitle').innerText = "SECURITY ALERT";
+            } else {
+                toast.classList.remove('error');
+                document.getElementById('toastTitle').innerText = "SYSTEM PROTOCOL";
+            }
             toast.classList.add('show');
             setTimeout(() => toast.classList.remove('show'), 3000);
         };
 
         window.handleWithdrawal = () => {
             const amount = parseInt(document.getElementById('w-amount').value);
+            
             if (!userData?.bankName) return showStreamAlert("Link bank in profile first", "error");
-            if (amount < 12000) return showStreamAlert("Minimum payout is ₦12,000", "error");
+            
+            // BLOCK 1: BELOW MINIMUM
+            if (amount < 12000) {
+                return showStreamAlert("Minimum payout is ₦12,000", "error");
+            }
+            
+            // BLOCK 2: ABOVE BALANCE
+            if (amount > currentBalance) {
+                return showStreamAlert("Exceeds available balance", "error");
+            }
             
             document.getElementById('r-user').innerText = userData.fullName || "MEMBER";
             document.getElementById('r-bank').innerText = `${userData.bankName} - ${userData.accountNumber}`;
@@ -160,31 +176,27 @@
         window.finalConfirm = () => {
             const amount = document.getElementById('r-amt').innerText;
             const ref = document.getElementById('r-ref').innerText;
-            
-            // SAVE TO LOCAL HISTORY
             const record = { amount, ref, date: new Date().toLocaleDateString(), status: 'Pending' };
             let history = JSON.parse(localStorage.getItem(`history_${currentUser.uid}`)) || [];
             history.unshift(record);
             localStorage.setItem(`history_${currentUser.uid}`, JSON.stringify(history));
 
-            document.getElementById('receipt-status').innerText = "Payout Queued";
             document.getElementById('modal-actions').classList.add('hidden');
             document.getElementById('done-btn').classList.remove('hidden');
-            showStreamAlert("Transaction Logged Successfully");
+            showStreamAlert("Payout Logged Successfully");
         };
 
         function loadLocalHistory() {
             const history = JSON.parse(localStorage.getItem(`history_${currentUser.uid}`)) || [];
-            const list = document.getElementById('history-list');
             if(history.length > 0) {
                 document.getElementById('no-history').style.display = 'none';
-                list.innerHTML = history.map(item => `
+                document.getElementById('history-list').innerHTML = history.map(item => `
                     <div class="history-item">
                         <div>
                             <p class="text-[11px] font-black text-white/90">${item.amount}</p>
                             <p class="text-[9px] text-white/30 font-bold">${item.date} • ${item.ref}</p>
                         </div>
-                        <span class="status-pill status-pending">${item.status}</span>
+                        <span class="status-pill">Pending</span>
                     </div>
                 `).join('');
             }
