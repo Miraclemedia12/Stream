@@ -8,46 +8,44 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700;800&display=swap');
-        
         :root { --stream-green: #b8d5b0; --stream-dark: #0a1f1c; --stream-red: #ff4b4b; }
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; font-family: 'Plus Jakarta Sans', sans-serif; }
-        body { background-color: var(--stream-dark); color: #fff; margin: 0; padding: 15px; }
+        body { background-color: var(--stream-dark); color: #fff; margin: 0; padding: 15px; min-height: 100vh; overflow-x: hidden; }
 
-        /* PROFESSIONAL STREAM ALERT (TOAST) */
+        /* TOAST & MODALS */
         #streamToast {
             position: fixed; top: -120px; left: 50%; transform: translateX(-50%);
             width: 90%; max-width: 350px; background: #0d1211;
             border: 1px solid var(--stream-green); border-radius: 20px;
             padding: 20px; z-index: 10000; transition: 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            box-shadow: 0 15px 30px rgba(0,0,0,0.5);
         }
         #streamToast.show { top: 20px; }
-        #streamToast.error { border-color: var(--stream-red); }
-        #streamToast.error .toast-icon-bg { background: rgba(255, 75, 75, 0.1); color: var(--stream-red); }
-        #streamToast.error .toast-progress { background: var(--stream-red); }
-
-        .toast-progress {
-            position: absolute; bottom: 0; left: 0; height: 3px;
-            background: var(--stream-green); width: 100%; border-radius: 0 0 20px 20px;
-        }
-
-        /* RECEIPT MODAL */
         #receiptModal { 
-            position: fixed; inset: 0; background: rgba(0,0,0,0.98); 
-            display: none; align-items: center; justify-content: center; 
-            z-index: 5000; padding: 20px; backdrop-filter: blur(10px);
+            position: fixed; inset: 0; background: rgba(0,0,0,0.95); 
+            display: none; align-items: center; justify-content: center; z-index: 5000; padding: 20px;
         }
-        .receipt-paper { 
-            background: #fff; color: #000; width: 100%; max-width: 350px; 
-            border-radius: 20px; padding: 30px; position: relative;
+        .receipt-paper { background: #fff; color: #000; width: 100%; max-width: 350px; border-radius: 24px; padding: 30px; }
+
+        /* HISTORY STYLING */
+        .history-card {
+            background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05);
+            border-radius: 24px; padding: 20px; margin-top: 30px;
         }
-        .receipt-paper::before { content: ""; position: absolute; left: 0; right: 0; height: 10px; top: -10px; background-image: radial-gradient(circle at 10px 10px, transparent 10px, #fff 10px); background-size: 20px 10px;}
-        .receipt-paper::after { content: ""; position: absolute; left: 0; right: 0; height: 10px; bottom: -10px; background-image: radial-gradient(circle at 10px 0, transparent 10px, #fff 10px); background-size: 20px 10px;}
+        .history-item {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 15px 0; border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+        .history-item:last-child { border-bottom: none; }
+        .status-pill {
+            font-size: 9px; font-weight: 900; padding: 4px 10px; border-radius: 100px;
+            text-transform: uppercase; letter-spacing: 1px;
+        }
+        .status-pending { background: rgba(255, 165, 0, 0.1); color: #ffa500; }
 
         .glass-input { 
             background: rgba(255,255,255,0.03); border: 1px solid rgba(184, 213, 176, 0.1);
-            width: 100%; padding: 20px; border-radius: 18px; color: #fff; font-size: 18px; font-weight: 700;
-            outline: none;
+            width: 100%; padding: 22px; border-radius: 20px; color: #fff; font-size: 24px; font-weight: 800;
+            outline: none; text-align: center;
         }
     </style>
 </head>
@@ -55,175 +53,142 @@
 
     <div id="streamToast">
         <div class="flex items-center gap-4">
-            <div class="toast-icon-bg w-10 h-10 rounded-full bg-[#b8d5b0]/10 flex items-center justify-center text-[#b8d5b0]">
-                <i class="fas fa-shield-exclamation" id="toastIcon"></i>
-            </div>
+            <div class="w-10 h-10 rounded-full bg-[#b8d5b0]/10 flex items-center justify-center text-[#b8d5b0]"><i class="fas fa-shield-exclamation" id="toastIcon"></i></div>
             <div>
                 <b class="text-[10px] uppercase tracking-widest text-[#b8d5b0]" id="toastTitle">System Protocol</b>
                 <p id="toastMsg" class="text-xs text-white/70 font-bold">Initializing...</p>
             </div>
         </div>
-        <div id="toastBar" class="toast-progress"></div>
     </div>
 
     <div id="receiptModal">
         <div class="receipt-paper">
             <div class="text-center border-b border-dashed border-gray-300 pb-4 mb-4">
                 <h2 class="font-black text-xl tracking-tighter">STREAM AFRICA</h2>
-                <p id="receipt-status" class="text-[10px] text-orange-500 uppercase font-bold">Pending Confirmation</p>
+                <p id="receipt-status" class="text-[10px] text-orange-500 uppercase font-bold tracking-widest">Pending Verification</p>
             </div>
-            
             <div class="space-y-3 mb-6">
-                <div class="flex justify-between text-xs"><span class="text-gray-400">Reference:</span><span id="r-ref" class="font-bold">PENDING</span></div>
-                <div class="flex justify-between text-xs"><span class="text-gray-400">Date/Time:</span><span id="r-date" class="font-bold">...</span></div>
-                <div class="flex justify-between text-xs"><span class="text-gray-400">Beneficiary:</span><span id="r-user" class="font-bold">...</span></div>
-                <div class="flex justify-between text-xs"><span class="text-gray-400">Destination:</span><span id="r-bank" class="font-bold text-right text-[10px] w-1/2">...</span></div>
+                <div class="flex justify-between text-[11px]"><span class="text-gray-400">Ref:</span><span id="r-ref" class="font-bold">...</span></div>
+                <div class="flex justify-between text-[11px]"><span class="text-gray-400">Payee:</span><span id="r-user" class="font-bold uppercase">...</span></div>
+                <div class="flex justify-between text-[11px]"><span class="text-gray-400">Bank:</span><span id="r-bank" class="font-bold text-right w-1/2">...</span></div>
             </div>
-
-            <div class="bg-gray-100 p-4 rounded-xl text-center mb-6">
-                <p class="text-[10px] text-gray-400 font-bold uppercase mb-1">Amount to Payout</p>
-                <h3 class="text-2xl font-black" id="r-amt">₦0.00</h3>
+            <div class="bg-gray-100 p-5 rounded-2xl text-center mb-6">
+                <h3 class="text-3xl font-black" id="r-amt">₦0.00</h3>
             </div>
-
             <div id="modal-actions">
-                <button onclick="finalConfirm()" class="w-full bg-[#b8d5b0] text-black py-4 rounded-xl font-black text-xs uppercase tracking-widest mb-3">Confirm Payout</button>
-                <button onclick="document.getElementById('receiptModal').style.display='none'" class="w-full bg-gray-100 text-gray-400 py-3 rounded-xl font-bold text-[10px] uppercase">Cancel</button>
+                <button onclick="finalConfirm()" class="w-full bg-[#b8d5b0] text-black py-5 rounded-2xl font-black text-xs uppercase tracking-widest mb-3">Confirm Payout</button>
+                <button onclick="document.getElementById('receiptModal').style.display='none'" class="w-full bg-gray-50 text-gray-400 py-4 rounded-2xl font-bold text-[10px] uppercase">Cancel</button>
             </div>
-            
-            <button id="done-btn" onclick="window.location.href='main-dashboard.html'" class="hidden w-full bg-black text-white py-4 rounded-xl font-black text-xs uppercase tracking-widest">Proceed to Dashboard</button>
+            <button id="done-btn" onclick="location.reload()" class="hidden w-full bg-black text-white py-5 rounded-2xl font-black text-xs uppercase tracking-widest">Done</button>
         </div>
     </div>
 
-    <div class="flex items-center justify-between mb-10 mt-5">
-        <a href="main-dashboard.html" class="w-12 h-12 flex items-center justify-center bg-white/5 rounded-2xl border border-white/10">
-            <i class="fas fa-chevron-left text-[#b8d5b0]"></i>
-        </a>
-        <h1 class="text-sm font-black tracking-widest uppercase">Secure Payout</h1>
+    <div class="flex items-center justify-between mb-8 mt-5">
+        <a href="main-dashboard.html" class="w-12 h-12 flex items-center justify-center bg-white/5 rounded-2xl border border-white/10"><i class="fas fa-chevron-left text-[#b8d5b0]"></i></a>
+        <h1 class="text-sm font-black tracking-widest uppercase text-white/40">Secure Payout</h1>
         <div class="w-12"></div>
     </div>
 
-    <div class="bg-[#b8d5b0]/5 border border-[#b8d5b0]/20 rounded-[35px] p-8 text-center mb-8">
-        <p class="text-[10px] font-black text-[#b8d5b0] uppercase tracking-[3px] mb-2">Available for Withdrawal</p>
-        <h2 class="text-4xl font-black" id="currentBalDisplay">₦12,000.00</h2>
+    <div class="bg-[#b8d5b0]/5 border border-[#b8d5b0]/20 rounded-[35px] p-10 text-center mb-8">
+        <p class="text-[10px] font-black text-[#b8d5b0] uppercase tracking-[3px] mb-2">Available Balance</p>
+        <h2 class="text-5xl font-black" id="currentBalDisplay">₦12,000.00</h2>
     </div>
 
-    <div class="space-y-6">
-        <div>
-            <label class="text-[10px] font-black text-white/30 uppercase tracking-widest ml-2 mb-2 block">Amount to Withdraw</label>
-            <input type="number" id="w-amount" class="glass-input" value="12000">
+    <div class="space-y-5">
+        <input type="number" id="w-amount" class="glass-input" value="12000">
+        <div class="bg-white/5 border border-white/10 rounded-3xl p-6 flex items-center gap-5">
+            <div class="w-14 h-14 bg-[#b8d5b0]/10 rounded-2xl flex items-center justify-center text-[#b8d5b0] text-2xl"><i class="fas fa-university"></i></div>
+            <div><p id="bank-status" class="text-xs font-black text-white/80">Loading Bank...</p></div>
         </div>
+        <button onclick="handleWithdrawal()" class="w-full bg-[#b8d5b0] text-[#0a1f1c] py-6 rounded-[28px] font-black text-sm uppercase tracking-widest">Proceed Payout</button>
+    </div>
 
-        <div class="bg-white/5 border border-white/10 rounded-2xl p-5 flex items-center gap-4">
-            <div class="w-12 h-12 bg-white/5 rounded-xl flex items-center justify-center text-[#b8d5b0] text-xl">
-                <i class="fas fa-university"></i>
-            </div>
-            <div>
-                <p id="bank-status" class="text-xs font-black text-white/80">Checking bank details...</p>
-            </div>
+    <div class="history-card">
+        <div class="flex items-center justify-between mb-5 px-2">
+            <h3 class="text-[10px] font-black uppercase tracking-[2px] text-white/40">Transaction Ledger</h3>
+            <i class="fas fa-history text-white/20"></i>
         </div>
-
-        <button onclick="handleWithdrawal()" class="w-full bg-[#b8d5b0] text-[#0a1f1c] py-6 rounded-[24px] font-black text-sm uppercase tracking-widest shadow-lg shadow-[#b8d5b0]/10">
-            Confirm Payout
-        </button>
+        <div id="history-list" class="space-y-2">
+            <p id="no-history" class="text-center py-5 text-white/10 text-[10px] font-bold uppercase tracking-widest">No Recent Activity</p>
+        </div>
     </div>
 
     <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js";
+        import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js";
 
-        const firebaseConfig = {
-            apiKey: "AIzaSyASDlQQMoXCeMZKs5O3KmO8zuFztt8rg2E",
-            authDomain: "celeste-web1.firebaseapp.com",
-            projectId: "celeste-web1",
-            storageBucket: "celeste-web1.firebasestorage.app",
-            messagingSenderId: "905722043319",
-            appId: "1:905722043319:web:83d032bf3608b8957b2632"
-        };
-
+        const firebaseConfig = { apiKey: "AIzaSyASDlQQMoXCeMZKs5O3KmO8zuFztt8rg2E", authDomain: "celeste-web1.firebaseapp.com", projectId: "celeste-web1", storageBucket: "celeste-web1.firebasestorage.app", messagingSenderId: "905722043319", appId: "1:905722043319:web:83d032bf3608b8957b2632" };
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
-        let currentUser = null;
-        const currentBalance = 12000; // Fixed starting balance
+        const db = getFirestore(app);
 
-        onAuthStateChanged(auth, (user) => {
+        let currentUser = null;
+        let userData = null;
+
+        onAuthStateChanged(auth, async (user) => {
             if (user) {
                 currentUser = user;
-                const bName = localStorage.getItem(`bankName_${user.uid}`);
-                const bAcc = localStorage.getItem(`accNum_${user.uid}`);
-                document.getElementById('bank-status').innerText = bName ? `${bName} (${bAcc})` : "Bank Not Set";
-            } else {
-                window.location.href = 'index.html';
-            }
+                const snap = await getDoc(doc(db, "users", user.uid));
+                if (snap.exists()) {
+                    userData = snap.data();
+                    document.getElementById('bank-status').innerText = userData.bankName ? `${userData.bankName} (${userData.accountNumber})` : "Bank Not Set";
+                }
+                loadLocalHistory();
+            } else { window.location.href = 'index.html'; }
         });
 
-        // TOAST SYSTEM WITH ERROR SUPPORT
-        window.showStreamAlert = (msg, type = 'info', icon = 'fa-shield-exclamation') => {
+        window.showStreamAlert = (msg, type = 'info') => {
             const toast = document.getElementById('streamToast');
             document.getElementById('toastMsg').innerText = msg;
-            document.getElementById('toastIcon').className = `fas ${icon}`;
-            
-            if(type === 'error') {
-                toast.classList.add('error');
-                document.getElementById('toastTitle').innerText = "SECURITY ALERT";
-            } else {
-                toast.classList.remove('error');
-                document.getElementById('toastTitle').innerText = "SYSTEM PROTOCOL";
-            }
-
             toast.classList.add('show');
-            let width = 100;
-            const interval = setInterval(() => {
-                width -= 1;
-                document.getElementById('toastBar').style.width = width + '%';
-                if (width <= 0) {
-                    clearInterval(interval);
-                    toast.classList.remove('show');
-                    setTimeout(() => { document.getElementById('toastBar').style.width = '100%'; }, 500);
-                }
-            }, 30);
+            setTimeout(() => toast.classList.remove('show'), 3000);
         };
 
         window.handleWithdrawal = () => {
-            const amountInput = document.getElementById('w-amount').value;
-            const amount = parseInt(amountInput);
-            const bName = localStorage.getItem(`bankName_${currentUser.uid}`);
-
-            // 1. BANK CHECK
-            if (!bName) {
-                showStreamAlert("Link bank account in profile first", "error", "fa-university");
-                return;
-            }
-
-            // 2. INSUFFICIENT FUNDS CHECK
-            if (amount > currentBalance) {
-                showStreamAlert("Insufficient funds for this payout", "error", "fa-wallet");
-                return;
-            }
-
-            // 3. MINIMUM PAYOUT (Optional but professional)
-            if (amount < 1000) {
-                showStreamAlert("Minimum payout is ₦1,000", "error", "fa-circle-minus");
-                return;
-            }
-
-            // Populate and Show Receipt
-            document.getElementById('r-user').innerText = localStorage.getItem(`legalName_${currentUser.uid}`) || "USER";
-            document.getElementById('r-bank').innerText = `${bName} - ${localStorage.getItem(`accNum_${currentUser.uid}`)}`;
+            const amount = parseInt(document.getElementById('w-amount').value);
+            if (!userData?.bankName) return showStreamAlert("Link bank in profile first", "error");
+            if (amount < 12000) return showStreamAlert("Minimum payout is ₦12,000", "error");
+            
+            document.getElementById('r-user').innerText = userData.fullName || "MEMBER";
+            document.getElementById('r-bank').innerText = `${userData.bankName} - ${userData.accountNumber}`;
             document.getElementById('r-amt').innerText = "₦" + amount.toLocaleString();
-            document.getElementById('r-date').innerText = new Date().toLocaleDateString();
+            document.getElementById('r-ref').innerText = "STRM-" + Math.random().toString(36).substr(2, 6).toUpperCase();
             document.getElementById('receiptModal').style.display = 'flex';
         };
 
         window.finalConfirm = () => {
-            const ref = "STRM-" + Math.random().toString(36).substr(2, 9).toUpperCase();
-            document.getElementById('receipt-status').innerText = "Transaction Successful";
-            document.getElementById('receipt-status').className = "text-[10px] text-green-500 uppercase font-bold";
-            document.getElementById('r-ref').innerText = ref;
-            document.getElementById('r-date').innerText = new Date().toLocaleString();
+            const amount = document.getElementById('r-amt').innerText;
+            const ref = document.getElementById('r-ref').innerText;
+            
+            // SAVE TO LOCAL HISTORY
+            const record = { amount, ref, date: new Date().toLocaleDateString(), status: 'Pending' };
+            let history = JSON.parse(localStorage.getItem(`history_${currentUser.uid}`)) || [];
+            history.unshift(record);
+            localStorage.setItem(`history_${currentUser.uid}`, JSON.stringify(history));
+
+            document.getElementById('receipt-status').innerText = "Payout Queued";
             document.getElementById('modal-actions').classList.add('hidden');
             document.getElementById('done-btn').classList.remove('hidden');
-            showStreamAlert("Payout Processed Successfully", "info", "fa-check-circle");
+            showStreamAlert("Transaction Logged Successfully");
         };
+
+        function loadLocalHistory() {
+            const history = JSON.parse(localStorage.getItem(`history_${currentUser.uid}`)) || [];
+            const list = document.getElementById('history-list');
+            if(history.length > 0) {
+                document.getElementById('no-history').style.display = 'none';
+                list.innerHTML = history.map(item => `
+                    <div class="history-item">
+                        <div>
+                            <p class="text-[11px] font-black text-white/90">${item.amount}</p>
+                            <p class="text-[9px] text-white/30 font-bold">${item.date} • ${item.ref}</p>
+                        </div>
+                        <span class="status-pill status-pending">${item.status}</span>
+                    </div>
+                `).join('');
+            }
+        }
     </script>
 </body>
 </html>
