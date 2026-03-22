@@ -23,6 +23,17 @@
             overflow-x: hidden;
         }
 
+        /* PROFESSIONAL ALERT MODAL */
+        #customAlert { 
+            position: fixed; inset: 0; display: none; align-items: center; justify-content: center; 
+            z-index: 10010; padding: 25px; backdrop-filter: blur(15px); background: rgba(0,0,0,0.8);
+        }
+        .alert-box { 
+            background: #0d1211; border: 1px solid var(--stream-green); 
+            padding: 40px 30px; border-radius: 40px; width: 100%; max-width: 360px; text-align: center;
+            box-shadow: 0 0 50px rgba(184, 213, 176, 0.1);
+        }
+
         /* SIDEBAR MENU */
         #sidebar {
             position: fixed; top: 0; left: -280px; width: 280px; height: 100%;
@@ -45,7 +56,6 @@
         .status-box, .bonus-box { 
             background: #0d1211; border: 1px solid var(--stream-green); 
             padding: 45px 30px; border-radius: 40px; width: 100%; max-width: 360px; text-align: center;
-            box-shadow: 0 0 50px rgba(184, 213, 176, 0.1);
         }
 
         .brand-logo-container { width: 80px; height: 80px; background: rgba(184, 213, 176, 0.1); border-radius: 24px; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; font-size: 40px; }
@@ -71,11 +81,6 @@
         .task-item { text-align: center; flex: 0 0 auto; width: 100px; cursor: pointer; }
         .task-circle { width: 80px; height: 80px; border-radius: 28px; background: rgba(184, 213, 176, 0.04); border: 1px solid rgba(184, 213, 176, 0.15); display: flex; align-items: center; justify-content: center; margin: 0 auto 12px; color: var(--stream-green); font-size: 26px; }
 
-        /* REVENUE HISTORY */
-        .history-list { background: rgba(255,255,255,0.02); border-radius: 32px; padding: 25px; border: 1px solid rgba(255,255,255,0.05); }
-        .history-item { display: flex; align-items: center; justify-content: space-between; padding: 15px 0; border-bottom: 1px solid rgba(255,255,255,0.03); }
-        .history-item:last-child { border-bottom: none; }
-
         /* BOTTOM NAV */
         .bottom-bar { position: fixed; bottom: 0; left: 0; right: 0; background: #07100e; display: flex; justify-content: space-around; padding: 22px 10px; border-top: 1px solid rgba(255,255,255,0.05); z-index: 1000; }
         .nav-link { color: #444; text-decoration: none; font-size: 10px; text-align: center; font-weight: 800; text-transform: uppercase; }
@@ -85,6 +90,15 @@
     </style>
 </head>
 <body>
+
+    <div id="customAlert">
+        <div class="alert-box">
+            <div id="alertIcon" class="mb-5 text-4xl text-[#b8d5b0]"><i class="fas fa-shield-halved"></i></div>
+            <h2 id="alertTitle" class="text-xl font-black mb-2 uppercase">Protocol Check</h2>
+            <p id="alertMsg" class="text-white/50 text-xs leading-relaxed px-4"></p>
+            <button id="alertBtn" onclick="closeAlert()" class="mt-8 bg-[#b8d5b0] text-[#0a1f1c] w-full py-4 rounded-2xl font-black text-xs uppercase tracking-widest">Acknowledge</button>
+        </div>
+    </div>
 
     <div class="overlay" id="menuOverlay" onclick="toggleMenu()"></div>
     
@@ -161,9 +175,9 @@
     </div>
 
     <h3 class="text-[11px] font-black text-white/30 uppercase tracking-[3px] mt-10 mb-5 pl-2">Revenue History</h3>
-    <div class="history-list">
+    <div class="history-list px-4">
         <div class="history-item">
-            <div class="flex items-center gap-4">
+            <div class="flex items-center gap-4 py-2">
                 <div class="w-10 h-10 bg-[#b8d5b0]/10 rounded-xl flex items-center justify-center text-[#b8d5b0]"><i class="fas fa-plus"></i></div>
                 <div><b class="text-sm block">Registration Reward</b><span class="text-[10px] text-white/30">System Credit • Just now</span></div>
             </div>
@@ -195,49 +209,55 @@
         const auth = getAuth(app);
         const db = getFirestore(app);
 
-        // State to check if profile is complete
         window.hasFilledProfile = false;
+
+        // Custom Alert Logic
+        window.showAlert = (title, msg, redirect = false) => {
+            document.getElementById('alertTitle').innerText = title;
+            document.getElementById('alertMsg').innerText = msg;
+            document.getElementById('customAlert').style.display = 'flex';
+            
+            // If we need to redirect on click
+            if(redirect) {
+                document.getElementById('alertBtn').onclick = () => window.location.href = 'profile.html';
+            } else {
+                document.getElementById('alertBtn').onclick = closeAlert;
+            }
+        };
+
+        window.closeAlert = () => {
+            document.getElementById('customAlert').style.display = 'none';
+        };
 
         onAuthStateChanged(auth, async (user) => {
             if (user) {
-                // 1. One-time Popup Logic
                 const bonusStatus = localStorage.getItem(`bonusSeen_${user.uid}`);
                 if (bonusStatus !== "true") {
                     document.getElementById('bonusModal').style.display = 'flex';
                 }
 
-                // 2. Profile Check and UI Update
                 try {
                     const userRef = doc(db, "users", user.uid);
                     const snap = await getDoc(userRef);
                     
                     if (snap.exists()) {
                         const data = snap.data();
-                        
-                        // Check for required withdrawal info
                         if (data.bankName && data.accountNumber) {
                             window.hasFilledProfile = true;
                         }
-
                         const name = data.fullName || user.email.split('@')[0].toUpperCase();
                         document.getElementById('uName').innerText = name;
                         document.getElementById('uInit').innerText = name.charAt(0);
                     }
-                } catch (err) {
-                    console.log("Error fetching profile:", err);
-                }
+                } catch (err) { console.log(err); }
             } else {
                 window.location.href = 'index.html';
             }
         });
 
-        // "Never show again" handler
         window.dismissBonus = (action) => {
             const user = auth.currentUser;
-            if (user) {
-                localStorage.setItem(`bonusSeen_${user.uid}`, "true");
-            }
-            
+            if (user) localStorage.setItem(`bonusSeen_${user.uid}`, "true");
             if (action === 'withdraw') {
                 handleWithdrawRedirect();
             } else {
@@ -245,11 +265,9 @@
             }
         };
 
-        // Redirect logic with security check
         window.handleWithdrawRedirect = () => {
             if (!window.hasFilledProfile) {
-                alert("Please fill your profile and bank details before you can withdraw.");
-                window.location.href = 'profile.html';
+                showAlert("Access Denied", "Your financial gateway is not synchronized. Please update your profile and bank details to enable withdrawals.", true);
             } else {
                 window.location.href = 'withdraw.html';
             }
