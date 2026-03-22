@@ -23,63 +23,59 @@
             overflow-x: hidden;
         }
 
+        /* CUSTOM MODAL */
+        #customAlert { 
+            position: fixed; inset: 0; display: none; align-items: center; justify-content: center; 
+            z-index: 10005; padding: 25px; backdrop-filter: blur(15px); background: rgba(0,0,0,0.8);
+        }
+        .alert-box { 
+            background: #0d1211; border: 1px solid var(--stream-green); 
+            padding: 40px 30px; border-radius: 40px; width: 100%; max-width: 360px; text-align: center;
+        }
+
         /* HEADER */
         .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; padding-top: 10px; }
         .back-btn { display: flex; align-items: center; justify-content: center; background: rgba(255,255,255,0.03); border-radius: 16px; border: 1px solid rgba(255,255,255,0.05); }
 
-        /* PULSING GREEN CIRCLE WITH PROFILE ICON */
+        /* LOGO AREA */
         .logo-container { text-align: center; margin-bottom: 40px; }
         .logo-circle {
             display: inline-flex; align-items: center; justify-content: center;
-            width: 100px; height: 100px;
-            border-radius: 50%;
+            width: 100px; height: 100px; border-radius: 50%;
             border: 4px solid var(--stream-green);
-            background: rgba(184, 213, 176, 0.05);
-            margin-bottom: 20px;
-            position: relative;
-            box-shadow: 0 0 20px rgba(184, 213, 176, 0.3);
-            animation: pulse 2.5s infinite;
-            color: var(--stream-green);
-            font-size: 45px;
+            background: rgba(184, 213, 176, 0.05); margin-bottom: 20px;
+            animation: pulse 2.5s infinite; color: var(--stream-green); font-size: 45px;
         }
-        @keyframes pulse { 0% { transform: scale(1); box-shadow: 0 0 20px rgba(184, 213, 176, 0.3); } 50% { transform: scale(1.05); box-shadow: 0 0 40px rgba(184, 213, 176, 0.5); } 100% { transform: scale(1); box-shadow: 0 0 20px rgba(184, 213, 176, 0.3); } }
-        
-        .authorized-node { font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 2px; color: rgba(255,255,255,0.4); }
+        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
 
-        /* INPUTS (Pill style) */
+        /* INPUTS */
         .form-label { font-size: 11px; font-weight: 900; color: rgba(255,255,255,0.9); text-transform: uppercase; letter-spacing: 1.5px; margin-left: 20px; margin-bottom: 8px; display: block; }
-        
         .profile-pill-input {
             background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);
             width: 100%; padding: 22px 28px; border-radius: 100px; color: #fff; font-weight: 600;
             outline: none; transition: 0.3s; font-size: 15px; margin-bottom: 25px;
         }
         .profile-pill-input:focus { border-color: var(--stream-green); background: rgba(184, 213, 176, 0.05); }
-        .profile-pill-input::placeholder { color: rgba(255,255,255,0.3); font-weight: 500; }
-        .profile-pill-input:read-only { opacity: 0.6; cursor: not-allowed; border-style: dashed; }
 
-        /* FINANCIAL GATEWAY HEADER */
-        .financial-header { display: flex; align-items: center; gap: 12px; margin-top: 40px; margin-bottom: 25px; color: var(--stream-green); }
-        .financial-header i { font-size: 18px; }
-        .financial-header span { font-size: 16px; font-weight: 900; text-transform: uppercase; letter-spacing: 2px; }
-
-        /* SUBMIT BUTTON */
         .btn-submit { 
             background: var(--stream-green); color: var(--stream-dark); 
             width: 100%; padding: 22px; border-radius: 100px; 
-            font-weight: 900; font-size: 15px; 
-            text-transform: uppercase; letter-spacing: 1.5px;
-            margin-top: 40px; margin-bottom: 25px;
-            border: none; cursor: pointer; transition: 0.2s;
-            box-shadow: 0 10px 25px rgba(184, 213, 176, 0.2);
+            font-weight: 900; font-size: 15px; text-transform: uppercase;
+            margin-top: 40px; margin-bottom: 25px; border: none; cursor: pointer;
         }
-        .btn-submit:active { transform: scale(0.97); opacity: 0.9; }
-
-        /* LOGOUT */
-        .logout-link { display: block; text-align: center; color: #ff4b4b; font-weight: 800; text-transform: uppercase; letter-spacing: 2px; font-size: 12px; text-decoration: none; margin-top: 20px; cursor: pointer; }
+        .logout-link { display: block; text-align: center; color: #ff4b4b; font-weight: 800; text-transform: uppercase; font-size: 12px; cursor: pointer; }
     </style>
 </head>
 <body>
+
+    <div id="customAlert">
+        <div class="alert-box">
+            <div id="alertIcon" class="mb-5 text-4xl text-[#b8d5b0]"><i class="fas fa-shield-halved"></i></div>
+            <h2 id="alertTitle" class="text-xl font-black mb-2 uppercase">Protocol Check</h2>
+            <p id="alertMsg" class="text-white/50 text-xs leading-relaxed px-4"></p>
+            <button onclick="closeAlert()" class="mt-8 bg-[#b8d5b0] text-[#0a1f1c] w-full py-4 rounded-2xl font-black text-xs uppercase tracking-widest">Acknowledge</button>
+        </div>
+    </div>
 
     <div class="header">
         <a href="main-dashboard.html" class="back-btn w-12 h-12">
@@ -90,33 +86,26 @@
     </div>
 
     <div class="logo-container">
-        <div class="logo-circle">
-            <i class="fas fa-user"></i>
-        </div>
+        <div class="logo-circle"><i class="fas fa-user-gear"></i></div>
         <p style="font-size: 24px; font-weight: 900; margin-bottom: 5px;" id="statusText">LOADING...</p>
-        <p class="authorized-node">Authorized Node</p>
+        <p class="text-[11px] font-extrabold uppercase text-white/30 tracking-widest">Authorized Node</p>
     </div>
 
-    <div class="form-section">
+    <div class="form-section px-2">
         <label class="form-label">Full Name</label>
-        <input type="text" id="legalName" class="profile-pill-input" placeholder="Legal Name" readonly>
-
-        <label class="form-label">Email Protocol</label>
-        <input type="email" id="emailProtocol" class="profile-pill-input" style="border-style: dashed !important;" placeholder="Protocol Address" readonly>
+        <input type="text" id="legalName" class="profile-pill-input" placeholder="Enter Full Name">
 
         <label class="form-label">Phone Line</label>
-        <input type="tel" id="phoneLine" class="profile-pill-input" placeholder="+234..." readonly>
+        <input type="tel" id="phoneLine" class="profile-pill-input" placeholder="+234...">
 
         <label class="form-label">Display Username</label>
-        <input type="text" id="displayUsername" class="profile-pill-input" placeholder="@username" readonly>
-    </div>
+        <input type="text" id="displayUsername" class="profile-pill-input" placeholder="@username">
 
-    <div class="financial-header">
-        <i class="fas fa-university"></i>
-        <span>Financial Gateway</span>
-    </div>
+        <div class="flex items-center gap-3 mt-8 mb-6 text-[#b8d5b0]">
+            <i class="fas fa-university"></i>
+            <span class="font-black text-sm uppercase tracking-widest">Financial Gateway</span>
+        </div>
 
-    <div class="form-section">
         <label class="form-label">Bank Institution</label>
         <select id="bankName" class="profile-pill-input appearance-none">
             <option value="">Select Bank</option>
@@ -135,22 +124,16 @@
         <input type="number" id="accNumber" class="profile-pill-input" placeholder="10 Digits">
 
         <label class="form-label">Holder Name</label>
-        <input type="text" id="holderName" class="profile-pill-input" placeholder="Full Bank Name">
+        <input type="text" id="holderName" class="profile-pill-input" placeholder="Bank Account Name">
     </div>
 
-    <button onclick="saveProfileChanges()" class="btn-submit">
-        Save Changes
-    </button>
-
-    <a class="logout-link" onclick="handleLogout()">
-        Logout
-    </a>
-
-    <p class="text-center text-[10px] text-white/20 mt-12 font-bold uppercase tracking-widest">STREAM AFRICA v1.0 | SECURE SHELL</p>
+    <button onclick="saveProfileChanges()" id="saveBtn" class="btn-submit">Sync & Proceed</button>
+    <a class="logout-link" onclick="handleLogout()">Logout Session</a>
 
     <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
+        import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js";
+        import { getFirestore, doc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyASDlQQMoXCeMZKs5O3KmO8zuFztt8rg2E",
@@ -163,59 +146,77 @@
 
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
-        let currentUserId = null;
+        const db = getFirestore(app);
 
-        onAuthStateChanged(auth, (user) => {
+        // Professional Alert Function
+        window.showAlert = (title, msg, icon = "fa-shield-halved") => {
+            document.getElementById('alertTitle').innerText = title;
+            document.getElementById('alertMsg').innerText = msg;
+            document.getElementById('alertIcon').innerHTML = `<i class="fas ${icon}"></i>`;
+            document.getElementById('customAlert').style.display = 'flex';
+        };
+
+        window.closeAlert = () => {
+            document.getElementById('customAlert').style.display = 'none';
+        };
+
+        onAuthStateChanged(auth, async (user) => {
             if (user) {
-                currentUserId = user.uid;
-                document.getElementById('emailProtocol').value = user.email;
-                
-                // SYNC FROM REGISTER DATA (Assuming keys are 'regName', 'regPhone', etc. or generic UID keys)
-                const syncName = localStorage.getItem(`legalName_${user.uid}`) || localStorage.getItem(`regName`);
-                const syncPhone = localStorage.getItem(`phoneLine_${user.uid}`) || localStorage.getItem(`regPhone`);
-                const syncUser = localStorage.getItem(`displayUsername_${user.uid}`) || user.email.split('@')[0];
+                // Initial Welcome Popup for Profile
+                if (!localStorage.getItem(`profileHint_${user.uid}`)) {
+                    showAlert("Identity Setup", "Please fill in the exact details you used during registration to verify your node.", "fa-user-pen");
+                    localStorage.setItem(`profileHint_${user.uid}`, "true");
+                }
 
-                document.getElementById('legalName').value = syncName || '';
-                document.getElementById('phoneLine').value = syncPhone || '';
-                document.getElementById('displayUsername').value = syncUser || '';
-                
-                // Set Profile Status Name
-                document.getElementById('statusText').innerText = (syncName || "ACTIVE").toUpperCase();
-
-                // Load Financial data if already saved
-                document.getElementById('bankName').value = localStorage.getItem(`bankName_${user.uid}`) || '';
-                document.getElementById('accNumber').value = localStorage.getItem(`accNum_${user.uid}`) || '';
-                document.getElementById('holderName').value = localStorage.getItem(`holderName_${user.uid}`) || '';
+                const snap = await getDoc(doc(db, "users", user.uid));
+                if (snap.exists()) {
+                    const d = snap.data();
+                    document.getElementById('legalName').value = d.fullName || "";
+                    document.getElementById('phoneLine').value = d.phoneNumber || "";
+                    document.getElementById('displayUsername').value = d.username || "";
+                    document.getElementById('bankName').value = d.bankName || "";
+                    document.getElementById('accNumber').value = d.accountNumber || "";
+                    document.getElementById('holderName').value = d.accountHolder || "";
+                    document.getElementById('statusText').innerText = (d.fullName || "USER").toUpperCase();
+                }
             } else {
                 window.location.href = 'index.html';
             }
         });
 
-        window.saveProfileChanges = () => {
-            const bank = document.getElementById('bankName').value;
-            const acc = document.getElementById('accNumber').value;
-            const holder = document.getElementById('holderName').value;
+        window.saveProfileChanges = async () => {
+            const user = auth.currentUser;
+            const btn = document.getElementById('saveBtn');
+            const data = {
+                fullName: document.getElementById('legalName').value,
+                phoneNumber: document.getElementById('phoneLine').value,
+                username: document.getElementById('displayUsername').value,
+                bankName: document.getElementById('bankName').value,
+                accountNumber: document.getElementById('accNumber').value,
+                accountHolder: document.getElementById('holderName').value,
+                profileCompleted: true
+            };
 
-            if(!bank || !acc || !holder) {
-                alert("PROTOCOL ERROR: Financial details are required for payout routing.");
+            if(!data.bankName || !data.accountNumber || !data.fullName) {
+                showAlert("Missing Intel", "Required fields are empty. Fill them to enable withdrawal access.", "fa-triangle-exclamation");
                 return;
             }
 
-            if(acc.length !== 10) {
-                alert("ERROR: Account number must be exactly 10 digits.");
-                return;
+            btn.innerText = "UPLOADING TO SHELL...";
+            btn.disabled = true;
+
+            try {
+                await updateDoc(doc(db, "users", user.uid), data);
+                localStorage.setItem(`legalName_${user.uid}`, data.fullName);
+                
+                // Final Success before redirect
+                showAlert("Success", "Node Synchronized. Proceeding to Withdrawal Gateway.", "fa-circle-check");
+                setTimeout(() => window.location.href = 'withdraw.html', 1500);
+            } catch (error) {
+                showAlert("Sync Failed", "Could not connect to servers. Try again.", "fa-circle-xmark");
+                btn.innerText = "SYNC & PROCEED";
+                btn.disabled = false;
             }
-
-            // Save Financial Details specifically
-            localStorage.setItem(`bankName_${currentUserId}`, bank);
-            localStorage.setItem(`accNum_${currentUserId}`, acc);
-            localStorage.setItem(`holderName_${currentUserId}`, holder);
-            
-            // Format for withdrawal page access
-            localStorage.setItem(`bank_${currentUserId}`, `${bank} - ${acc}`);
-
-            alert("SUCCESS: Financial Gateway Synchronized.");
-            window.location.href = 'withdraw.html';
         };
 
         window.handleLogout = async () => {
