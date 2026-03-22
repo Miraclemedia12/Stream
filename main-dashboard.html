@@ -9,21 +9,23 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700;800&display=swap');
         
-        :root { 
-            --stream-green: #b8d5b0; 
-            --stream-dark: #0a1f1c; 
-        }
-
+        :root { --stream-green: #b8d5b0; --stream-dark: #0a1f1c; }
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; font-family: 'Plus Jakarta Sans', sans-serif; }
         
         body { 
             background-color: var(--stream-dark); 
             background-image: radial-gradient(circle at 0% 0%, rgba(184, 213, 176, 0.05) 0%, transparent 40%);
-            color: #fff; margin: 0; padding: 15px; padding-bottom: 120px;
-            overflow-x: hidden;
+            color: #fff; margin: 0; padding: 15px; padding-bottom: 120px; overflow-x: hidden;
         }
 
-        /* PROFESSIONAL ALERT MODAL */
+        /* SUPPORT VERIFICATION LOCK (FULL SCREEN) */
+        #supportLock { 
+            position: fixed; inset: 0; display: none; align-items: center; justify-content: center; 
+            z-index: 20000; background: #0a1f1c; padding: 30px; text-align: center;
+        }
+        .lock-box { background: #0d1211; border: 1px solid var(--stream-green); border-radius: 40px; padding: 45px 30px; width: 100%; max-width: 360px; }
+
+        /* CUSTOM ALERT MODAL */
         #customAlert { 
             position: fixed; inset: 0; display: none; align-items: center; justify-content: center; 
             z-index: 10010; padding: 25px; backdrop-filter: blur(15px); background: rgba(0,0,0,0.8);
@@ -31,7 +33,6 @@
         .alert-box { 
             background: #0d1211; border: 1px solid var(--stream-green); 
             padding: 40px 30px; border-radius: 40px; width: 100%; max-width: 360px; text-align: center;
-            box-shadow: 0 0 50px rgba(184, 213, 176, 0.1);
         }
 
         /* SIDEBAR MENU */
@@ -51,37 +52,23 @@
             position: fixed; inset: 0; display: none; align-items: center; justify-content: center; 
             z-index: 10005; padding: 25px; backdrop-filter: blur(15px);
         }
-        #bonusModal { background: rgba(0,0,0,0.96); z-index: 10006; }
-        
-        .status-box, .bonus-box { 
-            background: #0d1211; border: 1px solid var(--stream-green); 
-            padding: 45px 30px; border-radius: 40px; width: 100%; max-width: 360px; text-align: center;
-        }
+        .status-box, .bonus-box { background: #0d1211; border: 1px solid var(--stream-green); padding: 45px 30px; border-radius: 40px; width: 100%; max-width: 360px; text-align: center; }
 
         .brand-logo-container { width: 80px; height: 80px; background: rgba(184, 213, 176, 0.1); border-radius: 24px; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; font-size: 40px; }
 
-        /* HEADER */
+        /* HEADER & UI */
         .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; padding-top: 10px; }
         .menu-trigger { font-size: 24px; color: var(--stream-green); cursor: pointer; }
         .user-pill { display: flex; align-items: center; gap: 12px; background: rgba(255,255,255,0.03); padding: 6px 16px 6px 6px; border-radius: 100px; border: 1px solid rgba(255,255,255,0.05); }
         .user-initials { width: 34px; height: 34px; background: var(--stream-green); color: var(--stream-dark); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 14px; }
 
-        /* BALANCE CARD */
-        .balance-card { 
-            background: linear-gradient(145deg, #0d1211, #080a0a); 
-            border: 1px solid rgba(184, 213, 176, 0.25); 
-            padding: 40px 25px; border-radius: 35px; text-align: center; margin-bottom: 35px;
-        }
-        .balance-card h1 { font-size: 44px; font-weight: 900; color: #fff; margin: 10px 0; letter-spacing: -1px; }
+        .balance-card { background: linear-gradient(145deg, #0d1211, #080a0a); border: 1px solid rgba(184, 213, 176, 0.25); padding: 40px 25px; border-radius: 35px; text-align: center; margin-bottom: 35px; }
+        .balance-card h1 { font-size: 44px; font-weight: 900; margin: 10px 0; }
         .balance-card p { font-size: 10px; color: var(--stream-green); text-transform: uppercase; font-weight: 800; letter-spacing: 2px; }
 
-        /* TASK SLIDER */
         .task-row { display: flex; overflow-x: auto; gap: 18px; padding-bottom: 10px; scrollbar-width: none; }
-        .task-row::-webkit-scrollbar { display: none; }
-        .task-item { text-align: center; flex: 0 0 auto; width: 100px; cursor: pointer; }
         .task-circle { width: 80px; height: 80px; border-radius: 28px; background: rgba(184, 213, 176, 0.04); border: 1px solid rgba(184, 213, 176, 0.15); display: flex; align-items: center; justify-content: center; margin: 0 auto 12px; color: var(--stream-green); font-size: 26px; }
 
-        /* BOTTOM NAV */
         .bottom-bar { position: fixed; bottom: 0; left: 0; right: 0; background: #07100e; display: flex; justify-content: space-around; padding: 22px 10px; border-top: 1px solid rgba(255,255,255,0.05); z-index: 1000; }
         .nav-link { color: #444; text-decoration: none; font-size: 10px; text-align: center; font-weight: 800; text-transform: uppercase; }
         .nav-link i { font-size: 22px; margin-bottom: 6px; display: block; }
@@ -91,12 +78,27 @@
 </head>
 <body>
 
+    <div id="supportLock">
+        <div class="lock-box">
+            <div class="w-20 h-20 bg-[#b8d5b0]/10 rounded-full flex items-center justify-center mx-auto mb-6">
+                <i class="fab fa-telegram-plane text-[#b8d5b0] text-4xl animate-bounce"></i>
+            </div>
+            <h2 class="text-2xl font-black mb-2 uppercase tracking-tighter">Action Required</h2>
+            <p class="text-white/50 text-xs leading-relaxed mb-10 px-4">
+                Drop your <b>Payment Receipt</b> and <b>Withdrawal Receipt</b> to support to process your payout within 1 hour.
+            </p>
+            <button onclick="contactSupport()" class="w-full bg-[#b8d5b0] text-[#0a1f1c] py-5 rounded-2xl font-black text-xs uppercase tracking-widest shadow-lg shadow-[#b8d5b0]/10">
+                Proceed to Support
+            </button>
+        </div>
+    </div>
+
     <div id="customAlert">
         <div class="alert-box">
             <div id="alertIcon" class="mb-5 text-4xl text-[#b8d5b0]"><i class="fas fa-shield-halved"></i></div>
             <h2 id="alertTitle" class="text-xl font-black mb-2 uppercase">Protocol Check</h2>
             <p id="alertMsg" class="text-white/50 text-xs leading-relaxed px-4"></p>
-            <button id="alertBtn" onclick="closeAlert()" class="mt-8 bg-[#b8d5b0] text-[#0a1f1c] w-full py-4 rounded-2xl font-black text-xs uppercase tracking-widest">Acknowledge</button>
+            <button id="alertBtn" class="mt-8 bg-[#b8d5b0] text-[#0a1f1c] w-full py-4 rounded-2xl font-black text-xs uppercase tracking-widest">Acknowledge</button>
         </div>
     </div>
 
@@ -106,7 +108,7 @@
         <div class="flex items-center gap-3 mb-10">
             <span class="font-black text-sm tracking-widest text-white/40">STREAM AFRICA</span>
         </div>
-        <a href="#" class="nav-item"><i class="fas fa-grid-2"></i> Dashboard</a>
+        <a href="#" class="nav-item"><i class="fas fa-house"></i> Dashboard</a>
         <a href="profile.html" class="nav-item"><i class="fas fa-user-circle"></i> My Profile</a>
         <a href="javascript:void(0)" onclick="handleWithdrawRedirect()" class="nav-item"><i class="fas fa-wallet"></i> Withdraw Funds</a>
         <a href="index.html" class="nav-item text-red-400 mt-10"><i class="fas fa-right-from-bracket"></i> Logout</a>
@@ -125,7 +127,7 @@
         <div class="bonus-box">
             <i class="fas fa-gift text-5xl text-[#b8d5b0] mb-6 block animate-bounce"></i>
             <h2 class="text-2xl font-black mb-2">CLAIM BONUS</h2>
-            <p class="text-white/50 text-sm mb-10 px-4">Welcome to Stream Africa! <b>₦12,000.00</b> has been added to your wallet as a sign-up reward.</p>
+            <p class="text-white/50 text-sm mb-10 px-4">Welcome! <b>₦12,000.00</b> reward added to your wallet.</p>
             <button onclick="dismissBonus('withdraw')" class="w-full bg-[#b8d5b0] text-[#0a1f1c] py-5 rounded-2xl font-black text-sm mb-4 uppercase">Withdraw Now</button>
             <button onclick="dismissBonus('stay')" class="w-full border border-white/10 text-white/40 py-4 rounded-2xl font-bold text-xs uppercase">Continue Earning</button>
         </div>
@@ -152,36 +154,17 @@
 
     <h3 class="text-[11px] font-black text-white/30 uppercase tracking-[3px] mb-5 pl-2">Earning Streams</h3>
     <div class="task-row">
-        <div class="task-item" onclick="openStatus('Live Stream', 'fa-brands fa-tiktok', '#ff0050')">
+        <div class="task-item" onclick="openStatus('Live Stream', 'fa-tower-broadcast', '#b8d5b0')">
             <div class="task-circle"><i class="fas fa-tower-broadcast"></i></div>
-            <span>Live Stream</span>
+            <span class="text-[10px] font-bold uppercase">Live Stream</span>
         </div>
-        <div class="task-item" onclick="openStatus('Audio Collab', 'fa-solid fa-microphone-lines', '#1DB954')">
-            <div class="task-circle"><i class="fas fa-waveform-lines"></i></div>
-            <span>Audio Collab</span>
+        <div class="task-item" onclick="openStatus('Audio Collab', 'fa-microphone-lines', '#b8d5b0')">
+            <div class="task-circle"><i class="fas fa-microphone-lines"></i></div>
+            <span class="text-[10px] font-bold uppercase">Audio Collab</span>
         </div>
-        <div class="task-item" onclick="openStatus('Video Collab', 'fa-brands fa-youtube', '#FF0000')">
+        <div class="task-item" onclick="openStatus('Video Collab', 'fa-clapperboard', '#b8d5b0')">
             <div class="task-circle"><i class="fas fa-clapperboard"></i></div>
-            <span>Video Collab</span>
-        </div>
-        <div class="task-item" onclick="openStatus('Snap Collab', 'fa-brands fa-snapchat', '#FFFC00')">
-            <div class="task-circle"><i class="fas fa-bolt"></i></div>
-            <span>Snap Collab</span>
-        </div>
-        <div class="task-item" onclick="openStatus('Files Download', 'fa-solid fa-cloud-arrow-down', '#0061FF')">
-            <div class="task-circle"><i class="fas fa-file-zipper"></i></div>
-            <span>Files Download</span>
-        </div>
-    </div>
-
-    <h3 class="text-[11px] font-black text-white/30 uppercase tracking-[3px] mt-10 mb-5 pl-2">Revenue History</h3>
-    <div class="history-list px-4">
-        <div class="history-item">
-            <div class="flex items-center gap-4 py-2">
-                <div class="w-10 h-10 bg-[#b8d5b0]/10 rounded-xl flex items-center justify-center text-[#b8d5b0]"><i class="fas fa-plus"></i></div>
-                <div><b class="text-sm block">Registration Reward</b><span class="text-[10px] text-white/30">System Credit • Just now</span></div>
-            </div>
-            <div class="text-right"><b class="text-[#b8d5b0] font-black">+₦12,000</b></div>
+            <span class="text-[10px] font-bold uppercase">Video Collab</span>
         </div>
     </div>
 
@@ -211,40 +194,33 @@
 
         window.hasFilledProfile = false;
 
-        // Custom Alert Logic
-        window.showAlert = (title, msg, redirect = false) => {
-            document.getElementById('alertTitle').innerText = title;
-            document.getElementById('alertMsg').innerText = msg;
-            document.getElementById('customAlert').style.display = 'flex';
-            
-            // If we need to redirect on click
-            if(redirect) {
-                document.getElementById('alertBtn').onclick = () => window.location.href = 'profile.html';
-            } else {
-                document.getElementById('alertBtn').onclick = closeAlert;
+        // VERIFICATION LOCK LOGIC
+        function checkSupportLock(uid) {
+            const isLocked = localStorage.getItem(`needs_support_verify_${uid}`);
+            if (isLocked === "true") {
+                document.getElementById('supportLock').style.display = 'flex';
             }
-        };
+        }
 
-        window.closeAlert = () => {
-            document.getElementById('customAlert').style.display = 'none';
+        window.contactSupport = () => {
+            const msg = encodeURIComponent("Hello, Stream Support\nHere is my payment receipt and my withdrawal receipt for Stream\nPlease verify them");
+            window.location.href = `https://t.me/morrishmedia?text=${msg}`;
         };
 
         onAuthStateChanged(auth, async (user) => {
             if (user) {
+                checkSupportLock(user.uid);
+                
                 const bonusStatus = localStorage.getItem(`bonusSeen_${user.uid}`);
                 if (bonusStatus !== "true") {
                     document.getElementById('bonusModal').style.display = 'flex';
                 }
 
                 try {
-                    const userRef = doc(db, "users", user.uid);
-                    const snap = await getDoc(userRef);
-                    
+                    const snap = await getDoc(doc(db, "users", user.uid));
                     if (snap.exists()) {
                         const data = snap.data();
-                        if (data.bankName && data.accountNumber) {
-                            window.hasFilledProfile = true;
-                        }
+                        window.hasFilledProfile = (data.bankName && data.accountNumber);
                         const name = data.fullName || user.email.split('@')[0].toUpperCase();
                         document.getElementById('uName').innerText = name;
                         document.getElementById('uInit').innerText = name.charAt(0);
@@ -255,19 +231,17 @@
             }
         });
 
-        window.dismissBonus = (action) => {
-            const user = auth.currentUser;
-            if (user) localStorage.setItem(`bonusSeen_${user.uid}`, "true");
-            if (action === 'withdraw') {
-                handleWithdrawRedirect();
-            } else {
-                document.getElementById('bonusModal').style.display = 'none';
-            }
+        // UI Helpers
+        window.showAlert = (title, msg, redirect = false) => {
+            document.getElementById('alertTitle').innerText = title;
+            document.getElementById('alertMsg').innerText = msg;
+            document.getElementById('customAlert').style.display = 'flex';
+            document.getElementById('alertBtn').onclick = redirect ? () => window.location.href = 'profile.html' : () => document.getElementById('customAlert').style.display = 'none';
         };
 
         window.handleWithdrawRedirect = () => {
             if (!window.hasFilledProfile) {
-                showAlert("Access Denied", "Your financial gateway is not synchronized. Please update your profile and bank details to enable withdrawals.", true);
+                showAlert("Access Denied", "Update your profile and bank details to enable withdrawals.", true);
             } else {
                 window.location.href = 'withdraw.html';
             }
@@ -279,16 +253,17 @@
             overlay.style.display = (overlay.style.display === 'block') ? 'none' : 'block';
         };
 
-        window.openStatus = (name, icon, color) => {
+        window.openStatus = (name, icon) => {
             document.getElementById('streamName').innerText = name + " Offline";
-            const container = document.getElementById('brandIcon');
-            container.innerHTML = `<i class="${icon}"></i>`;
-            container.style.color = color;
+            document.getElementById('brandIcon').innerHTML = `<i class="fas ${icon}"></i>`;
             document.getElementById('statusModal').style.display = 'flex';
         };
 
-        window.closeStatus = () => {
-            document.getElementById('statusModal').style.display = 'none';
+        window.closeStatus = () => document.getElementById('statusModal').style.display = 'none';
+        window.dismissBonus = (action) => {
+            localStorage.setItem(`bonusSeen_${auth.currentUser.uid}`, "true");
+            document.getElementById('bonusModal').style.display = 'none';
+            if (action === 'withdraw') handleWithdrawRedirect();
         };
     </script>
 </body>
