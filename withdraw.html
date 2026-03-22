@@ -30,11 +30,6 @@
         .receipt-paper { 
             background: #fff; color: #000; width: 100%; max-width: 360px; 
             border-radius: 30px; padding: 35px 30px; position: relative;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.3);
-        }
-        .receipt-paper::before, .receipt-paper::after {
-            content: ""; position: absolute; bottom: -10px; left: 5%; width: 90%;
-            height: 20px; background: #fff; z-index: -1; filter: blur(10px); opacity: 0.3;
         }
 
         /* LEDGER STYLING */
@@ -56,6 +51,7 @@
             width: 100%; padding: 22px; border-radius: 20px; color: #fff; font-size: 24px; font-weight: 800;
             outline: none; text-align: center;
         }
+        .glass-input:disabled { opacity: 0.5; cursor: not-allowed; }
     </style>
 </head>
 <body class="pb-10">
@@ -73,17 +69,17 @@
     <div id="receiptModal">
         <div class="receipt-paper">
             <div class="text-center mb-6">
-                <div class="w-16 h-16 bg-green-100 text-green-600 rounded-full flex items-center justify-center mx-auto mb-4 text-2xl">
-                    <i class="fas fa-check-double"></i>
+                <div id="r-icon" class="w-16 h-16 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center mx-auto mb-4 text-2xl">
+                    <i class="fas fa-spinner fa-spin"></i>
                 </div>
-                <h2 class="font-black text-2xl tracking-tighter uppercase">Withdrawal Successful</h2>
-                <p class="text-[10px] text-gray-400 font-bold tracking-widest mt-1" id="r-datetime">MARCH 22, 2026 • 02:00 AM</p>
+                <h2 id="r-main-title" class="font-black text-2xl tracking-tighter uppercase text-gray-800">Request Initialized</h2>
+                <p class="text-[10px] text-gray-400 font-bold tracking-widest mt-1" id="r-datetime">...</p>
             </div>
 
             <div class="space-y-4 border-t border-b border-dashed border-gray-200 py-6 mb-6">
                 <div class="flex justify-between items-center">
                     <span class="text-[11px] font-bold text-gray-400 uppercase">Reference</span>
-                    <span id="r-ref" class="text-[11px] font-black font-mono">STRM-AF-9928-X021</span>
+                    <span id="r-ref" class="text-[11px] font-black font-mono">...</span>
                 </div>
                 <div class="flex justify-between items-center">
                     <span class="text-[11px] font-bold text-gray-400 uppercase">Beneficiary</span>
@@ -95,12 +91,12 @@
                 </div>
                 <div class="flex justify-between items-center">
                     <span class="text-[11px] font-bold text-gray-400 uppercase">Status</span>
-                    <span class="text-[10px] bg-orange-100 text-orange-600 px-2 py-1 rounded font-black uppercase">Pending Verification</span>
+                    <span id="r-status-badge" class="text-[10px] bg-blue-100 text-blue-600 px-2 py-1 rounded font-black uppercase tracking-widest">Awaiting Confirmation</span>
                 </div>
             </div>
 
             <div class="bg-gray-50 p-6 rounded-2xl text-center mb-8">
-                <p class="text-[10px] font-bold text-gray-400 uppercase mb-1">Amount Debited</p>
+                <p class="text-[10px] font-bold text-gray-400 uppercase mb-1">Amount to Debit</p>
                 <h3 class="text-4xl font-black" id="r-amt">₦0.00</h3>
             </div>
 
@@ -130,7 +126,7 @@
             <div class="w-14 h-14 bg-[#b8d5b0]/10 rounded-2xl flex items-center justify-center text-[#b8d5b0] text-2xl"><i class="fas fa-university"></i></div>
             <div><p id="bank-status" class="text-xs font-black text-white/80">Syncing Node...</p></div>
         </div>
-        <button onclick="handleWithdrawal()" class="w-full bg-[#b8d5b0] text-[#0a1f1c] py-6 rounded-[28px] font-black text-sm uppercase tracking-widest shadow-xl shadow-[#b8d5b0]/5">Initiate Payout</button>
+        <button id="initiateBtn" onclick="handleWithdrawal()" class="w-full bg-[#b8d5b0] text-[#0a1f1c] py-6 rounded-[28px] font-black text-sm uppercase tracking-widest shadow-xl shadow-[#b8d5b0]/5">Initiate Payout</button>
     </div>
 
     <div class="history-card">
@@ -152,11 +148,15 @@
 
         let currentUser = null;
         let userData = null;
-        const currentBalance = 12000; 
+        let availableBalance = 12000; 
 
         onAuthStateChanged(auth, async (user) => {
             if (user) {
                 currentUser = user;
+                // Check if already withdrawn in this session
+                if(localStorage.getItem(`withdrawn_${user.uid}`)) {
+                    applyZeroBalance();
+                }
                 const snap = await getDoc(doc(db, "users", user.uid));
                 if (snap.exists()) {
                     userData = snap.data();
@@ -166,57 +166,74 @@
             } else { window.location.href = 'index.html'; }
         });
 
-        window.showStreamAlert = (msg, type = 'info') => {
-            const toast = document.getElementById('streamToast');
-            document.getElementById('toastMsg').innerText = msg;
-            if(type === 'error') {
-                toast.classList.add('error');
-                document.getElementById('toastTitle').innerText = "SECURITY ALERT";
-            } else {
-                toast.classList.remove('error');
-                document.getElementById('toastTitle').innerText = "SYSTEM PROTOCOL";
-            }
-            toast.classList.add('show');
-            setTimeout(() => toast.classList.remove('show'), 3000);
-        };
+        function applyZeroBalance() {
+            availableBalance = 0;
+            document.getElementById('currentBalDisplay').innerText = "₦0.00";
+            document.getElementById('w-amount').value = 0;
+            document.getElementById('w-amount').disabled = true;
+            document.getElementById('initiateBtn').disabled = true;
+            document.getElementById('initiateBtn').style.opacity = "0.3";
+        }
 
         window.handleWithdrawal = () => {
             const amount = parseInt(document.getElementById('w-amount').value);
-            if (!userData?.bankName) return showStreamAlert("Link bank in profile first", "error");
+            if (!userData?.bankName) return showStreamAlert("Link bank details first", "error");
+            if (availableBalance <= 0) return showStreamAlert("Insufficient funds", "error");
             if (amount < 12000) return showStreamAlert("Minimum payout is ₦12,000", "error");
-            if (amount > currentBalance) return showStreamAlert("Exceeds available balance", "error");
-            
-            // Set Receipt Data
+
+            // STAGE 1: INITIAL UI
+            document.getElementById('r-main-title').innerText = "Request Initialized";
+            document.getElementById('r-status-badge').innerText = "Awaiting Confirmation";
+            document.getElementById('r-status-badge').className = "text-[10px] bg-blue-100 text-blue-600 px-2 py-1 rounded font-black uppercase tracking-widest";
+            document.getElementById('r-icon').className = "w-16 h-16 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center mx-auto mb-4 text-2xl";
+            document.getElementById('r-icon').innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+
+            // Set Data
             const now = new Date();
-            const dateStr = now.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
-            const timeStr = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true });
-            
-            document.getElementById('r-datetime').innerText = `${dateStr} • ${timeStr}`.toUpperCase();
-            document.getElementById('r-user').innerText = userData.fullName || "STREAM MEMBER";
+            document.getElementById('r-datetime').innerText = `${now.toLocaleDateString()} • ${now.toLocaleTimeString()}`.toUpperCase();
+            document.getElementById('r-user').innerText = userData.fullName || "MEMBER";
             document.getElementById('r-bank').innerText = `${userData.bankName} (${userData.accountNumber})`;
             document.getElementById('r-amt').innerText = "₦" + amount.toLocaleString();
-            
-            // Generate longer professional Ref
-            const randomPart = Math.random().toString(36).substr(2, 8).toUpperCase();
-            document.getElementById('r-ref').innerText = `STRM-AF-${randomPart}`;
+            document.getElementById('r-ref').innerText = `STRM-AF-${Math.random().toString(36).substr(2, 9).toUpperCase()}`;
             
             document.getElementById('receiptModal').style.display = 'flex';
         };
 
         window.finalConfirm = () => {
+            // STAGE 2: SUCCESS UI
+            document.getElementById('r-main-title').innerText = "Withdrawal Successful";
+            document.getElementById('r-status-badge').innerText = "Approved";
+            document.getElementById('r-status-badge').className = "text-[10px] bg-orange-100 text-orange-600 px-2 py-1 rounded font-black uppercase tracking-widest";
+            document.getElementById('r-icon').className = "w-16 h-16 bg-green-100 text-green-600 rounded-full flex items-center justify-center mx-auto mb-4 text-2xl";
+            document.getElementById('r-icon').innerHTML = '<i class="fas fa-check-double"></i>';
+
             const amount = document.getElementById('r-amt').innerText;
             const ref = document.getElementById('r-ref').innerText;
+            
+            // Save locally
             const record = { amount, ref, date: new Date().toLocaleDateString(), status: 'Pending' };
             let history = JSON.parse(localStorage.getItem(`history_${currentUser.uid}`)) || [];
             history.unshift(record);
             localStorage.setItem(`history_${currentUser.uid}`, JSON.stringify(history));
 
-            // Set Lock Flag
+            // SET THE LOCKS
             localStorage.setItem(`needs_support_verify_${currentUser.uid}`, "true");
+            localStorage.setItem(`withdrawn_${currentUser.uid}`, "true");
+
+            // Reset Balance visually
+            applyZeroBalance();
 
             document.getElementById('modal-actions').classList.add('hidden');
             document.getElementById('done-btn').classList.remove('hidden');
-            showStreamAlert("Payout Logged Successfully");
+        };
+
+        window.showStreamAlert = (msg, type = 'info') => {
+            const toast = document.getElementById('streamToast');
+            document.getElementById('toastMsg').innerText = msg;
+            toast.classList.toggle('error', type === 'error');
+            document.getElementById('toastTitle').innerText = type === 'error' ? "SECURITY ALERT" : "SYSTEM PROTOCOL";
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 3000);
         };
 
         function loadLocalHistory() {
