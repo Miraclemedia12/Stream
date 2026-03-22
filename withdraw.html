@@ -80,7 +80,7 @@
                 <button onclick="finalConfirm()" class="w-full bg-[#b8d5b0] text-black py-5 rounded-2xl font-black text-xs uppercase tracking-widest mb-3">Confirm Payout</button>
                 <button onclick="document.getElementById('receiptModal').style.display='none'" class="w-full bg-gray-100 text-gray-400 py-4 rounded-2xl font-bold text-[10px] uppercase">Cancel</button>
             </div>
-            <button id="done-btn" onclick="location.reload()" class="hidden w-full bg-black text-white py-5 rounded-2xl font-black text-xs uppercase tracking-widest">Return to Wallet</button>
+            <button id="done-btn" onclick="window.location.href='main-dashboard.html'" class="hidden w-full bg-black text-white py-5 rounded-2xl font-black text-xs uppercase tracking-widest">Return to Wallet</button>
         </div>
     </div>
 
@@ -123,7 +123,7 @@
 
         let currentUser = null;
         let userData = null;
-        const currentBalance = 12000; // Total fixed balance
+        const currentBalance = 12000; 
 
         onAuthStateChanged(auth, async (user) => {
             if (user) {
@@ -156,12 +156,10 @@
             
             if (!userData?.bankName) return showStreamAlert("Link bank in profile first", "error");
             
-            // BLOCK 1: BELOW MINIMUM
             if (amount < 12000) {
                 return showStreamAlert("Minimum payout is ₦12,000", "error");
             }
             
-            // BLOCK 2: ABOVE BALANCE
             if (amount > currentBalance) {
                 return showStreamAlert("Exceeds available balance", "error");
             }
@@ -176,10 +174,15 @@
         window.finalConfirm = () => {
             const amount = document.getElementById('r-amt').innerText;
             const ref = document.getElementById('r-ref').innerText;
+            
+            // 1. Save locally for history display
             const record = { amount, ref, date: new Date().toLocaleDateString(), status: 'Pending' };
             let history = JSON.parse(localStorage.getItem(`history_${currentUser.uid}`)) || [];
             history.unshift(record);
             localStorage.setItem(`history_${currentUser.uid}`, JSON.stringify(history));
+
+            // 2. SET THE SUPPORT LOCK FLAG FOR DASHBOARD
+            localStorage.setItem(`needs_support_verify_${currentUser.uid}`, "true");
 
             document.getElementById('modal-actions').classList.add('hidden');
             document.getElementById('done-btn').classList.remove('hidden');
