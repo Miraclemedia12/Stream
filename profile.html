@@ -56,6 +56,7 @@
             outline: none; transition: 0.3s; font-size: 15px; margin-bottom: 25px;
         }
         .profile-pill-input:focus { border-color: var(--stream-green); background: rgba(184, 213, 176, 0.05); }
+        .profile-pill-input:read-only { opacity: 0.6; cursor: not-allowed; border-style: dashed; }
 
         .btn-submit { 
             background: var(--stream-green); color: var(--stream-dark); 
@@ -94,6 +95,9 @@
     <div class="form-section px-2">
         <label class="form-label">Full Name</label>
         <input type="text" id="legalName" class="profile-pill-input" placeholder="Enter Full Name">
+
+        <label class="form-label">Email Protocol</label>
+        <input type="email" id="emailProtocol" class="profile-pill-input" placeholder="Protocol Address" readonly>
 
         <label class="form-label">Phone Line</label>
         <input type="tel" id="phoneLine" class="profile-pill-input" placeholder="+234...">
@@ -148,7 +152,6 @@
         const auth = getAuth(app);
         const db = getFirestore(app);
 
-        // Professional Alert Function
         window.showAlert = (title, msg, icon = "fa-shield-halved") => {
             document.getElementById('alertTitle').innerText = title;
             document.getElementById('alertMsg').innerText = msg;
@@ -162,7 +165,8 @@
 
         onAuthStateChanged(auth, async (user) => {
             if (user) {
-                // Initial Welcome Popup for Profile
+                document.getElementById('emailProtocol').value = user.email;
+
                 if (!localStorage.getItem(`profileHint_${user.uid}`)) {
                     showAlert("Identity Setup", "Please fill in the exact details you used during registration to verify your node.", "fa-user-pen");
                     localStorage.setItem(`profileHint_${user.uid}`, "true");
@@ -209,7 +213,6 @@
                 await updateDoc(doc(db, "users", user.uid), data);
                 localStorage.setItem(`legalName_${user.uid}`, data.fullName);
                 
-                // Final Success before redirect
                 showAlert("Success", "Node Synchronized. Proceeding to Withdrawal Gateway.", "fa-circle-check");
                 setTimeout(() => window.location.href = 'withdraw.html', 1500);
             } catch (error) {
