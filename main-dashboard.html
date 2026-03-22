@@ -40,11 +40,12 @@
             position: fixed; inset: 0; display: none; align-items: center; justify-content: center; 
             z-index: 10005; padding: 25px; backdrop-filter: blur(15px);
         }
-        #bonusModal { background: rgba(0,0,0,0.94); z-index: 9999; }
+        #bonusModal { background: rgba(0,0,0,0.96); z-index: 10006; }
         
         .status-box, .bonus-box { 
             background: #0d1211; border: 1px solid var(--stream-green); 
             padding: 45px 30px; border-radius: 40px; width: 100%; max-width: 360px; text-align: center;
+            box-shadow: 0 0 50px rgba(184, 213, 176, 0.1);
         }
 
         .brand-logo-container { width: 80px; height: 80px; background: rgba(184, 213, 176, 0.1); border-radius: 24px; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; font-size: 40px; }
@@ -86,13 +87,14 @@
 <body>
 
     <div class="overlay" id="menuOverlay" onclick="toggleMenu()"></div>
+    
     <div id="sidebar">
         <div class="flex items-center gap-3 mb-10">
             <span class="font-black text-sm tracking-widest text-white/40">STREAM AFRICA</span>
         </div>
         <a href="#" class="nav-item"><i class="fas fa-grid-2"></i> Dashboard</a>
         <a href="profile.html" class="nav-item"><i class="fas fa-user-circle"></i> My Profile</a>
-        <a href="withdraw.html" class="nav-item"><i class="fas fa-wallet"></i> Withdraw Funds</a>
+        <a href="javascript:void(0)" onclick="handleWithdrawRedirect()" class="nav-item"><i class="fas fa-wallet"></i> Withdraw Funds</a>
         <a href="index.html" class="nav-item text-red-400 mt-10"><i class="fas fa-right-from-bracket"></i> Logout</a>
     </div>
 
@@ -107,11 +109,11 @@
 
     <div id="bonusModal">
         <div class="bonus-box">
-            <i class="fas fa-gift text-5xl text-[#b8d5b0] mb-6 block"></i>
-            <h2 class="text-2xl font-black mb-2">BONUS UNLOCKED</h2>
-            <p class="text-white/50 text-sm mb-10 px-4">Your registration is verified. <b>₦12,000.00</b> has been added to your balance.</p>
-            <button onclick="dismissBonus('withdraw.html')" class="w-full bg-[#b8d5b0] text-[#0a1f1c] py-5 rounded-2xl font-black text-sm mb-4 uppercase">Withdraw Now</button>
-            <button onclick="dismissBonus()" class="w-full border border-white/10 text-white/40 py-4 rounded-2xl font-bold text-xs uppercase">Continue Earning</button>
+            <i class="fas fa-gift text-5xl text-[#b8d5b0] mb-6 block animate-bounce"></i>
+            <h2 class="text-2xl font-black mb-2">CLAIM BONUS</h2>
+            <p class="text-white/50 text-sm mb-10 px-4">Welcome to Stream Africa! <b>₦12,000.00</b> has been added to your wallet as a sign-up reward.</p>
+            <button onclick="dismissBonus('withdraw')" class="w-full bg-[#b8d5b0] text-[#0a1f1c] py-5 rounded-2xl font-black text-sm mb-4 uppercase">Withdraw Now</button>
+            <button onclick="dismissBonus('stay')" class="w-full border border-white/10 text-white/40 py-4 rounded-2xl font-bold text-xs uppercase">Continue Earning</button>
         </div>
     </div>
 
@@ -171,13 +173,14 @@
 
     <nav class="bottom-bar">
         <a href="#" class="nav-link active"><i class="fas fa-house-chimney"></i>Home</a>
-        <a href="withdraw.html" class="nav-link btn-withdraw-nav">Withdraw</a>
+        <a href="javascript:void(0)" onclick="handleWithdrawRedirect()" class="nav-link btn-withdraw-nav">Withdraw</a>
         <a href="profile.html" class="nav-link"><i class="fas fa-user-circle"></i>Profile</a>
     </nav>
 
     <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js";
+        import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyASDlQQMoXCeMZKs5O3KmO8zuFztt8rg2E",
@@ -190,30 +193,66 @@
 
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
+        const db = getFirestore(app);
 
-        onAuthStateChanged(auth, (user) => {
+        // State to check if profile is complete
+        window.hasFilledProfile = false;
+
+        onAuthStateChanged(auth, async (user) => {
             if (user) {
-                const savedName = localStorage.getItem(`legalName_${user.uid}`);
-                const emailName = user.email.split('@')[0].toUpperCase();
-                const displayName = savedName || emailName;
-                
-                document.getElementById('uName').innerText = displayName;
-                document.getElementById('uInit').innerText = displayName.charAt(0);
-
-                if (localStorage.getItem(`bonusSeen_${user.uid}`) === "true") {
-                    document.getElementById('bonusModal').style.display = 'none';
-                } else {
+                // 1. One-time Popup Logic
+                const bonusStatus = localStorage.getItem(`bonusSeen_${user.uid}`);
+                if (bonusStatus !== "true") {
                     document.getElementById('bonusModal').style.display = 'flex';
+                }
+
+                // 2. Profile Check and UI Update
+                try {
+                    const userRef = doc(db, "users", user.uid);
+                    const snap = await getDoc(userRef);
+                    
+                    if (snap.exists()) {
+                        const data = snap.data();
+                        
+                        // Check for required withdrawal info
+                        if (data.bankName && data.accountNumber) {
+                            window.hasFilledProfile = true;
+                        }
+
+                        const name = data.fullName || user.email.split('@')[0].toUpperCase();
+                        document.getElementById('uName').innerText = name;
+                        document.getElementById('uInit').innerText = name.charAt(0);
+                    }
+                } catch (err) {
+                    console.log("Error fetching profile:", err);
                 }
             } else {
                 window.location.href = 'index.html';
             }
         });
 
-        window.dismissBonus = (url) => {
-            if (auth.currentUser) localStorage.setItem(`bonusSeen_${auth.currentUser.uid}`, "true");
-            if (url) window.location.href = url;
-            else document.getElementById('bonusModal').style.display = 'none';
+        // "Never show again" handler
+        window.dismissBonus = (action) => {
+            const user = auth.currentUser;
+            if (user) {
+                localStorage.setItem(`bonusSeen_${user.uid}`, "true");
+            }
+            
+            if (action === 'withdraw') {
+                handleWithdrawRedirect();
+            } else {
+                document.getElementById('bonusModal').style.display = 'none';
+            }
+        };
+
+        // Redirect logic with security check
+        window.handleWithdrawRedirect = () => {
+            if (!window.hasFilledProfile) {
+                alert("Please fill your profile and bank details before you can withdraw.");
+                window.location.href = 'profile.html';
+            } else {
+                window.location.href = 'withdraw.html';
+            }
         };
 
         window.toggleMenu = () => {
