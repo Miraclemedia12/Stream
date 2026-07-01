@@ -44,6 +44,11 @@
         .form-group label { display: block; margin-bottom: 8px; font-size: 11px; font-weight: 800; color: var(--stream-green); text-transform: uppercase; }
         .form-group input { width: 100%; padding: 15px; border: 1px solid rgba(184, 213, 176, 0.2); border-radius: 12px; background: rgba(255, 255, 255, 0.03); color: #fff; outline: none; }
         
+        /* Plan Banner Style */
+        .plan-display-badge {
+            width: 100%; padding: 15px; border: 1px dashed var(--stream-green); border-radius: 12px; background: rgba(184, 213, 176, 0.05); text-align: center; font-weight: 800; font-size: 14px; text-transform: uppercase; letter-spacing: 0.5px;
+        }
+
         .eye-icon { position: absolute; right: 15px; top: 42px; color: rgba(255,255,255,0.3); cursor: pointer; font-size: 18px; }
         .register-button { width: 100%; padding: 18px; background: var(--stream-green); color: var(--stream-dark); border-radius: 12px; font-weight: 900; text-transform: uppercase; border: none; }
         .login-link { display: block; text-align: center; margin-top: 20px; font-size: 14px; color: #fff; text-decoration: none; }
@@ -77,6 +82,14 @@
 <div class="register-container">
     <h1 class="text-center font-black text-2xl uppercase mb-8">Create Account</h1>
     <form id="registration-form">
+        <!-- TRACKED PLAN DISPLAY -->
+        <div class="form-group">
+            <label>Selected Package</label>
+            <div id="plan-tracker-text" class="plan-display-badge text-[#b8d5b0]">
+                <i class="fas fa-spinner fa-spin mr-2"></i> Detecting Selected Plan...
+            </div>
+        </div>
+
         <div class="form-group"><label>Full Name</label><input type="text" id="full-name" placeholder="Miracle Okon" required></div>
         <div class="form-group"><label>Username</label><input type="text" id="username" placeholder="Choose username" required></div>
         <div class="form-group"><label>Email Address</label><input type="email" id="email" placeholder="email@example.com" required></div>
@@ -109,6 +122,20 @@
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
     const db = getFirestore(app);
+
+    // TRACK SELECTION FROM URL PARAMETER & DISPLAY DIRECTLY
+    const urlParams = new URLSearchParams(window.location.search);
+    let trackedPlan = urlParams.get('plan') || 'regular'; // Fallback to regular if directly landed
+    const displayElement = document.getElementById('plan-tracker-text');
+
+    if (trackedPlan === 'prime') {
+        displayElement.innerHTML = `<i class="fas fa-crown mr-2 text-white"></i> Stream Prime — ₦20,000`;
+        displayElement.style.borderColor = "#ffffff";
+        displayElement.className = "plan-display-badge text-white";
+    } else {
+        trackedPlan = 'regular'; // Make sure it defaults explicitly to clear string value
+        displayElement.innerHTML = `<i class="fas fa-star mr-2 text-[#b8d5b0]"></i> Stream Regular — ₦14,000`;
+    }
 
     // TOAST SYSTEM
     window.showStreamAlert = (msg, type = 'info') => {
@@ -163,10 +190,11 @@
 
             localStorage.setItem(`paid_${user.uid}`, 'false');
             localStorage.setItem(`legalName_${user.uid}`, fullName);
+            localStorage.setItem(`selectedPlan_${user.uid}`, trackedPlan); // Saves 'regular' or 'prime'
 
             await setDoc(doc(db, "users", user.uid), {
                 fullName, username: userName, email, phone,
-                paidStatus: false, balance: 0,
+                selectedPlan: trackedPlan, paidStatus: false, balance: 0,
                 regDate: new Date().toLocaleDateString()
             });
 
