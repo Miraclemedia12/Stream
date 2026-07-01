@@ -61,15 +61,58 @@
             padding: 40px 15px;
         }
 
-        .reward-box {
+        /* Container to house both cards side-by-side on desktop or stacked on mobile */
+        .plans-container {
+            display: flex;
+            flex-direction: column;
+            gap: 40px;
             width: 100%;
-            max-width: 450px;
+            max-width: 950px;
+            justify-content: center;
+            align-items: stretch;
+            margin-top: 20px;
+        }
+
+        @media (min-width: 768px) {
+            .plans-container {
+                flex-direction: row;
+            }
+        }
+
+        .reward-box {
+            flex: 1;
             background: rgba(255, 255, 255, 0.05); /* Subtle dark card */
             border: 2px solid #b8d5b0;
             border-radius: 20px;
             padding: 30px;
             text-align: center;
             box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        /* Highlight border variant for Stream Prime to show premium hierarchy safely */
+        .reward-box.premium {
+            border-color: #ffffff;
+            background: rgba(184, 213, 176, 0.08);
+        }
+
+        /* Most Recommended Badge */
+        .recommended-badge {
+            position: absolute;
+            top: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #b8d5b0;
+            color: #0a1f1c;
+            padding: 6px 20px;
+            font-size: 11px;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border-radius: 50px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
         }
 
         .plan-header {
@@ -79,6 +122,10 @@
             margin-bottom: 20px;
             text-transform: uppercase;
             letter-spacing: 1px;
+        }
+        
+        .reward-box.premium .plan-header {
+            color: #ffffff;
         }
 
         .price-container {
@@ -90,7 +137,7 @@
         }
 
         .old-price { font-size: 20px; color: #666; text-decoration: line-through; }
-        .new-price { font-size: 48px; font-weight: 900; color: #ffffff; } /* Big white amount */
+        .new-price { font-size: 44px; font-weight: 900; color: #ffffff; } /* Big white amount */
 
         .timer-badge {
             font-size: 13px;
@@ -101,6 +148,7 @@
             font-weight: bold;
             display: inline-block;
             margin-bottom: 25px;
+            align-self: center;
         }
 
         .section-title {
@@ -112,6 +160,11 @@
             padding-left: 10px;
             font-size: 13px;
             text-transform: uppercase;
+        }
+
+        .reward-box.premium .section-title {
+            color: #ffffff;
+            border-left-color: #ffffff;
         }
 
         .earn-item {
@@ -134,6 +187,10 @@
             width: 20px;
             text-align: center;
         }
+        
+        .reward-box.premium .earn-item i {
+            color: #ffffff;
+        }
 
         /* The white amount column */
         .highlight-green { color: #ffffff; font-weight: 900; } 
@@ -148,9 +205,14 @@
             font-weight: 900;
             font-size: 17px;
             cursor: pointer;
-            margin-top: 25px;
+            margin-top: auto; /* Pushes button to the bottom so cards align perfectly */
             transition: 0.3s;
             text-transform: uppercase;
+        }
+
+        .reward-box.premium .plan-button {
+            background: #ffffff;
+            color: #0a1f1c;
         }
 
         /* TOP-LEFT ACTIVITY FEED (MEDIUM SIZE) */
@@ -195,29 +257,61 @@
 </div>
 
 <main>
-    <div class="reward-box">
-        <div class="plan-header">Membership Onboarding</div>
-        <div class="price-container">
-            <div class="old-price">₦25,000</div>
-            <div class="new-price">₦15,000</div>
+    <div class="plans-container">
+        
+        <!-- STREAM REGULAR PLAN -->
+        <div class="reward-box">
+            <div class="plan-header">Stream Regular</div>
+            <div class="price-container">
+                <div class="old-price">₦25,000</div>
+                <div class="new-price">₦15,000</div>
+            </div>
+            <div class="timer-badge">OFFER EXPIRES: <span class="countdown-timer">10:00</span></div>
+
+            <div class="section-title">Earnings & Rewards</div>
+            <div class="earn-item"><span><i class="fas fa-wallet"></i> Stream Cashback</span> <span class="highlight-green">₦15,000</span></div>
+            <div class="earn-item"><span><i class="fas fa-tower-broadcast"></i> Livestream</span> <span class="highlight-green">₦2,500</span></div>
+            <div class="earn-item"><span><i class="fas fa-clapperboard"></i> Video</span> <span class="highlight-green">₦1,200</span></div>
+            <div class="earn-item"><span><i class="fas fa-music"></i> Audio</span> <span class="highlight-green">₦750</span></div>
+            <div class="earn-item"><span><i class="fas fa-camera"></i> Snap</span> <span class="highlight-green">₦500</span></div>
+            <div class="earn-item"><span><i class="fas fa-file-arrow-down"></i> File Download</span> <span class="highlight-green">₦450</span></div>
+
+            <div class="section-title">Power Features</div>
+            <div class="earn-item"><span><i class="fab fa-tiktok"></i> TikTok Network</span> <span class="highlight-green">₦50k Monthly</span></div>
+            <div class="earn-item"><span><i class="fas fa-gift"></i> WishHub</span> <span class="highlight-green">Standard Access</span></div>
+            <div class="earn-item"><span><i class="fas fa-store"></i> Stream Bazaar</span> <span class="highlight-green">Market Access</span></div>
+            <div class="earn-item"><span><i class="fas fa-graduation-cap"></i> Stream SkillUp</span> <span class="highlight-green">Digital Skills</span></div>
+
+            <button class="plan-button" onclick="window.location.href='register.html?plan=regular'">Get Regular Now</button>
         </div>
-        <div class="timer-badge">OFFER EXPIRES: <span id="countdown">10:00</span></div>
 
-        <div class="section-title">Earnings & Rewards</div>
-        <div class="earn-item"><span><i class="fas fa-wallet"></i> Stream Cashback</span> <span class="highlight-green">₦12,000</span></div>
-        <div class="earn-item"><span><i class="fas fa-tower-broadcast"></i> Livestream</span> <span class="highlight-green">₦5,700</span></div>
-        <div class="earn-item"><span><i class="fas fa-clapperboard"></i> Video</span> <span class="highlight-green">₦2,750</span></div>
-        <div class="earn-item"><span><i class="fas fa-music"></i> Audio</span> <span class="highlight-green">₦1,550</span></div>
-        <div class="earn-item"><span><i class="fas fa-camera"></i> Snap</span> <span class="highlight-green">₦1,150</span></div>
-        <div class="earn-item"><span><i class="fas fa-file-arrow-down"></i> File Download</span> <span class="highlight-green">₦1,050</span></div>
+        <!-- STREAM PRIME PLAN -->
+        <div class="reward-box premium">
+            <div class="recommended-badge">Most Recommended</div>
+            <div class="plan-header">Stream Prime</div>
+            <div class="price-container">
+                <div class="old-price">₦35,000</div>
+                <div class="new-price">₦20,000</div>
+            </div>
+            <div class="timer-badge">OFFER EXPIRES: <span class="countdown-timer">10:00</span></div>
 
-        <div class="section-title">Power Features</div>
-        <div class="earn-item"><span><i class="fab fa-tiktok"></i> TikTok Network</span> <span class="highlight-green">₦200k Monthly</span></div>
-        <div class="earn-item"><span><i class="fas fa-gift"></i> WishHub</span> <span class="highlight-green">Weekly Gifts</span></div>
-        <div class="earn-item"><span><i class="fas fa-store"></i> Stream Bazaar</span> <span class="highlight-green">Market Access</span></div>
-        <div class="earn-item"><span><i class="fas fa-graduation-cap"></i> Stream SkillUp</span> <span class="highlight-green">Digital Skills</span></div>
+            <div class="section-title">Earnings & Rewards</div>
+            <div class="earn-item"><span><i class="fas fa-wallet"></i> Prime Cashback</span> <span class="highlight-green">₦16,000</span></div>
+            <div class="earn-item"><span><i class="fas fa-tower-broadcast"></i> Livestream Elite</span> <span class="highlight-green">₦5,700</span></div>
+            <div class="earn-item"><span><i class="fas fa-clapperboard"></i> Video Plus</span> <span class="highlight-green">₦2,750</span></div>
+            <div class="earn-item"><span><i class="fas fa-music"></i> Audio HD</span> <span class="highlight-green">₦1,550</span></div>
+            <div class="earn-item"><span><i class="fas fa-camera"></i> Premium Snap</span> <span class="highlight-green">₦1,150</span></div>
+            <div class="earn-item"><span><i class="fas fa-file-arrow-down"></i> Unlimited Files</span> <span class="highlight-green">₦1,050</span></div>
 
-        <button class="plan-button" onclick="window.location.href='register.html'">Get Started Now</button>
+            <div class="section-title">Power Features</div>
+            <div class="earn-item"><span><i class="fab fa-tiktok"></i> TikTok Network</span> <span class="highlight-green">₦200k Monthly</span></div>
+            <div class="earn-item"><span><i class="fas fa-gift"></i> WishHub Ultra</span> <span class="highlight-green">VIP Weekly Gifts</span></div>
+            <div class="earn-item"><span><i class="fas fa-store"></i> Stream Bazaar</span> <span class="highlight-green">Market Access</span></div>
+            <div class="earn-item"><span><i class="fas fa-graduation-cap"></i> Stream SkillUp</span> <span class="highlight-green">Digital Skills</span></div>
+
+            <button class="plan-button" onclick="window.location.href='register.html?plan=prime'">Get Stream Prime</button>
+        </div>
+
     </div>
 </main>
 
@@ -231,27 +325,31 @@
 </div>
 
 <script>
-    function startTimer(duration, display) {
+    function startTimer(duration, displays) {
         let timer = duration, minutes, seconds;
         setInterval(function () {
             minutes = parseInt(timer / 60, 10);
             seconds = parseInt(timer % 60, 10);
             minutes = minutes < 10 ? "0" + minutes : minutes;
             seconds = seconds < 10 ? "0" + seconds : seconds;
-            display.textContent = minutes + ":" + seconds;
+            
+            displays.forEach(display => {
+                display.textContent = minutes + ":" + seconds;
+            });
+
             if (--timer < 0) { timer = duration; }
         }, 1000);
     }
 
     const ACTIVITIES = [
-        { name: "Adesua M.", type: "withdrawn", amount: "35,000", location: "Lagos", time: "just now" },
-        { name: "Obinna K.", type: "joined", amount: "12,000", location: "PH", time: "2m ago" },
-        { name: "Fatima S.", type: "joined", amount: "12,000", location: "Kano", time: "5m ago" },
-        { name: "Chidi N.", type: "withdrawn", amount: "15,500", location: "Enugu", time: "10m ago" },
-        { name: "Tunde W.", type: "joined", amount: "12,000", location: "Ibadan", time: "1m ago" },
-        { name: "Zainab A.", type: "withdrawn", amount: "52,000", location: "Abuja", time: "just now" },
-        { name: "Efe J.", type: "joined", amount: "12,000", location: "Warri", time: "4m ago" },
-        { name: "Amaka R.", type: "withdrawn", amount: "110,000", location: "Onitsha", time: "just now" }
+        { name: "Adesua M.", type: "withdrawn", amount: "35,000", location: "Lagos", plan: "Stream Prime", time: "just now" },
+        { name: "Obinna K.", type: "joined", amount: "14,000", location: "PH", plan: "Stream Regular", time: "2m ago" },
+        { name: "Fatima S.", type: "joined", amount: "20,000", location: "Kano", plan: "Stream Prime", time: "5m ago" },
+        { name: "Chidi N.", type: "withdrawn", amount: "15,500", location: "Enugu", plan: "Stream Regular", time: "10m ago" },
+        { name: "Tunde W.", type: "joined", amount: "14,000", location: "Ibadan", plan: "Stream Regular", time: "1m ago" },
+        { name: "Zainab A.", type: "withdrawn", amount: "52,000", location: "Abuja", plan: "Stream Prime", time: "just now" },
+        { name: "Efe J.", type: "joined", amount: "20,000", location: "Warri", plan: "Stream Prime", time: "4m ago" },
+        { name: "Amaka R.", type: "withdrawn", amount: "110,000", location: "Onitsha", plan: "Stream Prime", time: "just now" }
     ];
     let activityIndex = 0;
 
@@ -263,10 +361,10 @@
         
         if (act.type === 'joined') {
             actIcon.className = "fas fa-user-plus";
-            activityElement.innerHTML = `<span class="activity-user">${act.name}</span> (${act.location}) joined <span class="stream-brand">STREAM AFRICA</span> and earned <span class="activity-amount">₦${act.amount}</span>!<span class="activity-time">${act.time}</span>`;
+            activityElement.innerHTML = `<span class="activity-user">${act.name}</span> (${act.location}) activated <span class="stream-brand">${act.plan}</span> and unlocked <span class="activity-amount">₦${act.amount}</span> rewards!<span class="activity-time">${act.time}</span>`;
         } else {
             actIcon.className = "fas fa-money-bill-transfer";
-            activityElement.innerHTML = `<span class="activity-user">${act.name}</span> (${act.location}) withdrew <span class="activity-amount withdrawal">₦${act.amount}</span> from <span class="stream-brand">STREAM AFRICA</span>!<span class="activity-time">${act.time}</span>`;
+            activityElement.innerHTML = `<span class="activity-user">${act.name}</span> (${act.location}) withdrew <span class="activity-amount withdrawal">₦${act.amount}</span> via <span class="stream-brand">${act.plan}</span>!<span class="activity-time">${act.time}</span>`;
         }
 
         feedContainer.classList.add('show-activity');
@@ -277,12 +375,10 @@
     }
 
     window.onload = function () {
-        // Changed duration to 10 minutes (600 seconds)
-        startTimer(10 * 60, document.querySelector('#countdown'));
+        startTimer(10 * 60, document.querySelectorAll('.countdown-timer'));
         setTimeout(cycleActivityFeed, 2000);
         setInterval(cycleActivityFeed, 10000);
     };
 </script>
 </body>
 </html>
-
