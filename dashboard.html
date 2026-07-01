@@ -3,413 +3,558 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard | STREAM AFRICA</title>
+    <title>DASHBOARD | STREAM</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght=300;400;600;700;800&display=swap');
 
-        :root {
-            --stream-green: #b8d5b0;
-            --stream-dark: #0a1f1c;
-            --stream-bg: #0a1f1c; 
+        :root { 
+            --stream-gold: #d4af37; 
+            --stream-dark: #0a0a0a; 
+            --stream-red: #ff4b4b; 
         }
 
-        body {
+        * { 
             margin: 0;
             padding: 0;
-            background-color: var(--stream-bg);
-            font-family: 'Inter', sans-serif;
-            color: #ffffff;
-            min-height: 100vh;
-            padding-bottom: 40px;
+            box-sizing: border-box; 
+            -webkit-tap-highlight-color: transparent; 
+            font-family: 'Plus Jakarta Sans', sans-serif; 
+        }
+
+        body { 
+            background: var(--stream-dark); 
+            color: #fff; 
+            min-height: 100vh; 
+            display: flex; 
+            flex-direction: column; 
             overflow-x: hidden;
+            position: relative;
         }
 
-        .dashboard-header {
-            padding: 25px 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            background: var(--stream-dark);
-            border-bottom: 2px solid var(--stream-green);
-        }
-
-        .welcome-text h1 {
-            font-size: 28px;
-            font-weight: 900;
-            margin: 0;
-            letter-spacing: -0.5px;
-            color: #ffffff;
-        }
-
-        .glass-card {
-            background: rgba(255, 255, 255, 0.05);
-            border: 2px solid var(--stream-green);
-            border-radius: 24px;
-            padding: 20px;
-            margin: 20px 15px;
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
-        }
-
-        .glass-card-bright {
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(184, 213, 176, 0.2);
-            border-radius: 24px;
-            padding: 20px;
-            margin: 0 15px 20px 15px;
-        }
-
-        .status-badge {
-            background: rgba(231, 76, 60, 0.2);
-            color: #ff6b6b;
-            padding: 6px 15px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: bold;
-            border: 1px solid rgba(231, 76, 60, 0.4);
-        }
-
-        .action-link-btn {
-            background: var(--stream-green);
-            color: var(--stream-dark);
-            width: 100%;
-            padding: 16px;
-            border-radius: 16px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 10px;
-            font-weight: 800;
-            font-size: 15px;
-            margin-top: 20px;
-            cursor: pointer;
-            transition: 0.2s;
-            text-transform: uppercase;
-        }
-        .action-link-btn:active { transform: scale(0.97); }
-
-        .feature-item {
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 20px;
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-            border: 1px solid rgba(184, 213, 176, 0.1);
-            transition: all 0.3s ease;
-        }
-
-        .feature-icon-box {
-            width: 45px;
-            height: 45px;
-            background: rgba(184, 213, 176, 0.1);
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--stream-green);
-            font-size: 18px;
-            margin-bottom: 5px;
-        }
-
-        .side-menu {
-            position: fixed;
-            top: 0;
-            left: -100%;
-            width: 80%;
-            max-width: 300px;
-            height: 100%;
-            background: var(--stream-dark);
-            z-index: 5000;
-            transition: left 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            padding: 30px 20px;
-            border-right: 2px solid var(--stream-green);
-        }
-
-        .side-menu.open { left: 0; }
-
-        .menu-item {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            padding: 15px;
-            color: #ffffff;
-            font-size: 16px;
-            font-weight: 600;
-            border-radius: 12px;
-            margin-bottom: 5px;
-        }
-
-        .menu-item i { width: 20px; color: var(--stream-green); }
-
-        .logo-img {
-            height: 50px;
-            filter: brightness(0) invert(1);
-        }
-
-        .menu-toggle {
-            position: fixed;
-            bottom: 30px;
-            right: 20px;
-            width: 65px;
-            height: 65px;
-            background: var(--stream-green);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 24px;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
-            z-index: 4000;
-            cursor: pointer;
-            color: var(--stream-dark);
-        }
-
-        .notif-popup {
-            position: fixed;
-            top: 20px;
-            left: -350px;
-            background: var(--stream-dark);
-            border: 2px solid var(--stream-green);
-            padding: 12px 15px;
-            border-radius: 15px;
-            width: 320px;
-            z-index: 6000;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.5);
-            display: flex;
-            gap: 12px;
-            align-items: center;
-            transition: left 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
-        .notif-popup.active { left: 20px; }
-        .notif-icon { font-size: 18px; color: var(--stream-green); }
-        .notif-body { font-size: 12px; color: #ffffff; line-height: 1.4; }
-        .notif-user { color: var(--stream-green); font-weight: 800; }
-        .notif-amount { color: #ffffff; font-weight: 900; }
-
-        .modal-overlay {
+        body::before {
+            content: "";
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.85);
-            z-index: 7000;
-            display: none;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-            backdrop-filter: blur(12px);
+            background-image: radial-gradient(circle at 10% 20%, rgba(212, 175, 55, 0.07) 1.5px, transparent 1.5px);
+            background-size: 28px 28px;
+            pointer-events: none;
+            z-index: 0;
         }
 
-        .modal-card {
-            background: #0d1211;
-            border-radius: 30px;
-            width: 95%;
-            max-width: 380px;
-            padding: 40px 25px;
-            position: relative;
-            text-align: center;
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            color: #ffffff;
+        /* SECURITY TOAST */
+        #streamToast {
+            position: fixed; top: -120px; left: 50%; transform: translateX(-50%);
+            width: 90%; max-width: 350px; background: #0d1211;
+            border: 1px solid var(--stream-gold); border-radius: 20px;
+            padding: 20px; z-index: 11000; transition: 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.5);
+        }
+        #streamToast.show { top: 20px; }
+        #streamToast.error { border-color: var(--stream-red); }
+        .toast-progress { position: absolute; bottom: 0; left: 0; height: 3px; background: var(--stream-gold); width: 100%; border-radius: 0 0 20px 20px; }
+
+        .dashboard-container {            
+            max-width: 800px;            
+            margin: 0 auto;            
+            width: 100%;            
+            background: rgba(0, 0, 0, 0.45);            
+            backdrop-filter: blur(14px);            
+            -webkit-backdrop-filter: blur(14px);            
+            border-left: 1px solid rgba(212, 175, 55, 0.25);            
+            border-right: 1px solid rgba(212, 175, 55, 0.25);            
+            min-height: 100vh;            
+            padding-bottom: 100px;            
+            position: relative;            
+            z-index: 2;            
+            box-shadow: 0 0 0 1px rgba(212, 175, 55, 0.1);        
         }
 
-        .country-select {
-            width: 100%;
-            background: #1a1f1e;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            color: white;
-            padding: 16px;
-            border-radius: 16px;
-            margin-top: 10px;
-            font-weight: 600;
-            outline: none;
-            appearance: none;
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='white'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
-            background-repeat: no-repeat;
-            background-position: right 15px center;
-            background-size: 15px;
+        .dashboard-container::before {            
+            content: "";            
+            position: absolute;            
+            top: 0;            
+            left: 10%;            
+            width: 80%;            
+            height: 2px;            
+            background: linear-gradient(90deg, transparent, rgb(212, 175, 55), rgb(245, 200, 120), rgb(212, 175, 55), transparent);            
+            opacity: 0.6;        
         }
 
-        .btn-proceed {
-            background: #ff4b4b;
-            color: white;
-            width: 100%;
-            padding: 18px;
-            border-radius: 18px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 12px;
-            font-weight: 700;
-            font-size: 16px;
-            margin-top: 25px;
-            cursor: pointer;
-            border: none;
+        .dashboard-header {            
+            padding: 24px 20px;            
+            border-bottom: 1px solid rgba(212, 175, 55, 0.25);        
+        }
+
+        .welcome-section {            
+            display: flex;            
+            justify-content: space-between;            
+            align-items: center;            
+            margin-bottom: 28px;        
+        }
+
+        .welcome-text h1 {            
+            font-size: 1.5rem;            
+            font-weight: 800;            
+            color: var(--stream-gold);
+            text-transform: uppercase;        
+        }
+
+        .welcome-text p {            
+            color: rgba(255, 255, 255, 0.6);            
+            font-size: 0.85rem;        
+        }
+
+        .user-avatar {            
+            width: 48px;            
+            height: 48px;            
+            background: var(--stream-gold);            
+            color: #0a0a0a;            
+            font-weight: 800;            
+            font-size: 1.1rem;            
+            display: flex;            
+            align-items: center;            
+            justify-content: center;            
+            border-radius: 40px;            
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);        
+        }
+
+        .earnings-card {            
+            background: rgba(255, 255, 255, 0.03);            
+            border: 1px solid rgba(212, 175, 55, 0.3);            
+            padding: 22px;            
+            margin-top: 8px;            
+            border-radius: 24px;            
+            backdrop-filter: blur(8px);            
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.3);            
+            transition: all 0.2s;        
+        }
+
+        .earnings-label {            
+            color: rgba(255, 255, 255, 0.8);            
+            font-size: 0.85rem;            
+            margin-bottom: 8px;            
+            display: flex;            
+            align-items: center;            
+            gap: 6px;        
+        }
+
+        .earnings-amount {            
+            font-size: 2.5rem;            
+            font-weight: 900;            
+            color: var(--stream-gold);            
+            margin-bottom: 4px;        
+        }
+
+        .plan-badge {            
+            display: inline-block;            
+            background: rgba(212, 175, 55, 0.15);            
+            border: 1px solid rgba(212, 175, 55, 0.5);            
+            border-radius: 30px;            
+            padding: 4px 14px;            
+            font-size: 0.8rem;            
+            font-weight: 800;            
+            color: var(--stream-gold);            
+            margin-bottom: 12px;
+            text-transform: uppercase;        
+        }
+
+        .balance-note {            
+            color: rgba(255, 255, 255, 0.7);            
+            font-size: 0.8rem;            
+            margin-bottom: 20px;        
+        }
+
+        .withdraw-btn {            
+            background: var(--stream-gold);            
+            color: #0a0a0a;            
+            border: none;            
+            padding: 14px;            
+            font-weight: 900;            
+            width: 100%;            
+            cursor: pointer;            
+            transition: all 0.2s;            
+            border-radius: 40px;            
+            font-size: 0.9rem;            
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            text-transform: uppercase;        
+        }
+
+        .withdraw-btn:hover {            
+            background: rgb(245, 200, 120);            
+            transform: translateY(-2px);            
+            box-shadow: 0 8px 18px rgba(0, 0, 0, 0.4);        
+        }
+
+        .quick-links-section {            
+            padding: 24px 20px;            
+            border-bottom: 1px solid rgba(212, 175, 55, 0.25);        
+        }
+
+        .section-title {            
+            font-size: 1.2rem;            
+            font-weight: 800;            
+            margin-bottom: 20px;            
+            display: flex;            
+            justify-content: space-between;            
+            align-items: center;            
+            color: var(--stream-gold);
+            text-transform: uppercase;        
+        }
+
+        .view-all {            
+            color: var(--stream-gold);            
+            font-size: 0.8rem;            
+            cursor: pointer;            
+            font-weight: 600;        
+        }
+
+        .view-all:hover {            
+            text-decoration: underline;            
+            color: rgb(245, 200, 120);        
+        }
+
+        .quick-links-grid {            
+            display: grid;            
+            grid-template-columns: repeat(4, 1fr);            
+            gap: 12px;        
+        }
+
+        .quick-link-item {            
+            background: rgba(255, 255, 255, 0.02);            
+            border: 1px solid rgba(212, 175, 55, 0.2);            
+            padding: 16px 6px;            
+            text-align: center;            
+            cursor: pointer;            
+            transition: all 0.2s;            
+            border-radius: 20px;            
+            backdrop-filter: blur(4px);        
+        }
+
+        .quick-link-item:hover {            
+            background: rgba(255, 255, 255, 0.05);            
+            border-color: var(--stream-gold);            
+            transform: translateY(-2px);            
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);        
+        }
+
+        .link-icon {            
+            font-size: 1.4rem;            
+            color: var(--stream-gold);            
+            margin-bottom: 8px;        
+        }
+
+        .quick-link-item span {            
+            font-size: 0.72rem;            
+            display: block;            
+            color: #ffffff;            
+            font-weight: 700;        
+        }
+
+        .stream-section {            
+            padding: 24px 20px;            
+            border-bottom: 1px solid rgba(212, 175, 55, 0.25);        
+        }
+
+        .boost-badge {            
+            background: var(--stream-gold);            
+            color: #0a0a0a;            
+            padding: 4px 14px;            
+            font-size: 0.7rem;            
+            font-weight: 900;            
+            display: inline-block;            
+            margin-bottom: 16px;            
+            border-radius: 30px;            
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);        
+        }
+
+        .stream-section h3 {            
+            font-size: 1.2rem;            
+            margin-bottom: 8px;            
+            color: var(--stream-gold);
+            font-weight: 800;        
+        }
+
+        .stream-section p {            
+            color: rgba(255, 255, 255, 0.9);            
+            font-size: 0.85rem;            
+            margin-bottom: 20px;        
+        }
+
+        .join-btn {            
+            background: var(--stream-gold);            
+            color: #0a0a0a;            
+            border: none;            
+            padding: 14px;            
+            font-weight: 900;            
+            width: 100%;            
+            cursor: pointer;            
+            transition: all 0.2s;            
+            border-radius: 40px;            
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            text-transform: uppercase;        
+        }
+
+        .join-btn:hover {            
+            background: rgb(245, 200, 120);            
+            transform: translateY(-1px);            
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);        
+        }
+
+        .action-buttons {            
+            position: fixed;            
+            bottom: 0;            
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;            
+            max-width: 800px;
+            display: grid;            
+            grid-template-columns: repeat(5, 1fr);            
+            background: rgba(10, 10, 10, 0.9);            
+            backdrop-filter: blur(16px);            
+            -webkit-backdrop-filter: blur(16px);            
+            border-top: 1px solid rgba(212, 175, 55, 0.35);            
+            z-index: 1000;        
+        }
+
+        .action-btn {            
+            background: transparent;            
+            border: none;            
+            padding: 14px 5px;            
+            color: rgba(255, 255, 255, 0.6);            
+            font-size: 0.75rem;            
+            cursor: pointer;            
+            display: flex;            
+            flex-direction: column;            
+            align-items: center;            
+            gap: 4px;            
+            transition: 0.2s;            
+            font-weight: 700;        
+        }
+
+        .action-btn.active {            
+            color: var(--stream-gold);            
+            border-top: 2px solid var(--stream-gold);        
+        }
+
+        .action-btn:hover {            
+            background: rgba(212, 175, 55, 0.08);            
+            color: var(--stream-gold);        
+        }
+
+        .activation-modal {            
+            display: none;            
+            position: fixed;            
+            top: 0;            
+            left: 0;            
+            width: 100%;            
+            height: 100%;            
+            background: rgba(10, 10, 10, 0.85);            
+            backdrop-filter: blur(8px);            
+            z-index: 2000;            
+            align-items: center;            
+            justify-content: center;        
+        }
+
+        .activation-content {            
+            background: #0d1211;            
+            backdrop-filter: blur(16px);            
+            -webkit-backdrop-filter: blur(16px);            
+            border: 1px solid var(--stream-gold);            
+            width: 92%;            
+            max-width: 400px;            
+            padding: 35px 25px;            
+            text-align: center;            
+            border-radius: 25px;            
+            box-shadow: 0 25px 40px rgba(0, 0, 0, 0.6);        
+        }
+
+        .activation-icon {            
+            font-size: 3rem;            
+            color: var(--stream-gold);            
+            margin-bottom: 16px;        
+        }
+
+        .activation-title {            
+            font-size: 1.4rem;            
+            font-weight: 900;            
+            margin-bottom: 12px;            
+            color: var(--stream-gold);
+            text-transform: uppercase;        
+        }
+
+        .activation-message {            
+            color: rgba(255, 255, 255, 0.7);            
+            margin-bottom: 24px;            
+            font-size: 0.9rem;
+            line-height: 1.5;        
+        }
+
+        .activate-now-btn {            
+            background: var(--stream-gold);            
+            color: var(--stream-dark);            
+            border: none;            
+            padding: 16px;            
+            font-weight: 900;            
+            width: 100%;            
+            cursor: pointer;            
+            margin-bottom: 14px;            
+            border-radius: 12px;            
+            font-size: 1rem;            
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);            
+            transition: 0.2s;
+            text-transform: uppercase;        
+        }
+
+        .activate-now-btn:hover {            
+            background: rgb(245, 200, 120);            
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);        
+        }
+
+        .cancel-link {            
+            color: rgba(255, 255, 255, 0.4);            
+            text-decoration: none;            
+            font-size: 0.85rem;            
+            cursor: pointer;            
+            font-weight: bold;        
+        }
+
+        .cancel-link:hover {            
+            text-decoration: underline;            
+            color: var(--stream-gold);        
+        }
+
+        @media (max-width: 600px) {            
+            .dashboard-container {                
+                max-width: 100%;                
+                border-left: none;
+                border-right: none;
+            }            
+            .quick-links-grid {                
+                grid-template-columns: repeat(3, 1fr);            
+            }            
+            .dashboard-header {                
+                padding: 20px 16px;            
+            }            
+            .earnings-card {                
+                padding: 18px;            
+            }        
         }
     </style>
 </head>
 <body>
 
-<div id="side-menu" class="side-menu">
-    <div style="margin-bottom: 40px;">
-        <img src="logo.png" alt="Logo" class="logo-img">
-    </div>
-    <div class="menu-item"><i class="fas fa-home"></i> HOME</div>
-    <div class="menu-item"><i class="fas fa-wallet"></i> REWARD</div>
-    <div class="menu-item"><i class="fas fa-tower-broadcast"></i> LIVESTREAM</div>
-    <div class="menu-item"><i class="fas fa-clapperboard"></i> VIDEO ADS</div>
-    <div class="menu-item"><i class="fas fa-users"></i> NETWORK</div>
-    <div class="menu-item"><i class="fas fa-gear"></i> SETTINGS</div>
-    
-    <button onclick="toggleMenu()" style="margin-top: 40px; background: rgba(255,255,255,0.1); color: #fff; width: 100%; padding: 15px; border-radius: 12px; font-weight: 800; text-transform: uppercase;">
-        CLOSE MENU
-    </button>
-</div>
-
-<div id="notif-popup" class="notif-popup">
-    <div class="notif-icon" id="notif-icon"><i class="fas fa-circle-check"></i></div>
-    <div class="notif-body" id="notif-text">Connecting to Stream...</div>
-</div>
-
-<div class="dashboard-header">
-    <div class="welcome-text">
-        <h1 id="user-greeting">Dashboard</h1>
-        <p style="color:rgba(255,255,255,0.6); font-size: 14px; margin-top: 5px;">Welcome to your <br> <span style="color:var(--stream-green); font-weight: 800;">STREAM AFRICA</span> account</p>
-    </div>
-    <div style="background: rgba(184, 213, 176, 0.1); width: 45px; height: 45px; border-radius: 50%; display: flex; align-items: center; justify-content: center; position: relative; border: 1px solid rgba(184, 213, 176, 0.2);">
-        <i class="fas fa-bell" style="color:var(--stream-green)"></i>
-        <div style="position: absolute; top: -2px; right: -2px; background: #e74c3c; width: 18px; height: 18px; border-radius: 50%; font-size: 10px; display: flex; align-items: center; justify-content: center; font-weight: bold; color: white;">1</div>
-    </div>
-</div>
-
-<div class="glass-card">
-    <div class="flex justify-between items-start mb-6">
-        <div class="flex items-center gap-3">
-            <i class="fas fa-shield-halved text-3xl" style="color:var(--stream-green)"></i>
-            <h2 style="font-size: 20px; font-weight: 800; color: #ffffff">Account<br>Status</h2>
-        </div>
-        <div class="status-badge" id="acc-status">Inactive</div>
-    </div>
-    <p style="color:rgba(255,255,255,0.7); font-size: 14px; line-height: 1.5; margin-bottom: 20px;">
-        Your Stream account is currently inactive. Complete your onboarding to unlock your earnings and dashboard features.
-    </p>
-    <div class="action-link-btn" onclick="openModal()">
-        Activate account now <i class="fas fa-bolt-lightning"></i>
-    </div>
-</div>
-
-<div class="glass-card">
-    <div class="flex items-center gap-3 mb-6">
-        <i class="fas fa-file-invoice-dollar text-xl" style="color:var(--stream-green)"></i>
-        <h2 style="font-size: 20px; font-weight: 800; color: #ffffff">Onboarding Details</h2>
-    </div>
-    
-    <div class="space-y-4">
-        <div class="flex justify-between border-b border-white/10 pb-3">
-            <span style="color:rgba(255,255,255,0.5)">Plan:</span>
-            <span id="dash-plan" style="color:#ff6b6b; font-weight: 800;">None</span>
-        </div>
-        <div class="flex justify-between border-b border-white/10 pb-3">
-            <span style="color:rgba(255,255,255,0.5)">Price:</span>
-            <span id="dash-price" style="color:#ff6b6b; font-weight: 800;">Pending</span>
-        </div>
-        <div class="flex justify-between border-b border-white/10 pb-3">
-            <span style="color:rgba(255,255,255,0.5)">Status:</span>
-            <span id="dash-status-text" style="color:#ff6b6b; font-weight: 800;">Inactive</span>
-        </div>
-        <div class="flex justify-between pb-1">
-            <span style="color:rgba(255,255,255,0.5)">Joined:</span>
-            <span style="color:var(--stream-green); font-weight: 600;" id="dash-reg-date">...</span>
-        </div>
-    </div>
-
-    <div class="action-link-btn" style="background: #e74c3c; color: white; margin-top: 30px;" onclick="openModal()">
-        Claim instant ₦12,000 reward <i class="fas fa-gift"></i>
-    </div>
-</div>
-
-<div style="margin: 30px 20px 15px; font-size: 18px; font-weight: 900; display: flex; align-items: center; gap: 10px; text-transform: uppercase; color: #ffffff;">
-    <i class="fas fa-grip-vertical" style="color:var(--stream-green)"></i> Stream Features
-</div>
-
-<div class="grid grid-cols-1 px-4 gap-4">
-    <div class="feature-item" onclick="openModal()">
-        <div class="feature-icon-box"><i class="fas fa-wallet"></i></div>
-        <h3 style="color:rgba(255,255,255,0.4); font-weight: 700; font-size: 13px; text-transform: uppercase;">Stream Balance</h3>
-        <div id="dash-balance" style="font-size: 24px; font-weight: 900; color:rgba(255,255,255,0.2);">₦0.00</div>
-        <div style="font-size: 11px; color: rgba(255,255,255,0.3);">Real-time earnings tracker</div>
-    </div>
-
-    <div class="feature-item" onclick="openModal()">
-        <div class="feature-icon-box"><i class="fas fa-tower-broadcast"></i></div>
-        <h3 style="color:rgba(255,255,255,0.4); font-weight: 700; font-size: 13px; text-transform: uppercase;">Livestream</h3>
-        <div id="dash-live-status" style="font-size: 24px; font-weight: 900; color:rgba(255,255,255,0.2);">Inactive</div>
-        <div style="font-size: 11px; color: rgba(255,255,255,0.3);">Earn while streaming content</div>
-    </div>
-
-    <div class="feature-item" onclick="openModal()">
-        <div class="feature-icon-box"><i class="fas fa-clapperboard"></i></div>
-        <h3 style="color:rgba(255,255,255,0.4); font-weight: 700; font-size: 13px; text-transform: uppercase;">Video Ads</h3>
-        <div id="dash-ads-views" style="font-size: 24px; font-weight: 900; color:rgba(255,255,255,0.2);">0 Views</div>
-        <div style="font-size: 11px; color: rgba(255,255,255,0.3);">Monetize your watch time</div>
-    </div>
-
-    <div class="feature-item" onclick="openModal()">
-        <div class="feature-icon-box"><i class="fas fa-network-wired"></i></div>
-        <h3 style="color:rgba(255,255,255,0.4); font-weight: 700; font-size: 13px; text-transform: uppercase;">My Network</h3>
-        <div id="dash-network" style="font-size: 24px; font-weight: 900; color:rgba(255,255,255,0.2);">0 Members</div>
-        <div style="font-size: 11px; color: rgba(255,255,255,0.3);">Growth statistics</div>
-    </div>
-</div>
-
-<div class="glass-card-bright mt-10">
-    <div style="font-size: 18px; font-weight: 800; margin-bottom: 25px; color: #ffffff;">Account History</div>
-    <div class="space-y-6">
-        <div class="flex gap-4 items-center">
-            <div style="width:40px; height:40px; background:rgba(255,255,255,0.05); border-radius:50%; display:flex; align-items:center; justify-content:center; color:var(--stream-green)"><i class="fas fa-user-plus"></i></div>
-            <div>
-                <div style="font-weight:700; font-size:15px; color:#ffffff;">Profile Created</div>
-                <div style="color:rgba(255,255,255,0.5); font-size:12px;">Welcome to Stream Africa</div>
+    <div id="streamToast">
+        <div class="flex items-center gap-4">
+            <div class="w-10 h-10 rounded-full bg-[#d4af37]/10 flex items-center justify-center text-[#d4af37]">
+                <i class="fas fa-shield-halved"></i>
             </div>
-            <div style="margin-left:auto; color:rgba(255,255,255,0.3); font-size:11px;">Just now</div>
-        </div>
-        <div class="flex gap-4 items-center">
-            <div style="width:40px; height:40px; background:rgba(255,255,255,0.05); border-radius:50%; display:flex; align-items:center; justify-content:center; color:var(--stream-green)"><i class="fas fa-clock"></i></div>
             <div>
-                <div style="font-weight:700; font-size:15px; color:#ffffff;">Verification Pending</div>
-                <div style="color:rgba(255,255,255,0.5); font-size:12px;">Onboarding not completed</div>
+                <b class="text-[10px] uppercase tracking-widest text-[#d4af37]" id="toastTitle">Security Protocol</b>
+                <p id="toastMsg" class="text-xs text-white/70 font-bold">Validating...</p>
             </div>
-            <div style="margin-left:auto; color:rgba(255,255,255,0.3); font-size:11px;">Just now</div>
         </div>
+        <div id="toastBar" class="toast-progress"></div>
     </div>
-</div>
 
-<div id="activation-modal" class="modal-overlay">
-    <div class="modal-card">
-        <div onclick="closeModal()" style="position: absolute; top: 20px; right: 20px; color: rgba(255,255,255,0.5); font-size: 24px; cursor: pointer;">
-            <i class="fas fa-times"></i>
+    <div class="dashboard-container">        
+        <div class="dashboard-header">            
+            <div class="welcome-section">                
+                <div class="welcome-text">                    
+                    <h1 id="welcomeName">HI!</h1>                    
+                    <p id="userEmail">Syncing credentials...</p>                
+                </div>                
+                <div class="user-avatar" id="userAvatar"><i class="fas fa-user"></i></div>            
+            </div>            
+            <div class="earnings-card">                
+                <div class="earnings-label"><i class="fas fa-chart-line text-[#d4af37]"></i> Your Current Plan</div>                
+                <div class="plan-badge" id="planBadge">Tracking Plan...</div>                
+                <div class="earnings-amount" id="earningsAmount">₦0.00</div>                
+                <div class="balance-note" id="balanceNote">Activate your account to start earning in Naira</div>                
+                <button class="withdraw-btn modal-trigger">Request Withdrawal</button>            
+            </div>        
         </div>
-        <div style="color:#ffcc00; font-size: 70px; margin-bottom: 25px;"><i class="fas fa-triangle-exclamation"></i></div>
-        <h2 style="font-size: 26px; font-weight: 900; margin-bottom: 15px; color:#ffffff; line-height: 1.2;">Complete Account Activation</h2>
-        <select id="country-select" class="country-select">
-            <option value="nigeria">Nigeria 🇳🇬</option>
-            <option value="cameroon">Cameroon 🇨🇲</option>
-            <option value="ghana">Ghana 🇬🇭</option>
-            <option value="kenya">Kenya 🇰🇪</option>
-            <option value="south_africa">South Africa 🇿🇦</option>
-            <option value="uganda">Uganda 🇺🇬</option>
-        </select>
-        <div class="btn-proceed" onclick="goToRegistration()">Proceed to payment <i class="fas fa-credit-card"></i></div>
+        
+        <div class="quick-links-section">            
+            <div class="section-title">                
+                Quick Modules                
+                <span class="view-all modal-trigger">More →</span>            
+            </div>            
+            <div class="quick-links-grid">                
+                <div class="quick-link-item modal-trigger">                    
+                    <div class="link-icon"><i class="fas fa-cloud-upload-alt"></i></div><span>Upload Content</span>                
+                </div>                
+                <div class="quick-link-item modal-trigger">                    
+                    <div class="link-icon"><i class="fas fa-file-download"></i></div><span>Stream Scripts</span>                
+                </div>                
+                <div class="quick-link-item modal-trigger">                    
+                    <div class="link-icon"><i class="fas fa-video"></i></div><span>Join Livestreams</span>                
+                </div>                
+                <div class="quick-link-item modal-trigger">                    
+                    <div class="link-icon"><i class="fas fa-eye"></i></div><span>Watch & Earn</span>                
+                </div>                
+                <div class="quick-link-item modal-trigger">                    
+                    <div class="link-icon"><i class="fas fa-cube"></i></div><span>Stream Loot Box</span>                
+                </div>                
+                <div class="quick-link-item modal-trigger">                    
+                    <div class="link-icon"><i class="fab fa-telegram"></i></div><span>Telegram Monetization</span>                
+                </div>                
+                <div class="quick-link-item modal-trigger">                    
+                    <div class="link-icon"><i class="fas fa-chart-bar"></i></div><span>Analytics</span>                
+                </div>                
+                <div class="quick-link-item modal-trigger">                    
+                    <div class="link-icon"><i class="fas fa-graduation-cap"></i></div><span>Stream Academy</span>                
+                </div>            
+            </div>        
+        </div>
+        
+        <div class="stream-section">            
+            <div class="boost-badge" id="boostBadge">x10 BOOST</div>            
+            <h3>Join. Stream. Earn in Naira</h3>            
+            <p id="streamMessage">Join Livestreams on TikTok for x10 boost on StreamStatus — paid in ₦</p>            
+            <button class="join-btn modal-trigger">Join Stream</button>        
+        </div>    
     </div>
-</div>
 
-<div class="menu-toggle" onclick="toggleMenu()"><i class="fas fa-bars"></i></div>
+    <div class="action-buttons">        
+        <button class="action-btn active modal-trigger">            
+            <div class="link-icon"><i class="fas fa-bolt"></i></div><span>Activate</span>        
+        </button>        
+        <button class="action-btn modal-trigger">            
+            <div class="link-icon"><i class="fas fa-gamepad"></i></div><span>Games</span>        
+        </button>        
+        <button class="action-btn modal-trigger">            
+            <div class="link-icon"><i class="fas fa-wallet"></i></div><span>Withdraw</span>        
+        </button>        
+        <button class="action-btn modal-trigger">            
+            <div class="link-icon"><i class="fas fa-user"></i></div><span>Profile</span>        
+        </button>    
+        <button class="action-btn" id="logout-panel-btn">            
+            <div class="link-icon text-red-500"><i class="fas fa-power-off"></i></div><span class="text-red-400">Logout</span>        
+        </button>
+    </div>
+
+    <div class="activation-modal" id="activationModal">        
+        <div class="activation-content">            
+            <div class="activation-icon"><i class="fas fa-gem"></i></div>            
+            <h2 class="activation-title">Activate Your Stream Account</h2>            
+            <p class="activation-message" id="modalMessage">Complete your Stream Fee payment to unlock withdrawals and all Stream modules.</p>            
+            
+            <button class="activate-now-btn" id="activateNowBtn">Pay Stream Fee</button>            
+            
+            <div class="mt-4">
+                <a class="cancel-link" id="cancelModalLink">Maybe later</a>            
+            </div>
+        </div>    
+    </div>
 
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
-    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js";
+    import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js";
     import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js";
 
     const firebaseConfig = {
@@ -425,67 +570,126 @@
     const auth = getAuth(app);
     const db = getFirestore(app);
 
-    onAuthStateChanged(auth, async (user) => {
-        if (user) {
-            const userRef = doc(db, "users", user.uid);
-            const userSnap = await getDoc(userRef);
+    const PAYMENT_LINKS = {
+        "regular": "https://flutterwave.com/pay/b4dasvcgh75c",
+        "prime": "https://flutterwave.com/pay/9lirq5mz79i9"
+    };
 
-            if (userSnap.exists()) {
-                const data = userSnap.data();
+    let userPlanType = "regular";
+
+    window.showStreamAlert = (msg, type = 'info') => {
+        const toast = document.getElementById('streamToast');
+        const title = document.getElementById('toastTitle');
+        document.getElementById('toastMsg').innerText = msg;
+        
+        if(type === 'error') {
+            toast.classList.add('error');
+            title.innerText = "SECURITY BREACH";
+        } else {
+            toast.classList.remove('error');
+            title.innerText = "SYSTEM PROTOCOL";
+        }
+
+        toast.classList.add('show');
+        let width = 100;
+        const interval = setInterval(() => {
+            width -= 2;
+            document.getElementById('toastBar').style.width = width + '%';
+            if (width <= 0) {
+                clearInterval(interval);
+                toast.classList.remove('show');
+                setTimeout(() => { document.getElementById('toastBar').style.width = '100%'; }, 500);
+            }
+        }, 60);
+    };
+
+    // ACTIVE DATABASE SYNC AND MAPPING PROTOCOL
+    onAuthStateChanged(auth, async (user) => {
+        if (!user) {
+            window.location.href = 'login.html';
+            return;
+        }
+
+        try {
+            const userDocRef = doc(db, "users", user.uid);
+            const userDocSnap = await getDoc(userDocRef);
+
+            if (userDocSnap.exists()) {
+                const data = userDocSnap.data();
                 
-                // CRITICAL: Skip page if user already paid
-                if (data.status === "Active" || data.status === "paid") {
-                    window.location.href = 'main-dashboard.html';
-                    return;
+                const fullName = data.fullName || "Stream Member";
+                userPlanType = data.plan || "regular"; 
+                
+                const firstName = fullName.split(' ')[0];
+                document.getElementById('welcomeName').textContent = `HI, ${firstName}!`;
+                document.getElementById('userEmail').textContent = user.email;
+                
+                const initials = fullName.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2);
+                document.getElementById('userAvatar').innerHTML = initials || '<i class="fas fa-user"></i>';
+
+                const isPlus = (userPlanType === 'prime');
+
+                // TRACKING AND UPDATING VALUES ACCORDING TO USER DATABASE SCHEMA
+                if (isPlus) {
+                    document.getElementById('earningsAmount').textContent = '₦20,000';
+                    document.getElementById('planBadge').textContent = 'Prime Plan';
+                    document.getElementById('balanceNote').innerHTML = 'Prime Plan – Higher daily earnings & VIP perks';
+                    document.getElementById('boostBadge').textContent = 'x15 BOOST';
+                    document.getElementById('streamMessage').textContent = 'Join Livestreams on TikTok for x15 boost (Premium Plus benefit)';
+                    document.getElementById('modalMessage').textContent = 'Activate your Stream Prime Plan account (₦20,000) to unlock VIP rewards, x15 boost and higher withdrawal limits.';
+                } else {
+                    document.getElementById('earningsAmount').textContent = '₦15,000';
+                    document.getElementById('planBadge').textContent = 'Regular Plan';
+                    document.getElementById('balanceNote').innerHTML = 'Activate your account to start earning up to ₦12,200+ daily';
+                    document.getElementById('boostBadge').textContent = 'x10 BOOST';
+                    document.getElementById('streamMessage').textContent = 'Join Livestreams on TikTok for x10 boost on StreamStatus — paid in ₦';
+                    document.getElementById('modalMessage').textContent = 'Complete your Stream Fee payment (₦15,000) to unlock withdrawals and all Stream modules.';
                 }
 
-                document.getElementById('user-greeting').innerText = `Hello, ${data.username || 'Member'}`;
-                document.getElementById('dash-reg-date').innerText = data.regDate || '...';
-                document.getElementById('dash-plan').innerText = data.plan || "None";
-                document.getElementById('dash-price').innerText = data.price || "Pending";
+                // If account is already processed and marked true, show full tracking data values
+                const storagePaidKey = localStorage.getItem(`paid_${user.uid}`);
+                if (data.paidStatus === true || storagePaidKey === 'true') {
+                    if (storagePaidKey !== 'true') localStorage.setItem(`paid_${user.uid}`, 'true');
+                    document.getElementById('balanceNote').innerHTML = `<span class="text-emerald-400 font-bold"><i class="fas fa-check-circle"></i> Account Active</span> • Balance: ₦${(data.balance || 0).toLocaleString()}`;
+                    document.getElementById('earningsAmount').textContent = `₦${(data.balance || 0).toLocaleString()}`;
+                }
+
+            } else {
+                window.showStreamAlert("Profile matrix document error.", "error");
             }
-        } else {
-            window.location.href = 'login.html';
+        } catch (err) {
+            console.error(err);
+            window.showStreamAlert("Error fetching cloud profile metrics.", "error");
         }
     });
 
-    window.goToRegistration = function() {
-        const country = document.getElementById('country-select').value;
-        localStorage.setItem('selected_country', country);
-        window.location.href = 'payment.html'; 
-    }
-</script>
+    const modal = document.getElementById('activationModal');
+    const closeModal = () => { modal.style.display = 'none'; document.body.style.overflow = 'auto'; };
+    const openModal = () => { modal.style.display = 'flex'; document.body.style.overflow = 'hidden'; };
+    
+    document.querySelectorAll('.modal-trigger').forEach(trigger => trigger.addEventListener('click', openModal));
+    document.getElementById('cancelModalLink').addEventListener('click', closeModal);
+    window.addEventListener('click', (e) => { if (e.target === modal) closeModal(); });
 
-<script>
-    const ACTIVITIES = [
-        { type: 'joined', name: "Ayo M.", loc: "Lagos", amount: "12,000", time: "Just now", icon: "fa-user-plus" },
-        { type: 'withdrawn', name: "Olamide B.", loc: "Ibadan", amount: "42,000", time: "2m ago", icon: "fa-money-bill-transfer" },
-        { type: 'joined', name: "Kwame O.", loc: "Accra", amount: "12,000", time: "5m ago", icon: "fa-user-check" },
-        { type: 'withdrawn', name: "Banda L.", loc: "Nairobi", amount: "15,000", time: "8m ago", icon: "fa-wallet" }
-    ];
-    let currentActIndex = 0;
-    function cycleActivities() {
-        const popup = document.getElementById('notif-popup');
-        const iconDiv = document.getElementById('notif-icon');
-        const textDiv = document.getElementById('notif-text');
-        const act = ACTIVITIES[currentActIndex];
-        if(!popup) return;
-        iconDiv.innerHTML = `<i class="fas ${act.icon}"></i>`;
-        let message = act.type === 'joined' 
-            ? `<span class="notif-user">${act.name}</span> (${act.loc}) joined and earned <span class="notif-amount">₦${act.amount}</span>`
-            : `<span class="notif-user">${act.name}</span> (${act.loc}) withdrew <span class="notif-amount">₦${act.amount}</span>`;
-        textDiv.innerHTML = `${message}<div style="font-size:10px; color:rgba(255,255,255,0.4); margin-top:2px;">${act.time}</div>`;
-        popup.classList.add('active');
-        setTimeout(() => {
-            popup.classList.remove('active');
-            currentActIndex = (currentActIndex + 1) % ACTIVITIES.length;
-            setTimeout(cycleActivities, 4000);
-        }, 6000);
-    }
-    window.toggleMenu = () => document.getElementById('side-menu').classList.toggle('open');
-    window.openModal = () => document.getElementById('activation-modal').style.display = 'flex';
-    window.closeModal = () => document.getElementById('activation-modal').style.display = 'none';
-    document.addEventListener('DOMContentLoaded', () => setTimeout(cycleActivities, 2000));
+    document.getElementById('activateNowBtn').addEventListener('click', () => {
+        window.location.href = PAYMENT_LINKS[userPlanType] || PAYMENT_LINKS["regular"];
+    });
+
+    document.getElementById('logout-panel-btn').addEventListener('click', async () => {
+        try {
+            await signOut(auth);
+            window.showStreamAlert("Session severed safely.");
+            setTimeout(() => { window.location.href = 'login.html'; }, 1500);
+        } catch (err) {
+            window.showStreamAlert("Error running exit procedure.", "error");
+        }
+    });
+
+    document.querySelectorAll('.action-btn').forEach(btn => btn.addEventListener('click', function () {
+        if(this.id === 'logout-panel-btn') return;
+        document.querySelectorAll('.action-btn').forEach(b => b.classList.remove('active'));
+        this.classList.add('active');
+    }));
 </script>
 </body>
 </html>
