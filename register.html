@@ -134,7 +134,7 @@
         displayElement.className = "plan-display-badge text-white";
     } else {
         trackedPlan = 'regular'; // Make sure it defaults explicitly to clear string value
-        displayElement.innerHTML = `<i class="fas fa-star mr-2 text-[#b8d5b0]"></i> Stream Regular — ₦14,000`;
+        displayElement.innerHTML = `<i class="fas fa-star mr- Star text-[#b8d5b0]"></i> Stream Regular — ₦14,000`;
     }
 
     // TOAST SYSTEM
@@ -194,7 +194,7 @@
 
             await setDoc(doc(db, "users", user.uid), {
                 fullName, username: userName, email, phone,
-                selectedPlan: trackedPlan, paidStatus: false, balance: 0,
+                selectedPlan: trackedPlan, plan: trackedPlan, paidStatus: false, balance: 0,
                 regDate: new Date().toLocaleDateString()
             });
 
