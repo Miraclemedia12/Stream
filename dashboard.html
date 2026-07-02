@@ -618,7 +618,8 @@
                 const data = userDocSnap.data();
                 
                 const fullName = data.fullName || "Stream Member";
-                userPlanType = data.plan || "regular"; 
+                // FIX: Support both selectedPlan and plan properties from Firestore layout mappings
+                userPlanType = data.selectedPlan || data.plan || "regular"; 
                 
                 const firstName = fullName.split(' ')[0];
                 document.getElementById('welcomeName').textContent = `HI, ${firstName}!`;
