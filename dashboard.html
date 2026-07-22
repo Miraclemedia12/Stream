@@ -570,9 +570,9 @@
     const auth = getAuth(app);
     const db = getFirestore(app);
 
-    const PAYMENT_LINKS = {
-        "regular": "https://flutterwave.com/pay/guguyaecplng",
-        "prime": "https://flutterwave.com/pay/qijqj216r3qr"
+    const PLAN_AMOUNTS = {
+        "regular": 15000,
+        "prime": 20000
     };
 
     let userPlanType = "regular";
@@ -673,7 +673,8 @@
     window.addEventListener('click', (e) => { if (e.target === modal) closeModal(); });
 
     document.getElementById('activateNowBtn').addEventListener('click', () => {
-        window.location.href = PAYMENT_LINKS[userPlanType] || PAYMENT_LINKS["regular"];
+        const amount = PLAN_AMOUNTS[userPlanType] || PLAN_AMOUNTS["regular"];
+        window.location.href = `payment.html?amount=${amount}&plan=${userPlanType}`;
     });
 
     document.getElementById('logout-panel-btn').addEventListener('click', async () => {
