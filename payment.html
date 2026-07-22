@@ -207,7 +207,7 @@
     <div id="success-content" class="hidden flex flex-col items-center text-center px-4">
         <i class="fas fa-circle-check text-7xl text-[#b8d5b0] animate-bounce"></i>
         <h3 class="mt-6 text-2xl font-black text-white uppercase tracking-widest">Account Activated</h3>
-        <p class="text-white/60 text-sm mt-2 font-bold uppercase tracking-widest">Opening your dashboard...</p>
+        <p class="text-white/60 text-sm mt-2 font-bold uppercase tracking-widest">Redirecting to Telegram Support...</p>
     </div>
 </div>
 
@@ -380,8 +380,12 @@
                 document.getElementById('loader-content').classList.add('hidden');
                 document.getElementById('success-content').classList.remove('hidden');
                 setTimeout(() => { 
-                    // REDIRECT TO MAIN DASHBOARD
-                    window.location.href = 'main-dashboard.html'; 
+                    // REDIRECT TO TELEGRAM DM WITH PREFILLED MESSAGE
+                    const amountText = document.getElementById('display-amount')?.innerText || 'my registration fee';
+                    const userIdentifier = user.email || user.phoneNumber || user.uid;
+                    const prefilledMessage = `Hello Admin, I have made my payment of ${amountText} for my Stream Africa account (${userIdentifier}). Here is my payment proof for verification.`;
+                    
+                    window.location.href = `https://t.me/morrishmedia?text=${encodeURIComponent(prefilledMessage)}`;
                 }, 4000);
             }, 10000);
 
